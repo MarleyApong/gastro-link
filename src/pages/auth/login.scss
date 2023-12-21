@@ -1,0 +1,192 @@
+.Login {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 10px;
+   height: 100vh;
+   width: 100%;
+   background: #fcfcfc;
+   overflow: hidden;
+
+   .Container {
+      display: flex;
+      height: 80%;
+      width: 80%;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 15px 15px 20px rgba(0, 0, 0, .1), -15px -15px 20px rgba(251, 249, 249, 0.733);
+
+      .Left {
+         position: relative;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         width: 60%;
+         overflow: hidden;
+         background-image: linear-gradient(var(--color-primary), black), url('../../assets/images/cover_login.jpg');
+         color: var(--color-1);
+         background-size: cover;
+         padding: 0 10px;
+         text-align: center;
+
+         h1 {
+            text-transform: capitalize;
+         }
+
+         span {
+            position: absolute;
+            bottom: 10px;
+
+            a {
+               color: var(--color-1);
+            }
+         }
+      }
+
+      .Right {
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         width: 40%;
+         padding: 0 30px;
+
+         p {
+            font-size: 14px;
+
+            &:last-child {
+               margin-top: 30px;
+               text-align: center;
+               font-weight: 500;
+            }
+         }
+
+         a {
+            color: var(--color-6);
+         }
+
+         .Form {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            height: auto;
+            gap: 20px;
+
+            .Logo {
+               display: flex;
+               flex-direction: column;
+               align-items: center;
+
+               img {
+                  margin: auto;
+                  width: 20%;
+               }
+
+               span {
+                  text-transform: uppercase;
+               }
+            }
+
+            h2 {
+               color: var(--color-primary);
+               font-size: 30px;
+            }
+
+            .InputBox {
+               display: flex;
+               align-items: center;
+               border-bottom: 1px solid #00000013;
+               box-shadow: inset 5px 5px 10px rgb(0, 0, 0, .1), inset -5px -5px 10px #fff;
+               padding: 5px;
+               border-radius: 3px;
+               gap: 5px;
+
+               .Icon {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  width: 40px;
+                  height: 40px;
+               }
+
+               input {
+                  width: 100%;
+                  border: none;
+                  outline: none;
+                  background: transparent;
+               }
+
+               &:last-child {
+                  margin-top: 10px;
+                  box-shadow: 1px 1px 5px var(--color-primary), -1px -1px 5px rgba(63, 1, 1, 0.733), inset 5px 5px 10px rgba(195, 8, 8, 0.1), inset -5px -5px 10px var(--color-primary);
+                  background: var(--color-primary);
+                  border: none;
+                  padding: 13px;
+                  cursor: pointer;
+
+                  &:hover {
+                     box-shadow: 4px 4px 5px rgb(232, 1, 1), -2px -2px 5px rgba(63, 1, 1, 0.733), inset 5px 5px 10px rgba(195, 8, 8, 0.1), inset -5px -5px 10px var(--color-primary);
+                     transition: 1s;
+                  }
+
+                  input {
+                     color: var(--color-1);
+                     font-weight: 600;
+                     cursor: pointer;
+                  }
+
+                  button {
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+                     width: 100%;
+                     border: none;
+                     outline: none;
+                     background: transparent;
+                     color: var(--color-1);
+                     font-weight: 600;
+                     cursor: pointer;
+                  }
+               }
+            }
+         }
+      }
+
+   }
+
+   // RESPONSIVE============================
+   @media screen and (max-width: 1282px) {
+      .Container {
+         width: 85%;
+      }
+   }
+
+   @media screen and (max-width: 817px) {
+      .Container {
+         flex-direction: column;
+         width: 55%;
+         height: 90%;
+
+         .Left {
+            display: none;
+         }
+
+         .Right {
+            height: 100%;
+            width: 100%;
+            padding: 20px;
+         }
+      }
+   }
+
+   @media screen and (max-width: 600px) {
+      .Container {
+         min-width: 100%;
+         min-height: 100%;
+
+         .Right {
+            padding: 20px;
+         }
+      }
+   }
+}
