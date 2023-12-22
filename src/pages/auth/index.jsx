@@ -28,27 +28,7 @@ const Login = () => {
                toast.error("Accès non authorisé !")
             }
             else {
-               localStorage.setItem('id', res.data.id)
-               account.saveToken(JSON.stringify(res.data.access))
-               if (res.data.role === 1) {
-                  localStorage.setItem('lero', 'zg450354b-2d9cv-4a42-904b-1700f57863d5')
-               }
-               else if (res.data.role === 2) {
-                  localStorage.setItem('lero', 'zg450354b-2d9cv-4a42-904b-2700f57863d5')
-               }
-               else if (res.data.role === 3) {
-                  localStorage.setItem('lero', 'zg450354b-2d9cv-4a42-904b-3700f57863d5')
-               }
-
-               if (res.data.env === 1) {
-                  localStorage.setItem('env', 'fkc76rew4-sef590kmlkm-1drds4w323-tpfz6r6')
-               }
-               else {
-                  localStorage.setItem('env', 'fkc76rew4-sef590kmlkm-2drds4w323-tpfz6r6')
-               }
-
-               localStorage.setItem('status', 'gt6m06768-rq0835gdgd-bvdf56-45rds4mbvpo')
-
+               account.saveToken(res.data.token, res.data.id, res.data.role, res.data.env)
                Navigate("/dashboard")
             }
 

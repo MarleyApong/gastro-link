@@ -5,10 +5,10 @@ import SubMenu from './sub-menu'
 import { ItemsInternalAdmin, ItemsInternalUser } from '../../data/items-nav'
 import './sidebar.scss'
 import avatar from '../../assets/imgs/avatar/Marley.jpg'
-import { statusAccess } from '../../services/access'
+import Access from '../../services/access'
 
 const Sidebar = ({ profil, setProfil, sidebar }) => {
-    const access = statusAccess()
+    const access = Access()
     const Navigate = useNavigate()
 
     const logout = (e) => {

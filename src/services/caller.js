@@ -9,9 +9,8 @@ const Axios  = axios.create ({
 // INTERCEPTOR OF TOKEN
 Axios.interceptors.request.use(request => {
     if (account.isLogged()) {
-        const token = JSON.parse(localStorage.getItem('lkiy-'))
-        request.headers.Authorization = 'Bearer ' + token[0].token
-        alert()
+        const token = localStorage.getItem('lkiy-')
+        request.headers.Authorization = 'Bearer ' + token
     }
     return request
 })

@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom'
 import './dashboard.scss'
 import Pagination from '../../components/pagination'
 import { users } from '../../services/users'
-import { statusAccess } from '../../services/access'
+
 import { FirstGroupInternal, FirstGroupExternal } from '../../utils/first-group'
 import { SecondGroupExternal, SecondGroupInternal } from '../../utils/second-group'
+import Access from '../../services/access'
+
 
 const Dashboard = () => {
-   const access = statusAccess()
+   const access = Access()
    const Navigate = useNavigate()
    // const [pageable, setPageable] = useState({
 

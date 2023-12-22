@@ -1,60 +1,96 @@
-const local = {
-   id: localStorage.getItem('id'),
-   role: localStorage.getItem('lero'),
-   env: localStorage.getItem('env'),
-   status: localStorage.getItem('status'),
-}
+import { useEffect, useState } from 'react'
+import { account } from './account'
+import { useNavigate } from 'react-router-dom'
 
-const idUser = () => {
-   return local.id
-}
+const Access = () => {
+   const Navigate = useNavigate()
 
-/*
-   env = 1 => internal
-   env = 2 => external
+   const [role, setRole] = useState(localStorage.getItem('lero'))
+   const [env, setEnv] = useState(localStorage.getItem('env'))
+   const [status, setStatus] = useState(localStorage.getItem('status'))
+   const [token, setToken] = useState(localStorage.getItem('lkiy-'))
+   const [id, setId] = useState(localStorage.getItem('id'))
+   const [data, setData] = useState(0)
 
-   role = 1 => user
-   role = 2 => admin
-   role = 3 => super admin
----------------------------------
-   Now : env = 1 && role = 1 return 11
-         env = 1 && role = 2 return 12
-         :::
-         :::
-         env = 2 && role = 1 return 21
-*/
+   useEffect(() => {
+      const timer = window.setInterval(() => {
+         const currentRole = localStorage.getItem('lero')
+         const currentEnv = localStorage.getItem('env')
+         const currentStatus = localStorage.getItem('status')
+         const currentToken = localStorage.getItem('lkiy-')
+         const currentId = localStorage.getItem('id')
 
-export const statusAccess = () => {
-   if (local.status !== 'gt6m06768-rq0835gdgd-bvdf56-45rds4mbvpo') {
-      return 0
-   }
-   else {
-      if (local.env === 'fkc76rew4-sef590kmlkm-1drds4w323-tpfz6r6') {
-         if (local.role === 'zg450354b-2d9cv-4a42-904b-1700f57863d5') {
-            return 11
+         if (currentRole !== role || currentEnv !== env || currentStatus !== status || currentToken !== token || currentId !== id ) {
+            setRole(currentRole)
+            setEnv(currentEnv)
+            setStatus(currentStatus)
+            setToken(currentToken)
+            setId(currentId)
          }
-         else if (local.role === 'zg450354b-2d9cv-4a42-904b-2700f57863d5') {
-            return 12
-         }
-         else if (local.role === 'zg450354b-2d9cv-4a42-904b-3700f57863d5') {
-            return 13
+      }, 1000)
+
+      return () => {
+         clearInterval(timer)
+      }
+   }, [role, env, status, token, id])
+
+   useEffect(() => {
+      const loadData = () => {
+         if (status !== 'gt6m06768-rq0835gdgd-bvdf56-45rds4mbvpo' || !token || !id) {
+            setData(0)
+            setTimeout(() => {
+               const code = 300
+               account.logout(code)
+            }, 10000)
+         } 
+         else {
+            let newData = 0
+            if (env === 'fkc76rew4-sef590kmlkm-1drds4w323-tpfz6r6') {
+               if (role === 'zg450354b-2d9cv-4a42-904b-1700f57863d5') {
+                  newData = 11
+               } else if (role === 'zg450354b-2d9cv-4a42-904b-2700f57863d5') {
+                  newData = 12
+               } else if (role === 'zg450354b-2d9cv-4a42-904b-3700f57863d5') {
+                  newData = 13
+               } else {
+                  setData(0)
+                  setTimeout(() => {
+                     const code = 300
+                     account.logout(code)
+                  }, 10000)
+                  return
+               }
+            } else if (env === 'fkc76rew4-sef590kmlkm-2drds4w323-tpfz6r6') {
+               if (role === 'zg450354b-2d9cv-4a42-904b-1700f57863d5') {
+                  newData = 21
+               } else if (role === 'zg450354b-2d9cv-4a42-904b-2700f57863d5') {
+                  newData = 22
+               } else if (role === 'zg450354b-2d9cv-4a42-904b-3700f57863d5') {
+                  newData = 23
+               } else {
+                  setData(0)
+                  setTimeout(() => {
+                     const code = 300
+                     account.logout(code)
+                  }, 10000)
+                  return
+               }
+            } else {
+               setData(0)
+               setTimeout(() => {
+                  const code = 300
+                  account.logout(code)
+               }, 10000)
+               return
+            }
+            setData(newData)
          }
       }
-      else if (local.env === 'fkc76rew4-sef590kmlkm-2drds4w323-tpfz6r6') {
-         if (local.role === 'zg450354b-2d9cv-4a42-904b-1700f57863d5') {
-            return 21
-         }
-         else if (local.role === 'zg450354b-2d9cv-4a42-904b-2700f57863d5') {
-            return 22
-         }
-         else if (local.role === 'zg450354b-2d9cv-4a42-904b-3700f57863d5') {
-            return 23
-         }
-      }
-   }
+
+      loadData()
+   }, [status, role, env, Navigate, data, token, id])
+
+   return data
 }
 
-export const access = {
-   idUser,
-   statusAccess
-}
+export default Access

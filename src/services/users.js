@@ -1,30 +1,36 @@
-import Axios from "./caller";
+import Axios from "./caller"
+
+const route = 'Users'
 
 const getAll = () => {
-   return Axios.get('/users')
+   return Axios.get(`/${route}`)
 }
 
-const getOne = () => {
-   return Axios.get(`/users/${id}`)
+const getOne = (id) => {
+   return Axios.get(`/${route}/${id}`)
 }
 
 const add = (user) => {
-   return Axios.post(`/users`, user)
+   return Axios.put(`/${route}`, user)
 }
 
-const changeStatus = (id, status) => {
-   return Axios.get(`/api/v1.0/users/lockAndUnlockAccount/${id}/${status}`)
+const changeStatus = (id) => {
+   return Axios.patch(`/${route}/${id}/status`)
 }
 
-const deleteUser = (id) => {
-   return Axios.delete(`/api/v1.0/users/${id}`)
+const changeRole = (id, role) => {
+   return Axios.patch(`/${route}/${id}/${role}`)
+}
+
+const deleted = (id) => {
+   return Axios.delete(`/${route}/${id}`)
 }
 
 export const users = {
    getAll,
    getOne,
    add,
-   signUp,
    changeStatus,
-   deleteUser
+   changeRole,
+   deleted
 }

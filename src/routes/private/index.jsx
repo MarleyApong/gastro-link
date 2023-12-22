@@ -11,11 +11,6 @@ import Header from '../../components/header'
 const PrivateRoute = () => {
    const [profil, setProfil] = useState(false)
    const [sidebar, setSidebar] = useState(false)
-   const access = {
-      role: localStorage.getItem('lero'),
-      env:  localStorage.getItem('env'),
-      status:  localStorage.getItem('status'),
-   }
 
    return (
       <div className="Pages">

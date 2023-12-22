@@ -4,12 +4,12 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import './header.scss'
 import logo from '../../assets/imgs/logo/cs-logo.png'
 import { Link } from 'react-router-dom'
-import { statusAccess } from '../../services/access'
+import Access from '../../services/access'
 
 const Header = ({ sidebar, setSidebar }) => {
     const Navigate = useNavigate()
     const location = useLocation()
-    const access = statusAccess()
+    const access = Access()
 
     const SelectLink = ({ urlLink }) => {
         if (urlLink.includes('dashboard')) {
@@ -86,7 +86,7 @@ const Header = ({ sidebar, setSidebar }) => {
                                 <Link to='http://localhost:3000/customer-space' target='_blank' className="NotificationIcon">
                                     <RemixIcons.RiGlobalLine />
                                 </Link> :
-                               Navigate('/auth/login')
+                                Navigate('/auth/login')
 
                     }
 

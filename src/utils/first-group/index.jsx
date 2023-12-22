@@ -1,7 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import * as RemixIcons from "react-icons/ri"
+import { Companies } from '../../services/companies'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
+import { account } from '../../services/account'
 
 export const FirstGroupInternal = () => {
+   const Navigate = useNavigate()
+   // const [companies, setCompanies] = useState()
+
+   // useEffect(() => {
+   //    const load = () => {
+   //       Companies.getAll()
+   //          .then((res) => {
+   //             setCompanies(res.data)
+
+   //          })
+   //          .catch((err => {
+   //             console.log("erreur: ", err)
+   //          }))
+   //    }
+
+   //    load()
+   // }, [])
    return (
       <>
          <div className="TBox">
