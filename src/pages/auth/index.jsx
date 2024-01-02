@@ -67,7 +67,7 @@ const Login = () => {
             <div className="Left">
                <h1>Bienvenue sur customer space</h1>
                <p>Connectez-vous pour continuer</p>
-               <span>Copyright &#xa9;customer-space 2023 | <a target='_blank' href="https://www.allhcorp.com" rel="noreferrer">made by allhcorp</a> </span>
+               <span>Copyright &#xa9;customer-space 2024 | <a target='_blank' href="https://www.allhcorp.com" rel="noreferrer">made by allhcorp</a> </span>
             </div>
             <div className="Right">
                <form onSubmit={handleLogin} method='post' className="Form">

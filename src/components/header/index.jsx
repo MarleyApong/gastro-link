@@ -11,38 +11,9 @@ const Header = ({ sidebar, setSidebar }) => {
     const location = useLocation()
     const access = Access()
 
-    const SelectLink = ({ urlLink }) => {
-        if (urlLink.includes('dashboard')) {
-            return "tableau de bord"
-        }
-        else if (urlLink.includes('organizations')) {
-            return "liste organisations"
-        }
-        else if (urlLink.includes('organizations/new')) {
-            return "ajout organisation"
-        }
-        else if (urlLink.includes('surveys')) {
-            return "liste enquêtes"
-        }
-        else if (urlLink.includes('surveys/new')) {
-            return "ajout enquête"
-        }
-        else if (urlLink.includes('notes')) {
-            return "notes"
-        }
-        else if (urlLink.includes('companies')) {
-            return "liste entreprises"
-        }
-        else if (urlLink.includes('companies/new')) {
-            return "ajout entreprise"
-        }
-        else if (urlLink.includes('customers')) {
-            return "liste clients"
-        }
-        else if (urlLink.includes('settings')) {
-            return "paramètres"
-        }
-    }
+    const newOrganization = () => Navigate('/organizations/new')
+    const newCompany = () => Navigate('/companies/new')
+    const newSurveys = () => Navigate('/surveys/new')
 
     return (
         <header>
@@ -51,22 +22,25 @@ const Header = ({ sidebar, setSidebar }) => {
                     <img src={logo} alt="" />
                     <span>All HIGHT Corp</span>
                 </div>
-                <div className="Date">[]
-                    {/* <RemixIcons.RiTimeLine /> */}
-                    <span style={{ textTransform: 'uppercase', width: '150px' }}><SelectLink urlLink={location.pathname} /></span>
-                </div>
             </div>
-            <div className="Middle">
+            {/* <div className="Middle">
                 <input type="text" name="" id="" placeholder='Rechercher...' />
                 <RemixIcons.RiSearch2Line className='Icon' />
-            </div>
+            </div> */}
             <div className="Right">
                 <div className="Not-SM">
                     {
                         access === 12 || access === 13 ?
                             <button className='Btn Success'>
                                 <RemixIcons.RiAddLine />
-                                <small>Nouvelle Entreprise</small>
+                                {
+                                    location.pathname.includes('compan') ?
+                                        <small onClick={newOrganization}>Nouvelle Organizat.</small> :
+                                        location.pathname.includes('organizat') ?
+                                            <small  onClick={newCompany}>Nouvelle Entreprise</small> : 
+                                            location.pathname.includes('surve') ?
+                                            <small onClick={newSurveys}>Nouvelle Enquête</small> :  <small>Nouvelle Enquête</small>
+                                }       
                             </button> :
                             access === 11 ?
                                 "" :
@@ -76,7 +50,7 @@ const Header = ({ sidebar, setSidebar }) => {
                                         <small>Nouvelle Enquête</small>
                                     </button> :
                                     access === 21 ?
-                                        "" : Navigate('/auth/login')
+                                        "" : ""
 
                     }
                     {
@@ -86,7 +60,7 @@ const Header = ({ sidebar, setSidebar }) => {
                                 <Link to='http://localhost:3000/customer-space' target='_blank' className="NotificationIcon">
                                     <RemixIcons.RiGlobalLine />
                                 </Link> :
-                                Navigate('/auth/login')
+                                ""
 
                     }
 

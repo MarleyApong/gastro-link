@@ -1,13 +1,9 @@
 import Axios from "./caller"
 
-const route = 'companies'
+const route = 'surveys'
 
-const getCount = () => {
+const getAll = () => {
    return Axios.get(`/${route}`)
-}
-
-const getAll = (order, filter, search, status, limit, page) => {
-   return Axios.get(`/${route}?limit=${limit}&page=${page}&sort=${order}&status=${status}&filter=${filter}&k=${search}`)
 }
 
 const getOne = (id) => {
@@ -18,11 +14,11 @@ const add = (data) => {
    return Axios.put(`/${route}`, data)
 }
 
-const update = (id,data) => {
-   return Axios.patch(`/${route}/${id}`, data)
+const update = (data) => {
+   return Axios.patch(`/${route}`, data)
 }
 
-const changeProfil = (id, data) => {
+const changeProfil = (data) => {
    return Axios.patch(`/${route}/${id}/profile-image`, data)
 }
 
@@ -34,8 +30,7 @@ const deleted = (id) => {
    return Axios.delete(`/${route}/${id}`)
 }
 
-export const Companies = {
-   getCount,
+export const Surveys = {
    getAll,
    getOne,
    add,

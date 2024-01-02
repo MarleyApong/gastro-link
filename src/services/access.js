@@ -39,56 +39,61 @@ const Access = () => {
          if (status !== 'gt6m06768-rq0835gdgd-bvdf56-45rds4mbvpo' || !token || !id) {
             setData(0)
             setTimeout(() => {
-               const code = 300
-               account.logout(code)
-            }, 10000)
+               account.logout()
+            }, 1000)
          } 
          else {
             let newData = 0
-            if (env === 'fkc76rew4-sef590kmlkm-1drds4w323-tpfz6r6') {
-               if (role === 'zg450354b-2d9cv-4a42-904b-1700f57863d5') {
-                  newData = 11
-               } else if (role === 'zg450354b-2d9cv-4a42-904b-2700f57863d5') {
-                  newData = 12
-               } else if (role === 'zg450354b-2d9cv-4a42-904b-3700f57863d5') {
-                  newData = 13
-               } else {
-                  setData(0)
-                  setTimeout(() => {
-                     const code = 300
-                     account.logout(code)
-                  }, 10000)
+            switch (env) {
+               case 'fkc76rew4-sef590kmlkm-1drds4w323-tpfz6r6':
+                  switch (role) {
+                     case 'zg450354b-2d9cv-4a42-904b-1700f57863d5':
+                        newData = 11
+                        break
+                     case 'zg450354b-2d9cv-4a42-904b-2700f57863d5':
+                        newData = 12
+                        break
+                     case 'zg450354b-2d9cv-4a42-904b-3700f57863d5':
+                        newData = 13
+                        break
+                     default:
+                        handleLogout(0)
+                        return
+                  }
+                  break
+               case 'fkc76rew4-sef590kmlkm-2drds4w323-tpfz6r6':
+                  switch (role) {
+                     case 'zg450354b-2d9cv-4a42-904b-1700f57863d5':
+                        newData = 21
+                        break
+                     case 'zg450354b-2d9cv-4a42-904b-2700f57863d5':
+                        newData = 22
+                        break
+                     case 'zg450354b-2d9cv-4a42-904b-3700f57863d5':
+                        newData = 23
+                        break
+                     default:
+                        handleLogout(300)
+                        return
+                  }
+                  break
+               default:
+                  handleLogout(300)
                   return
-               }
-            } else if (env === 'fkc76rew4-sef590kmlkm-2drds4w323-tpfz6r6') {
-               if (role === 'zg450354b-2d9cv-4a42-904b-1700f57863d5') {
-                  newData = 21
-               } else if (role === 'zg450354b-2d9cv-4a42-904b-2700f57863d5') {
-                  newData = 22
-               } else if (role === 'zg450354b-2d9cv-4a42-904b-3700f57863d5') {
-                  newData = 23
-               } else {
-                  setData(0)
-                  setTimeout(() => {
-                     const code = 300
-                     account.logout(code)
-                  }, 10000)
-                  return
-               }
-            } else {
-               setData(0)
-               setTimeout(() => {
-                  const code = 300
-                  account.logout(code)
-               }, 10000)
-               return
             }
             setData(newData)
          }
       }
 
+      const handleLogout = (code) => {
+         setData(0)
+         setTimeout(() => {
+            account.logout(code)
+         }, 1000)
+      }
+
       loadData()
-   }, [status, role, env, Navigate, data, token, id])
+   }, [status, role, env, data, token, id])
 
    return data
 }

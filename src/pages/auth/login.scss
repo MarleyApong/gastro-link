@@ -24,7 +24,7 @@
          align-items: center;
          width: 60%;
          overflow: hidden;
-         background-image: linear-gradient(var(--color-primary), black), url('../../assets/images/cover_login.jpg');
+         background: var(--color-primary);
          color: var(--color-1);
          background-size: cover;
          padding: 0 10px;

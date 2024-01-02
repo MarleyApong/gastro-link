@@ -2,7 +2,7 @@ import toast from "react-hot-toast"
 import Access from "./access"
 
 const saveToken = (token, id, role, env) => {
-    localStorage.setItem('lkiy-', JSON.stringify(token))
+    localStorage.setItem('lkiy-', token)
     localStorage.setItem('id', id)
     localStorage.setItem('lero',
         role === 1
@@ -23,7 +23,14 @@ const saveToken = (token, id, role, env) => {
     localStorage.setItem('status', 'gt6m06768-rq0835gdgd-bvdf56-45rds4mbvpo')
 }
 
-const logout = () => {
+let logoutAlreadyTriggered = false
+
+const logout = (code) => {
+    if (code === 300 && !logoutAlreadyTriggered) {
+        logoutAlreadyTriggered = true
+        toast.error("Déconnexion ! Les données de connexion ont été corrompues.")
+    }
+
     localStorage.removeItem('lkiy-')
     localStorage.removeItem('id')
     localStorage.removeItem('status')
@@ -40,8 +47,8 @@ const isLogged = () => {
 }
 
 const getToken = () => {
-    const token = JSON.parse(localStorage.getItem('lkiy-'))
-    return token[0].token
+    const token = localStorage.getItem('lkiy-')
+    return token
 }
 
 export const account = {

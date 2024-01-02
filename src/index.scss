@@ -1,12 +1,21 @@
 :root {
-  --color-primary: #db1d1d;
+  --color-primary: linear-gradient(45deg,
+      #00335B 49%,
+      #0e0e10 51%,
+      #616270 49%,
+      #d30606 51%,
+      #d30606 99%);
+
   --color-primary-blur: #cc9697;
-  --z-color-1: #171722;
-  --z-color-2: #940000;
+  --z-color-1: #00335B;
+  --z-color-2: #d30606;
   --color-1: #fff;
   --color-2: #f1f1f1e1;
   --color-3: #000;
-  --shadow-color: #d8d5d560;
+  --shadow-color: #1400000d;
+  --color-err: #5d0606;
+  --color-err-hv: #b40707;
+
 }
 
 * {
@@ -20,6 +29,7 @@
 .TBoxx::-webkit-scrollbar,
 .Details::-webkit-scrollbar,
 .Survey-Cont::-webkit-scrollbar,
+.CustomerData::-webkit-scrollbar,
 body::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -32,6 +42,7 @@ body::-webkit-scrollbar {
 .TBoxx::-webkit-scrollbar-track,
 .Details::-webkit-scrollbar-track,
 .Survey-Cont::-webkit-scrollbar-track,
+.CustomerData::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track {
   border-radius: 10px;
   background: var(--color-2);
@@ -41,11 +52,11 @@ body::-webkit-scrollbar-track {
 .TBoxx::-webkit-scrollbar-thumb,
 .details::-webkit-scrollbar-thumb,
 .Survey-Cont::-webkit-scrollbar-thumb,
+.CustomerData::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
-  border: 3px solid var(--color-primary);
+  border: 3px solid var(--z-color-2);
   border-radius: 10px;
 }
-
 
 .Btn {
   display: flex;
@@ -55,21 +66,26 @@ body::-webkit-scrollbar-thumb {
   outline: none;
   border: none;
   border-radius: 20px;
+  background: #abababe1;
   color: var(--color-1);
   font-size: 12px;
   cursor: pointer;
 }
 
 .Success {
-  background: #28a745;
+  background: #011b07;
 }
 
 .Send {
-  background: #006494;
+  background: #033750;
 }
 
 .Error {
-  background: #9e1515;
+  background: #9a0707;
+}
+
+.Update {
+  background: #FD7100;
 }
 
 /* .Success-Light {
@@ -102,13 +118,15 @@ label {
 }
 
 select,
-input {
+input,
+textarea {
   padding: 2px;
   font-size: 13px !important;
   border-radius: 5px;
   border-color: var(--color-2);
   outline: none;
 }
+
 
 
 .Pages {
@@ -178,7 +196,7 @@ input {
 }
 
 .CustomerData {
-  box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color) !important;
+  box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color), 2px -2px 3px var(--shadow-color), -2px 2px 3px var(--shadow-color) !important;
   border-radius: 5px !important;
   height: calc(100vh - 16rem) !important;
 }

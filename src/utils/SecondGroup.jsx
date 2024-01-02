@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import * as RemixIcons from "react-icons/ri"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { cuveExternal, cuveInternal } from '../../data/cuve'
-import Pagination from '../../components/pagination'
+import { cuveExternal, cuveInternal } from '../data/cuve'
+import Pagination from '../components/pagination'
+import { Companies } from '../services/companies'
+import { Surveys } from '../services/surveys'
 
-export const SecondGroupInternal = () => {
+export const SecondGroupInternal = ({chart }) => {
+   const [companies, setCompanies] = useState([])
+   const [surveys, setSurveys] = useState([])
+   useEffect(() => {
+      Companies.getCount()
+         .then((res) => {
+            setCompanies(res.data.content.data)
+         })
+   }, [])
+
    return (
       <>
          <div className="TBoxx">
@@ -13,20 +24,19 @@ export const SecondGroupInternal = () => {
                <LineChart
                   width={500}
                   height={300}
-                  data={cuveInternal}
+                  data={chart}
                   margin={{
                      top: 5,
                      right: 30,
                      left: 20,
                      bottom: 5,
-                  }}
-               >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
+                  }}>
+                  <CartesianGrid strokeDasharray="3" />
+                  <XAxis dataKey="0" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="Courbe" stroke="#8884d8" activeDot={{ r: 8 }} />
+                  <Line type="monotone" dataKey="1" stroke="#8884d8" activeDot={{ r: 8 }} />
                </LineChart>
             </ResponsiveContainer>
          </div>
@@ -60,51 +70,25 @@ export const SecondGroupInternal = () => {
                         <td>Nom</td>
                         <td>Email</td>
                         <td>Téléphone</td>
-                        <td>Immatriculation</td>
+                        <td>Ville</td>
                         <td>Statut</td>
                      </tr>
                   </thead>
                   <tbody>
-                     <tr>
-                        <td>1</td>
-                        <td>Resto famine</td>
-                        <td>resto.famine@gmail.com</td>
-                        <td>655 67 89 90</td>
-                        <td>RJ45UKSWE34098</td>
-                        <td><RemixIcons.RiCheckboxCircleLine size={16} /></td>
-                     </tr>
-                     <tr>
-                        <td>2</td>
-                        <td>Resto famine</td>
-                        <td>resto.famine@gmail.com</td>
-                        <td>655 67 89 90</td>
-                        <td>RJ45UKSWE34098</td>
-                        <td><RemixIcons.RiCheckboxCircleLine size={16} /></td>
-                     </tr>
-                     <tr>
-                        <td>3</td>
-                        <td>Resto famine</td>
-                        <td>resto.famine@gmail.com</td>
-                        <td>655 67 89 90</td>
-                        <td>RJ45UKSWE34098</td>
-                        <td><RemixIcons.RiCheckboxCircleLine size={16} /></td>
-                     </tr>
-                     <tr>
-                        <td>4</td>
-                        <td>Resto famine</td>
-                        <td>resto.famine@gmail.com</td>
-                        <td>655 67 89 90</td>
-                        <td>RJ45UKSWE34098</td>
-                        <td><RemixIcons.RiCheckboxCircleLine size={16} /></td>
-                     </tr>
-                     <tr>
-                        <td>5</td>
-                        <td>Resto famine</td>
-                        <td>resto.famine@gmail.com</td>
-                        <td>655 67 89 90</td>
-                        <td>RJ45UKSWE34098</td>
-                        <td><RemixIcons.RiCheckboxCircleLine size={16} /></td>
-                     </tr>
+                     {
+                        companies.map((company, index) => {
+                           return (
+                              <tr key={index}>
+                              <td>{index + 1}</td>
+                              <td>{company.name}</td>
+                              <td>{company.email}</td>
+                              <td>{company.phone}</td>
+                              <td>{company.city}</td>
+                              <td><RemixIcons.RiCheckboxCircleLine size={16} /></td>
+                           </tr>
+                           )
+                        })
+                     }
                   </tbody>
                </table>
             </div>

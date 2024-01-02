@@ -2,10 +2,11 @@ import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import * as RemixIcons from "react-icons/ri"
 import SubMenu from './sub-menu'
-import { ItemsInternalAdmin, ItemsInternalUser } from '../../data/items-nav'
+import { ItemsInternalAdmin, ItemsInternalUser } from '../../data/itemsNav'
 import './sidebar.scss'
 import avatar from '../../assets/imgs/avatar/Marley.jpg'
 import Access from '../../services/access'
+import { account } from '../../services/account'
 
 const Sidebar = ({ profil, setProfil, sidebar }) => {
     const access = Access()
@@ -14,8 +15,7 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
     const logout = (e) => {
         e.preventDefault()
         if (window.confirm("Attention, vous êtes sur le point de vous déconnecter !") === true) {
-            //    account_service.logout()
-            //    sessionStorage.removeItem("is-already-load", "yes")
+            account.logout()
             Navigate('/auth/login')
         }
     }
@@ -49,7 +49,7 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
                                 }) :
                                     access === 22 ? ItemsInternalAdmin.map((item, index) => {
                                         return <SubMenu item={item} key={index} />
-                                    }) : Navigate('/auth/login')
+                                    }) : ""
                 }
 
                 <NavLink to={'/auth/login'} onClick={logout}>

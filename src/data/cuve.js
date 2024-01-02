@@ -1,38 +1,38 @@
 export const cuveInternal = [
    {
       name: 'Lun',
-      Courbe: 10
+      total: 10
    },
    {
       name: 'Ma',
-      Courbe: 20
+      total: 20
    },
    {
       name: 'Me',
-      Courbe: 20
+      total: 20
    },
    {
       name: 'Jeu',
-      Courbe: 30
+      total: 30
    },
    {
       name: 'Ven',
-      Courbe: 31
+      total: 31
    },
    {
       name: 'Sam',
-      Courbe: 35
+      total: 35
    },
    {
       name: 'Dim',
-      Courbe: 50
+      total: 50
    },
 ]
 
 export const cuveExternal = [
    {
       name: 'Lun',
-      Courbe: 10
+      total: 10
    },
    {
       name: 'Ma',

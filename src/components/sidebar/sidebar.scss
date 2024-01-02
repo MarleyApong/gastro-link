@@ -16,7 +16,7 @@
         height: 80px;
         width: 229px;
         border-radius: 5px;
-        background: var(--color-primary);
+        background: var(--z-color-2);
         box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
         padding: 0 10px;
         cursor: pointer;
@@ -75,19 +75,19 @@
             overflow: hidden;
 
             &.LinkActive {
-                background: var(--color-2);
-                color: var(--color-3);
+                background: #14000070;
+                color: var(--color-1);
                 font-weight: 500;
                 position: relative;
 
                 .IconText {
-                    color: var(--color-3);
+                    color: var(--color-1);
                 }
 
                 &::before {
                     width: 3px;
                     height: 20px;
-                    background: var(--color-3);
+                    background: var(--color-1);
                     position: absolute;
                     content: '';
                     left: 0;

@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Dashboard, Layout} from '../../pages'
-// import { ListeNote, ListeClient, ListeEnquete } from '../pages/users'
-Header
-import Profil from '../../components/profil'
-import Sidebar from '../../components/sidebar'
+import { Dashboard, Layout, ListCompany, ListOrganization, ListSurvey, NewCompany, NewOrganization, NewSurvey, UpdateCompany, UpdateOrganization } from '../pages'
+import Profil from '../components/profil'
+import Sidebar from '../components/sidebar'
 // import Erreur404 from '../_util/Erreur404'
-import Header from '../../components/header'
+import Header from '../components/header'
+import Access from '../services/access'
 
 const PrivateRoute = () => {
    const [profil, setProfil] = useState(false)
@@ -33,11 +32,18 @@ const PrivateRoute = () => {
                   <Route element={<Layout />}>
                      <Route index element={<Dashboard />} />
                      <Route path='/dashboard' element={<Dashboard />} />
-                     {/* <Route path='/company' element={<ListeEntreprise />} />
-                     <Route path='/company/list' element={<ListeEntreprise />} />
-                     <Route path='/company/new' element={<AjouterEntreprise />} />
-                     <Route path='/company/update' element={<ModifierEntreprise />} />
-                     <Route path='/survey/list' element={<ListeEnquete />} />
+                     <Route path='/companies' element={<ListCompany />} />
+                     <Route path='/companies/list' element={<ListCompany />} />
+                     <Route path='/companies/new' element={<NewCompany />} />
+                     <Route path='/companies/update/:id' element={<UpdateCompany />} />
+                     <Route path='/organizations' element={<ListOrganization />} />
+                     <Route path='/organizations/list' element={<ListOrganization />} />
+                     <Route path='/organizations/new' element={<NewOrganization />} />
+                     <Route path='/organizations/update/:id' element={<UpdateOrganization />} />
+                     <Route path='/surveys' element={<ListSurvey />} />
+                     <Route path='/surveys/list' element={<ListSurvey />} />
+                     <Route path='/surveys/new' element={<NewSurvey />} />
+                     {/*<Route path='/survey/list' element={<ListeEnquete />} />
                      <Route path='/survey' element={<ListeEnquete />} />
                      <Route path='survey/note' element={<ListeNote />} />
                      <Route path='/customer' element={<ListeClient />} />

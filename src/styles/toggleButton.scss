@@ -1,0 +1,36 @@
+.ToggleButton {
+   margin-left: 5px;
+
+   .slide-button {
+      position: relative;
+      background-color: #d2d2d2;
+      width: 40px;
+      height: 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: .2s;
+
+      &::before {
+         position: absolute;
+         content: '';
+         background-color: #fff;
+         width: 17px;
+         height: 17px;
+         border-radius: 50%;
+         margin: 1.4px;
+         transition: .2s;
+      }
+   }
+
+   #check-button {
+      display: none;
+
+      &:checked + .slide-button {
+         background-color: var(--z-color-1);
+      }
+
+      &:checked + .slide-button::before {
+         transform: translateX(20px);
+      }
+   }
+}

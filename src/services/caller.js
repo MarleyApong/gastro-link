@@ -1,9 +1,8 @@
 import axios from "axios";
 import { account } from "./account";
 
-const Axios  = axios.create ({
+const Axios = axios.create({
     baseURL: 'http://localhost:8000',
-    withCredentials: false,
 })
 
 // INTERCEPTOR OF TOKEN
