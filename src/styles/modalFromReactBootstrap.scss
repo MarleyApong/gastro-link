@@ -104,6 +104,44 @@
  }
 
  // =================================
-.card-question {
+.card-answers {
    position: relative;
+   height: 300px;
+   overflow: hidden;
+
+   .answers {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      height: auto;
+      transition: 1s;
+   }
+
+
+   .add-answers, .add-answers-none {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      border: 2px solid var(--shadow-color);
+      background: #fff;
+      transform: translateX(1000%);
+      transition: 1s;
+      z-index: 100;
+
+      textarea {
+         width: auto;
+         height: 200px;
+         border: 1px solid var(--z-color-2);
+         resize: none;
+      }
+   }
+
+   .add-answers-none {
+      transform: translateX(0%);
+      transition: 1s;
+   }
 }

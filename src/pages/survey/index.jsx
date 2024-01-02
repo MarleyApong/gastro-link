@@ -58,10 +58,7 @@ const ListSurvey = () => {
    useEffect(() => {
       Surveys.getOne(id)
          .then((res) => setOneData(res.data.content))
-
    }, [id, refresh])
-
-   console.log("Data: ", data);
 
    const handleToggle = (idRow) => {
       Surveys.changeStatus(idRow)
@@ -149,26 +146,30 @@ const ListSurvey = () => {
                         <div className="fw-bold fs-5 mb-4">Entre. : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</div>
                         <div className="mb-2 fw-bold p-2 shadow">Enquête: {oneData.name ? oneData.name : '---'}</div>
                         <div className="mb-3"><AiOutlineFieldNumber className="icon" size={18} />{oneData.id ? oneData.id : '---'}</div>
-                        <div className="card-question">
-                           <div className="question p-2 shadow">
-                              <label htmlFor="answers">Nom de l'enquête: </label>
+                        <div className="card-answers">
+                           <div className={stateQuestion ? "add-answers-none answers p-2 shadow" : "add-answers answers p-2 shadow"}>
+                              <label htmlFor="answers" className="fw-bold">Nom de l'enquête: </label>
                               <textarea name="answers" id="answers"></textarea>
-                              <Button onClick={() => setStateQuestion(true)} className='Btn Success btn-sm me-2'><RemixIcons.RiAddLine />Ajouter</Button>
+                              <div className="d-flex justify-content-between">
+                                 <Button onClick={() => setStateQuestion(true)} className='Btn Success btn-sm me-2'><RemixIcons.RiAddLine />Ajouter</Button>
+                                 <Button onClick={() => setStateQuestion(false)} className="Btn Error btn-sm"><RemixIcons.RiCloseLine /></Button>
+                              </div>
                            </div>
-                           <div className="ps-3">
+                           <div className="ps-3 answers">
                               <div className="mb-3"><RemixIcons.RiNumber1 className="icon" />{oneData.createdAt ? dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss') : '---'}</div>
                               <div className="mb-3"><RemixIcons.RiNumber2 className="icon" />{oneData.email ? oneData.email : '---'}</div>
                               <div className="mb-3"><RemixIcons.RiNumber3 className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
                               <div className="mb-3"><RemixIcons.RiNumber4 className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
                               <div className="mb-3"><RemixIcons.RiNumber5 className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
+                              <div className="site">
+                                 <RemixIcons.RiGlobalLine className="icon" />
+                                 <a href="https://www.allhcorp.com" target="_blank" rel="noopener noreferrer">
+                                    www.allhcorp.com
+                                 </a>
+                              </div>
                            </div>
                         </div>
-                        <div className="site">
-                           <RemixIcons.RiGlobalLine className="icon" />
-                           <a href="https://www.allhcorp.com" target="_blank" rel="noopener noreferrer">
-                              www.allhcorp.com
-                           </a>
-                        </div>
+
                      </div>
                   </div>
                </div>
