@@ -15,8 +15,8 @@
         gap: 10px;
         height: 80px;
         width: 229px;
-        border-radius: 5px;
-        background: var(--z-color-2);
+        // border-radius: 5px;
+        background: var(--user-color);
         box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
         padding: 0 10px;
         cursor: pointer;
@@ -47,8 +47,8 @@
     }
 
     .IconText {
-        font-size: 25px;
-        color: var(--color-1);
+        font-size: 15px;
+        color: var(--aside-text-color);
         transition: .3s;
     }
 
@@ -57,25 +57,26 @@
         flex-direction: column;
         gap: 2px;
         height: calc(100vh - 10.5rem);
-        border-radius: 5px;
-        background: var(--color-primary);
+        // border-radius: 5px;
+        background: var(--aside-color);
         box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
         overflow-x: hidden;
 
         a {
-            color: var(--color-1);
+            color: var(--aside-text-color);
+            font-weight: 600;
             text-decoration: none;
             padding: 15px;
             padding-left: 40px;
             display: flex;
             gap: 5px;
             align-items: center;
-            width: 229px;
+            // width: 200px;
             transition: .3s;
             overflow: hidden;
 
             &.LinkActive {
-                background: #14000070;
+                background: var(--active-color);
                 color: var(--color-1);
                 font-weight: 500;
                 position: relative;
@@ -96,10 +97,11 @@
 
             &.LinkActive2 {
                 background: var(--color-2) !important;
-                color: var(--color-3);
+                color: var(--aside-text-color);
+                border: 1px solid var(--aside-text-color);
+                border-style: dashed;
                 font-weight: 500;
                 transition: .3s;
-
             }
 
             &:not(a.LinkActive):hover {
@@ -116,14 +118,15 @@
         .sousMenu {
             padding: 10px 5px;
             margin: 0 50px;
-            color: var(--color-2);
-            // background: var(--shadow-color);
+            color: var(--aside-text-color);
+            font-weight: 400;
             width: 100%;
             transition: .3s;
 
             &:hover {
                 background: var(--shadow-color) !important;
-                color: var(--color-2);
+                color: var(--aside-text-color);
+                font-weight: 500;
             }
 
             i {

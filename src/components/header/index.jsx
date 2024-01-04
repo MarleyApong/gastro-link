@@ -1,10 +1,10 @@
 import React from 'react'
 import * as RemixIcons from "react-icons/ri"
 import { useLocation, useNavigate } from 'react-router-dom'
-import './header.scss'
-import logo from '../../assets/imgs/logo/cs-logo.png'
+import logo from '../../assets/img/logo/cs-logo-red.png'
 import { Link } from 'react-router-dom'
-import Access from '../../services/access'
+import Access from '../../utils/utilsAccess'
+import './header.scss'
 
 const Header = ({ sidebar, setSidebar }) => {
     const Navigate = useNavigate()

@@ -1,4 +1,7 @@
 .Pagination {
+    position: absolute;
+    bottom: 0;
+    right: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -37,19 +40,19 @@
                     align-items: center;
                     height: 25px;
                     width: 25px;
-                    background: var(--z-color-2);
+                    background: var(--user-color);
                     border-radius: 2px;
                     font-size: 12px;
                     cursor: pointer;
 
                     &:hover {
                         background: var(--color-primary);
-                        color: var(--color-1);
+                        color: var(--user-color);
                     }
                 }
 
                 .active {
-                    background: var(--btn-color-hover) !important;
+                    background: var(--user-color) !important;
                 }
             }
 

@@ -5,14 +5,13 @@
 
 .modal-react-bootstrap {
    .header-react-bootstrap {
-      background: var(--z-color-2);
+      background: var(--color-modal-head);
       height: 0px;
       padding: 20px;
 
       .title-react-bootstrap {
          color: var(--color-1);
          font-size: 14px;
-
       }
 
       .btn-close {
@@ -31,36 +30,37 @@
 
 .enregistrer {
    margin-right: 10px;
- }
- 
- .fermer {
+}
+
+.fermer {
    margin-right: 9px;
- }
- 
- 
- .card-body {
+}
+
+
+.card-body {
    padding: 5px;
- }
- 
- // .titre{
- //     color: rgb(136, 64, 64)(148, 58, 58);
- // }
- 
- // table
- .voir {
+}
+
+// .titre{
+//     color: rgb(136, 64, 64)(148, 58, 58);
+// }
+
+// table
+.voir {
    margin-right: 5px;
- }
- .Link {
+}
+
+.Link {
    text-decoration: none;
    color: #ffff;
- }
- 
- .cardTitle {
+}
+
+.cardTitle {
    background-color: #463e3e;
- }
- 
- //   icon 
- .password-icon1 {
+}
+
+//   icon 
+.password-icon1 {
    position: relative;
    float: right;
    cursor: pointer;
@@ -68,10 +68,10 @@
    transform: translateY(-50%);
    display: inline-block;
    margin-right: 5px;
- 
- }
- 
- .password-confirm1 {
+
+}
+
+.password-confirm1 {
    position: relative;
    float: right;
    cursor: pointer;
@@ -79,69 +79,84 @@
    transform: translateY(-50%);
    display: inline-block;
    margin-right: 5px;
- }
- 
- .border_detail {
+}
+
+.border_detail {
    // margin-top: 30px;
    border: 0.5px solid #9c3b3b;
- }
- 
- .logo {
+}
+
+.logo {
    margin-top: 20%;
- }
- 
- .texte {
+}
+
+.texte {
    color: #0e0808;
- }
- 
- .infoDetail {
+}
+
+.infoDetail {
    font-size: 14px;
    // margin: 10px;
- }
- 
- .icon {
-   margin-right: 10px;
- }
+}
 
- // =================================
-.card-answers {
+.icon {
+   margin-right: 10px;
+}
+
+// =================================
+.card-question {
    position: relative;
    height: 300px;
    overflow: hidden;
 
-   .answers {
+   .question {
       position: absolute;
       display: flex;
       flex-direction: column;
       gap: 5px;
       width: 100%;
       height: auto;
-      transition: 1s;
+      transition: .5s;
    }
 
-
-   .add-answers, .add-answers-none {
+   .add-question,
+   .add-question-none {
       position: absolute;
       display: flex;
       flex-direction: column;
       gap: 5px;
       width: 100%;
-      border: 2px solid var(--shadow-color);
       background: #fff;
       transform: translateX(1000%);
-      transition: 1s;
+      transition: .5s;
       z-index: 100;
 
       textarea {
          width: auto;
          height: 200px;
-         border: 1px solid var(--z-color-2);
+         padding: 5px;
          resize: none;
+      }
+
+      button {
+         border-radius: 50%;
       }
    }
 
-   .add-answers-none {
+   .add-question-none {
       transform: translateX(0%);
-      transition: 1s;
+      transition: .5s;
+   }
+
+   .question-content-details {
+      position: relative;
+      .list-question {
+         cursor: pointer;
+   
+         &:hover {
+            background: var(--color-modal-head);
+            color: var(--color-1);
+         }
+      }
    }
 }

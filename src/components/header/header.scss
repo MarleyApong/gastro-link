@@ -6,8 +6,8 @@ header {
     padding: 0 10px;
     width: 100%;
     height: 4rem;
-    background: var(--z-color-1);
-    color: var(--color-1);
+    background: var(--header-color);
+    color: var(--logo-color);
     box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
     z-index: 200;
 
@@ -71,14 +71,14 @@ header {
         }
 
         .NotificationIcon {
-            background: var(--color-1);
+            background: var(--logo-color);
             width: 30px;
             height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            color: var(--z-color-1);
+            color: var(--color-1);
             cursor: pointer;
         }
     }

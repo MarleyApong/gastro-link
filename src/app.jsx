@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
-import AuthGuard from './utils/AuthGuard'
-import PrivateRoute from './routes/Private'
-import AuthRoute from './routes/Auth'
+import AuthGuard from './utils/utilsAuthGuard'
+import PrivateRoute from './routes/PrivateRoute'
+import AuthRoute from './routes/AuthRoute'
 import './styles/modalFromReactBootstrap.scss'
 
 const App = () => {

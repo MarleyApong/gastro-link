@@ -7,11 +7,12 @@ import { FaCity } from 'react-icons/fa'
 import DataTable from 'react-data-table-component'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import HeaderMain from "../../components/header-main"
-import ToggleButton from "../../components/toggle-button"
+import HeaderMain from "../../components/HeaderMain"
+import ToggleButton from "../../components/ToggleButton"
 import toast from "react-hot-toast"
-import logoPlaceholder from "../../assets/imgs/avatar/logo-placeholder.jpg"
-import { Companies } from "../../services/companies"
+import logoPlaceholder from "../../assets/img/avatar/logo-placeholder.jpg"
+import { Company } from "../../services/companyService"
+import CustomDataTable from "../../components/CustomDataTable"
 
 const ListCompany = () => {
    const Navigate = useNavigate()
@@ -46,10 +47,10 @@ const ListCompany = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
-            let res = await Companies.getAll(order, filter, search, status)
+            let res = await Company.getAll(order, filter, search, status)
             setdata(res.data.content.data)
 
-            res = await Companies.getCount()
+            res = await Company.getCount()
             setAllCount(res.data.content)
          } catch (err) {
             console.log("Load: ", err)
@@ -60,7 +61,7 @@ const ListCompany = () => {
    }, [order, filter, search, status, refresh])
 
    useEffect(() => {
-      Companies.getOne(id)
+      Company.getOne(id)
          .then((res) => setOneData(res.data.content))
 
    }, [id, refresh])
@@ -69,7 +70,7 @@ const ListCompany = () => {
       if (getImage) {
          const formData = new FormData()
          formData.append('picture', getImage)
-         Companies.changeProfil(id, formData)
+         Company.changeProfil(id, formData)
             .then((res) => {
                toast.success("Logo importé avec succès !")
                setRefresh((current) => current + 1)
@@ -104,7 +105,7 @@ const ListCompany = () => {
    }
 
    const handleToggle = (idRow) => {
-      Companies.changeStatus(idRow)
+      Company.changeStatus(idRow)
          .then((res) => {
             if (res.data.message === 'Company active') toast.success("Entreprise activée !")
             else toast.success("Entreprise désactivée !")
@@ -135,7 +136,7 @@ const ListCompany = () => {
    }
 
    const detailsStatusChange = (id) => {
-      Companies.changeStatus(id)
+      Company.changeStatus(id)
          .then((res) => {
             if (res.data.message === 'Company active') toast.success("Entreprise activée !")
             else toast.success("Entreprise désactivée !")
@@ -226,7 +227,7 @@ const ListCompany = () => {
                            <Button onClick={uploadPicture} className="Btn Update btn-sm me-2"><RemixIcons.RiPictureInPictureLine />Modifier logo</Button> :
                            <Button onClick={() => imageRef.current.click()} className="Btn Send btn-sm me-2"><RemixIcons.RiPictureInPictureLine />Choisir logo</Button>
                   }
-                  <Button onClick={() => Navigate(`/company/update/${oneData.id}`)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier infos</Button>
+                  <Button onClick={() => Navigate(`/companies/update/${oneData.id}`)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier infos</Button>
                   <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
                </div>
                <div>
@@ -238,31 +239,6 @@ const ListCompany = () => {
    }
 
    // table
-   const customStyles = {
-      headRow: {
-         style: {
-            backgroundColor: 'var(--z-color-2)',
-            fontWeight: 'bold',
-            color: "var(--color-1)",
-         },
-      },
-      rows: {
-         style: {
-            height: '0px',
-         },
-      },
-      headCells: {
-         style: {
-            paddingLeft: '25px',
-         },
-      },
-      cells: {
-         style: {
-            paddingLeft: '25px',
-         },
-      },
-   }
-
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
 
    const columns = [
@@ -332,8 +308,8 @@ const ListCompany = () => {
             <div className="AllOptionBox">
                <label htmlFor="">Trier par: </label>
                <select className="input ml-2" name={order} onChange={(e) => setOrder(e.target.value)}>
-                  <option value="asc">croisant</option>
-                  <option value="desc">Ordre décroisant</option>
+                  <option value="asc">croissant</option>
+                  <option value="desc">Ordre décroissant</option>
                </select>
             </div>
 
@@ -370,18 +346,12 @@ const ListCompany = () => {
             </div>
          </div>
 
-         <DataTable
-            className="CustomerData"
+         <CustomDataTable
             columns={columns}
             data={data}
-            // selectableRows
-            responsive
-            pagination
-            striped
-            highlightOnHover
-            customStyles={customStyles}
-            expandableRowsComponent={ExpandedComponent}
+            ExpandedComponent={ExpandedComponent}
          />
+
          {/* <!-- Logout Modal--> */}
          <DetailCompanyModal
             show={showDetailCompanyModal}

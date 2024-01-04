@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useRef } from "react"
 import * as RemixIcons from "react-icons/ri"
-import { AiOutlinePhone, AiOutlineFieldNumber } from 'react-icons/ai'
+import { AiOutlinePhone, AiOutlineMail, AiOutlineFieldNumber } from 'react-icons/ai'
 import dateFormat from 'dateformat'
 import { useNavigate } from "react-router-dom"
 import { FaCity } from 'react-icons/fa'
+import DataTable from 'react-data-table-component'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import toast from "react-hot-toast"
-import logoPlaceholder from "../../assets/img/avatar/logo-placeholder.jpg"
+import logoPlaceholder from "../../assets/imgs/avatar/logo-placeholder.jpg"
 import HeaderMain from "../../components/HeaderMain"
-import ToggleButton from "../../components/ToggleButton"
-import { Organization } from "../../services/organizationService"
-import CustomDataTable from "../../components/CustomDataTable"
+import ToggleButton from "../../components/toggle-button"
+import { Organizations } from "../../services/organizations"
 
 const ListOrganization = () => {
    const Navigate = useNavigate()
@@ -47,10 +47,10 @@ const ListOrganization = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
-            let res = await Organization.getAll(order, filter, status, search)
+            let res = await Organizations.getAll(order, filter, status, search)
             setdata(res.data.content.data)
 
-            res = await Organization.getCount()
+            res = await Organizations.getCount()
             setAllCount(res.data.content)
 
          } catch (err) {
@@ -62,7 +62,7 @@ const ListOrganization = () => {
    }, [order, filter, search, status, refresh])
 
    useEffect(() => {
-      Organization.getOne(id)
+      Organizations.getOne(id)
          .then((res) => {
             // alert(setOneData(res.data.content))
             setOneData(res.data.content)
@@ -73,7 +73,7 @@ const ListOrganization = () => {
       if (getImage) {
          const formData = new FormData()
          formData.append('picture', getImage)
-         Organization.changeProfil(id, formData)
+         Organizations.changeProfil(id, formData)
             .then((res) => {
                toast.success("Logo importé avec succès !")
                setRefresh((current) => current + 1)
@@ -109,7 +109,7 @@ const ListOrganization = () => {
    }
 
    const handleToggle = (idRow) => {
-      Organization.changeStatus(idRow)
+      Organizations.changeStatus(idRow)
          .then((res) => {
             if (res.data.message === 'organization active') toast.success("Organisation activée !")
             else toast.success("Organisation désactivée !")
@@ -137,7 +137,7 @@ const ListOrganization = () => {
    }
 
    const detailsStatusChange = (id) => {
-      Organization.changeStatus(id)
+      Organizations.changeStatus(id)
          .then((res) => {
             if (res.data.message === 'organization active') toast.success("Organisation activée !")
             else toast.success("Organisation désactivée !")
@@ -198,12 +198,14 @@ const ListOrganization = () => {
                      </div>
                      <div className="col-md-6 infoDetail ml-4 ">
                         <div className="nomEntr fw-bold fs-2">{oneData.name ? oneData.name.toUpperCase() : '---'}</div>
-                        <div className="secteurAc mb-4 ">
-                           <p className="fw-bold me-1 text-center">Description </p>
+                        <div className="secteurAc mb-2 fw-bold">Secteur: {oneData.category ? oneData.category : '---'}</div>
+                        <div className="secteurAc mb-4 d-flex ">
+                           <p className="fw-bold me-1">Description: </p>
                            {oneData.description ? oneData.description : '---'}
                         </div>
                         <div className="NumIden mb-3"><AiOutlineFieldNumber className="icon" size={18} />{oneData.id ? oneData.id : '---'}</div>
                         <div className="immatriculation mb-3"><RemixIcons.RiCalendar2Line className="icon" />{oneData.createdAt ? dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss') : '---'}</div>
+                        <div className="email mb-3"><AiOutlineMail className="icon" />{oneData.email ? oneData.email : '---'}</div>
                         <div className="telephone mb-3"><AiOutlinePhone className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
                         <div className="ville mb-3"><FaCity className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
                         <div className="ville mb-3 d-flex align-items-center">
@@ -242,6 +244,30 @@ const ListOrganization = () => {
    }
 
    // table
+   const customStyles = {
+      headRow: {
+         style: {
+            backgroundColor: 'var(--z-color-2)',
+            fontWeight: 'bold',
+            color: "var(--color-1)",
+         },
+      },
+      rows: {
+         style: {
+            height: '0px',
+         },
+      },
+      headCells: {
+         style: {
+            paddingLeft: '25px',
+         },
+      },
+      cells: {
+         style: {
+            paddingLeft: '25px',
+         },
+      },
+   }
 
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
 
@@ -312,8 +338,8 @@ const ListOrganization = () => {
             <div className="AllOptionBox">
                <label htmlFor="">Trier par: </label>
                <select className="input ml-2" name={order} onChange={(e) => setOrder(e.target.value)}>
-                  <option value="asc">croissant</option>
-                  <option value="desc">Ordre décroissant</option>
+                  <option value="asc">croisant</option>
+                  <option value="desc">Ordre décroisant</option>
                </select>
             </div>
 
@@ -347,10 +373,17 @@ const ListOrganization = () => {
             </div>
          </div>
 
-         <CustomDataTable
+         <DataTable
+            className="CustomerData"
             columns={columns}
             data={data}
-            ExpandedComponent={ExpandedComponent}
+            // selectableRows
+            responsive
+            pagination
+            striped
+            highlightOnHover
+            customStyles={customStyles}
+            expandableRowsComponent={ExpandedComponent}
          />
          {/* <!-- Logout Modal--> */}
          <DetailCompanyModal

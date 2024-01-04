@@ -1,21 +1,21 @@
 :root {
-  --color-primary: linear-gradient(45deg,
-      #00335B 49%,
-      #0e0e10 51%,
-      #616270 49%,
-      #d30606 51%,
-      #d30606 99%);
-
-  --color-primary-blur: #cc9697;
-  --z-color-1: #00335B;
-  --z-color-2: #d30606;
+  --color-primary: linear-gradient(#f3eaea, #ded1d1);
+  --aside-color: #fefefe;
+  --aside-text-color: #Ed1f24;
+  --active-color: #Ed1f24;
+  --header-color: #fefefe;
+  --user-color: #Ed1f24;
+  --toggle-color: #Ed1f24;
+  --logo-color: #Ed1f24;
+  --z-color-1: #6E659C;
+  --z-color-2: #D49D38;
   --color-1: #fff;
   --color-2: #f1f1f1e1;
   --color-3: #000;
+  --color-modal-head: #Ed1f24;
   --shadow-color: #1400000d;
   --color-err: #5d0606;
-  --color-err-hv: #b40707;
-
+  --color-err-hv: #Ed1f24;
 }
 
 * {
@@ -69,23 +69,37 @@ body::-webkit-scrollbar-thumb {
   background: #abababe1;
   color: var(--color-1);
   font-size: 12px;
+  transition: .5s;
   cursor: pointer;
 }
 
 .Success {
-  background: #011b07;
+  background: #025215;
+
+  &:hover {
+    background: #03851f;
+  }
 }
 
 .Send {
   background: #033750;
+  &:hover {
+    background: #044f72;
+  }
 }
 
 .Error {
   background: #9a0707;
+  &:hover {
+    background: #b60505;
+  }
 }
 
 .Update {
-  background: #FD7100;
+  background: #c35a04;
+  &:hover {
+    background: #f97001;
+  }
 }
 
 /* .Success-Light {
@@ -134,7 +148,7 @@ textarea {
   flex-direction: column;
   width: 100%;
   height: 100vh;
-  /* background: var(--color-2); */
+  background: var(--color-primary);
 }
 
 .Main {
@@ -166,6 +180,7 @@ textarea {
   gap: 10px;
   margin-bottom: 10px;
   box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
+  background: var(--color-1);
   border-radius: 2px;
   padding: 5px;
 
@@ -197,8 +212,10 @@ textarea {
 
 .CustomerData {
   box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color), 2px -2px 3px var(--shadow-color), -2px 2px 3px var(--shadow-color) !important;
-  border-radius: 5px !important;
-  height: calc(100vh - 16rem) !important;
+  height: calc(100vh - 14.7rem) !important;
+  background: var(--color-1);
+
+  
 }
 
 .CardBody {

@@ -1,32 +1,24 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
-import { Organizations } from "../../../services/organizations"
-import { useNavigate, useParams } from "react-router-dom"
-import { account } from "../../../services/account"
+import { Organization } from "../../../services/organizationService"
+import { useNavigate } from "react-router-dom"
+import { Account } from "../../../services/accountService"
 
-const UpdateOrganization = () => {
+const CreateOrganization = () => {
 	const Navigate = useNavigate()
-	const { id } = useParams()
-
 	const [file, setFile] = useState('')
-	const [lastData, setLastData] = useState({
-		name: "",
-		description: "",
-		phone: "",
-		city: "",
-		neighborhood: ""
-	})
 	const [organization, setOrganization] = useState({
 		name: "",
 		description: "",
 		phone: "",
 		city: "",
-		neighborhood: ""
+		neighborhood: "",
+		idStatus: ""
 	})
 
-	const handleUpdate = (e) => {
+	const handleAdd = (e) => {
 		const { name, value } = e.target;
 		setOrganization({
 			...organization,
@@ -34,25 +26,10 @@ const UpdateOrganization = () => {
 		})
 	}
 
-	useEffect(() => {
-		Organizations.getOne(id)
-			.then((res) => {
-				setOrganization({
-					name: res.data.content.name,
-					description: res.data.content.description,
-					phone: res.data.content.phone,
-					city: res.data.content.city,
-					neighborhood: res.data.content.neighborhood
-				})
-				setLastData({
-					name: res.data.content.name,
-					description: res.data.content.description,
-					phone: res.data.content.phone,
-					city: res.data.content.city,
-					neighborhood: res.data.content.neighborhood
-				})
-			})
-	}, [id])
+	const handleFileChange = (e) => {
+		const selectedFile = e.target.files[0];
+		setFile(selectedFile);
+	}
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
@@ -61,27 +38,25 @@ const UpdateOrganization = () => {
 			organization.description === "" ||
 			organization.phone === "" ||
 			organization.city === "" ||
-			organization.neighborhood === "") {
+			organization.neighborhood === "" ||
+			organization.idStatus === "") {
 			toast.error("Les champs marqués par une etoile sont obligations !")
 		}
-		else if (
-			organization.name === lastData.name &&
-			organization.description === lastData.description &&
-			organization.phone === lastData.phone &&
-			organization.city === lastData.city &&
-			organization.neighborhood === lastData.neighborhood
-		) {
-			toast.error("Aucune valeur n'a été modifiée.")
-			toast.error("Echec de l'opération  !")
-		}
 		else {
-			Organizations.update(id, organization)
+			const formData = new FormData();
+			Object.keys(organization).forEach((key) => {
+				formData.append(key, organization[key]);
+			});
+			if (file) {
+				formData.append('picture', file);
+			}
+
+			Organization.add(formData)
 				.then((res) => {
-					toast.success("organization modifiée avec succès !")
+					toast.success("organization ajoutée avec succès !")
 					Navigate('/organizations/')
 				})
 				.catch((err) => {
-					console.log("Erreur: ", err);
 					if (err.response.status === 400) {
 						toast.error("Champs mal renseigné ou format inattendu !", {
 							style: {
@@ -91,7 +66,7 @@ const UpdateOrganization = () => {
 					}
 					else if (err.response.status === 401) {
 						toast.error("La session a expiré !")
-						account.logout()
+						Account.logout()
 						Navigate("/auth/login")
 					}
 					else if (err.response.status === 403) {
@@ -108,7 +83,7 @@ const UpdateOrganization = () => {
 					}
 					else {
 						toast.error("Erreur de données organization(e)s !")
-						account_service.logout()
+						Account.logout()
 						Navigate("/auth/login")
 					}
 				})
@@ -121,7 +96,7 @@ const UpdateOrganization = () => {
 				<HeaderMain />
 
 				<div className="card-body CardBody card">
-					<h5>Modifiez les informations concernant votre organisation.</h5>
+					<h5>Entrez les informations concernant votre organisation.</h5>
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form" for>
 							<div className="col-md-6">
@@ -135,10 +110,25 @@ const UpdateOrganization = () => {
 									id="name"
 									name="name"
 									value={organization.name}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
-
+								/>
+							</div>
+							<div className="col-md-6">
+								<label htmlFor="phone" className="form-label">
+									Téléphone :
+									<span className="text-danger taille_etoile">*</span>
+								</label>
+								<input
+									type="number"
+									className="form-control no-focus-outline"
+									id="phone"
+									name="phone"
+									value={organization.phone}
+									onChange={handleAdd}
+									autoComplete='off'
+									required
 								/>
 							</div>
 							<div className="col-md-12">
@@ -152,28 +142,11 @@ const UpdateOrganization = () => {
 									id="description"
 									name="description"
 									value={organization.description}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								>
-
 								</textarea>
-							</div>
-							<div className="col-md-6">
-								<label htmlFor="phone" className="form-label">
-									Téléphone :
-									<span className="text-danger taille_etoile">*</span>
-								</label>
-								<input
-									type="number"
-									className="form-control no-focus-outline"
-									id="phone"
-									name="phone"
-									value={organization.phone}
-									onChange={handleUpdate}
-									autoComplete='off'
-									required
-								/>
 							</div>
 
 							<div className="col-md-6">
@@ -187,10 +160,24 @@ const UpdateOrganization = () => {
 									id="city"
 									name="city"
 									value={organization.city}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								/>
+							</div>
+
+							<div className="col-md-6 ">
+								<label htmlFor="idStatus" className="form-label">
+									Status :
+									<span className="text-danger taille_etoile">*</span>
+								</label>
+								<select className="form-control no-focus-outline p-2" name="idStatus" id="idStatus" value={organization.idStatus} required
+									onChange={handleAdd}
+									autoComplete='off'>
+									<option value=""></option>
+									<option value="1">actif</option>
+									<option value="2">inactif</option>
+								</select>
 							</div>
 
 							<div className="col-md-6 ">
@@ -204,21 +191,35 @@ const UpdateOrganization = () => {
 									id="neighborhood"
 									name="neighborhood"
 									value={organization.neighborhood}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								/>
 							</div>
 
-							<div className="col-md-12 d-flex gap-2 justify-content-between">
+							<div className="col-md-6 ">
+								<label htmlFor="picture" className="form-label">Logo :</label>
+								<input
+									type="file"
+									className="form-control no-focus-outline"
+									id="picture"
+									name="picture"
+									onChange={handleFileChange}
+								/>
+							</div>
+
+							<div className="col-md-12 d-flex gap-2">
 								<button type="submit" className="Btn Send btn-sm">
-									<RemixIcons.RiEditCircleLine />
-									Modifier
+									<RemixIcons.RiSendPlaneLine />
+									Enregistrer
 								</button>
-								<button className="Btn Error btn-sm" onClick={() => Navigate('/organizations')}>
+								<button type="reset" className="Btn Error btn-sm">
 									<RemixIcons.RiCloseLine />
-									Annuler / Retour
+									Annuler
 								</button>
+								{/* <Link to="/admin/company" className="btn btn-success retour">
+                  Retour
+                </Link> */}
 							</div>
 						</form>
 					</blockquote>
@@ -230,4 +231,4 @@ const UpdateOrganization = () => {
 
 
 
-export default UpdateOrganization
+export default CreateOrganization

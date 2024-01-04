@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { IconContext } from 'react-icons/lib'
 import { useNavigate } from 'react-router-dom'
+import { User } from '../../services/userService'
+import { FirstGroupInternal, FirstGroupExternal } from '../../components/Dashboard/FirstGroup'
+import { SecondGroupExternal, SecondGroupInternal } from '../../components/Dashboard//SecondGroup'
+import { Company } from '../../services/companyService'
+import { Survey } from '../../services/surveyService'
+import Pagination from '../../components/Pagination'
+import Access from '../../utils/utilsAccess'
 import './dashboard.scss'
-import Pagination from '../../components/pagination'
-import { users } from '../../services/users'
-import { FirstGroupInternal, FirstGroupExternal } from '../../utils/FirstGroup'
-import { SecondGroupExternal, SecondGroupInternal } from '../../utils/SecondGroup'
-import Access from '../../services/access'
-import { Companies } from '../../services/companies'
-import { Surveys } from '../../services/surveys'
 
 const Dashboard = () => {
    const access = Access()
@@ -19,13 +19,13 @@ const Dashboard = () => {
 
    useEffect(() => {
       const firstGroupData = async () => {
-         let res = await Companies.getCount()
+         let res = await Company.getCount()
          setAllCount(res.data.content)
 
-         res = await Companies.getCount()
+         res = await Company.getCount()
          setCompanies(res.data.content.data)
 
-         res = await Surveys.getAll()
+         res = await Survey.getAll()
          setSurveys(res.data.content)
       }
       firstGroupData()

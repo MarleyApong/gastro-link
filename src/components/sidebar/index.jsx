@@ -1,12 +1,12 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import * as RemixIcons from "react-icons/ri"
-import SubMenu from './sub-menu'
+import SubMenu from './SubMenu'
 import { ItemsInternalAdmin, ItemsInternalUser } from '../../data/itemsNav'
+import avatar from '../../assets/img/avatar/Marley.jpg'
+import Access from '../../utils/utilsAccess'
+import { Account } from '../../services/accountService'
 import './sidebar.scss'
-import avatar from '../../assets/imgs/avatar/Marley.jpg'
-import Access from '../../services/access'
-import { account } from '../../services/account'
 
 const Sidebar = ({ profil, setProfil, sidebar }) => {
     const access = Access()
@@ -15,7 +15,7 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
     const logout = (e) => {
         e.preventDefault()
         if (window.confirm("Attention, vous êtes sur le point de vous déconnecter !") === true) {
-            account.logout()
+            Account.logout()
             Navigate('/auth/login')
         }
     }

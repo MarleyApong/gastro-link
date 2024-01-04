@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
-import HeaderMain from "../../../components/header-main"
-import { Organizations } from "../../../services/organizations"
-import { useNavigate, useParams } from "react-router-dom"
-import { account } from "../../../services/account"
+import HeaderMain from "../../../components/HeaderMain"
+import { Organization } from "../../../services/organizationService"
+import { Account } from "../../../services/accountService"
 
 const UpdateOrganization = () => {
 	const Navigate = useNavigate()
@@ -35,7 +35,7 @@ const UpdateOrganization = () => {
 	}
 
 	useEffect(() => {
-		Organizations.getOne(id)
+		Organization.getOne(id)
 			.then((res) => {
 				setOrganization({
 					name: res.data.content.name,
@@ -75,7 +75,7 @@ const UpdateOrganization = () => {
 			toast.error("Echec de l'opération  !")
 		}
 		else {
-			Organizations.update(id, organization)
+			Organization.update(id, organization)
 				.then((res) => {
 					toast.success("organization modifiée avec succès !")
 					Navigate('/organizations/')
@@ -91,7 +91,7 @@ const UpdateOrganization = () => {
 					}
 					else if (err.response.status === 401) {
 						toast.error("La session a expiré !")
-						account.logout()
+						Account.logout()
 						Navigate("/auth/login")
 					}
 					else if (err.response.status === 403) {
@@ -108,7 +108,7 @@ const UpdateOrganization = () => {
 					}
 					else {
 						toast.error("Erreur de données organization(e)s !")
-						account_service.logout()
+						Account.logout()
 						Navigate("/auth/login")
 					}
 				})

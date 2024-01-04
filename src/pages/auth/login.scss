@@ -14,7 +14,7 @@
       width: 80%;
       border-radius: 4px;
       overflow: hidden;
-      box-shadow: 15px 15px 20px rgba(0, 0, 0, .1), -15px -15px 20px rgba(251, 249, 249, 0.733);
+      box-shadow: 10px 10px 15px #eeeeee, 10px -10px 15px #eeeeee, -10px 10px 15px #eeeeee, -10px -10px 15px #eeeeee;
 
       .Left {
          position: relative;
@@ -24,9 +24,11 @@
          align-items: center;
          width: 60%;
          overflow: hidden;
-         background: var(--color-primary);
+         // background: var(--color-primary);
+         background-image: url('../../assets/img/login/presse2.jpg');
          color: var(--color-1);
          background-size: cover;
+         background-position: center;
          padding: 0 10px;
          text-align: center;
 
@@ -88,7 +90,7 @@
             }
 
             h2 {
-               color: var(--color-primary);
+               color: var(--logo-color);
                font-size: 30px;
             }
 
@@ -118,14 +120,14 @@
 
                &:last-child {
                   margin-top: 10px;
-                  box-shadow: 1px 1px 5px var(--color-primary), -1px -1px 5px rgba(63, 1, 1, 0.733), inset 5px 5px 10px rgba(195, 8, 8, 0.1), inset -5px -5px 10px var(--color-primary);
-                  background: var(--color-primary);
+                  box-shadow: 1px 1px 5px var(--logo-color), -1px -1px 5px rgba(63, 1, 1, 0.733), inset 5px 5px 10px rgba(195, 8, 8, 0.1), inset -5px -5px 10px var(--logo-color);
+                  background: var(--logo-color);
                   border: none;
                   padding: 13px;
                   cursor: pointer;
 
                   &:hover {
-                     box-shadow: 4px 4px 5px rgb(232, 1, 1), -2px -2px 5px rgba(63, 1, 1, 0.733), inset 5px 5px 10px rgba(195, 8, 8, 0.1), inset -5px -5px 10px var(--color-primary);
+                     box-shadow: 4px 4px 5px rgb(232, 1, 1), -2px -2px 5px rgba(166, 3, 3, 0.733), inset 5px 5px 10px rgba(195, 8, 8, 0.1), inset -5px -5px 10px var(--logo-color);
                      transition: 1s;
                   }
 

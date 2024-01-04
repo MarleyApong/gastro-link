@@ -4,9 +4,9 @@ import { toast } from 'react-hot-toast'
 import { PulseLoader } from 'react-spinners'
 import * as RemixIcons from "react-icons/ri"
 import './login.scss'
-import logo from '../../assets/imgs/logo/cs-logo-red.png'
-import { authentification } from '../../services/authentification'
-import { account } from '../../services/account'
+import logo from '../../assets/img/logo/cs-logo-red.png'
+import { Authentification } from '../../services/authentificationService'
+import { Account } from '../../services/accountService'
 
 const Login = () => {
    const Navigate = useNavigate()
@@ -22,13 +22,13 @@ const Login = () => {
       else {
          setWait(false)
          try {
-            const res = await authentification.login(email, password)
+            const res = await Authentification.login(email, password)
             setWait(true)
             if (res.data.status !== 1) {
                toast.error("Accès non authorisé !")
             }
             else {
-               account.saveToken(res.data.token, res.data.id, res.data.role, res.data.env)
+               Account.saveToken(res.data.token, res.data.id, res.data.role, res.data.env)
                Navigate("/dashboard")
             }
 
@@ -65,8 +65,8 @@ const Login = () => {
       <div className="Login">
          <div className="Container">
             <div className="Left">
-               <h1>Bienvenue sur customer space</h1>
-               <p>Connectez-vous pour continuer</p>
+               {/* <h1>Bienvenue sur customer space</h1>
+               <p>Connectez-vous pour continuer</p> */}
                <span>Copyright &#xa9;customer-space 2024 | <a target='_blank' href="https://www.allhcorp.com" rel="noreferrer">made by allhcorp</a> </span>
             </div>
             <div className="Right">

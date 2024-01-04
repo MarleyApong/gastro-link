@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useRef } from "react"
+import { useNavigate } from "react-router-dom"
 import * as RemixIcons from "react-icons/ri"
 import { AiOutlineFieldNumber } from 'react-icons/ai'
-import dateFormat from 'dateformat'
-import { useNavigate } from "react-router-dom"
-import { FaCity } from 'react-icons/fa'
-import DataTable from 'react-data-table-component'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import toast from "react-hot-toast"
-import logoPlaceholder from "../../assets/imgs/avatar/logo-placeholder.jpg"
-import HeaderMain from "../../components/header-main"
-import ToggleButton from "../../components/toggle-button"
-import { Surveys } from "../../services/surveys"
+import dateFormat from 'dateformat'
+import logoPlaceholder from "../../assets/img/avatar/logo-placeholder.jpg"
+import HeaderMain from "../../components/HeaderMain"
+import ToggleButton from "../../components/ToggleButton"
+import { Survey } from "../../services/surveyService"
+import { Account } from "../../services/accountService"
+import CustomDataTable from "../../components/CustomDataTable"
+import { Question } from "../../services/questionService"
 
 const ListSurvey = () => {
    const Navigate = useNavigate()
@@ -23,6 +24,7 @@ const ListSurvey = () => {
    const [status, setStatus] = useState(1)
    const [search, setSearch] = useState('')
    const [id, setId] = useState('')
+   const [question, setQuestion] = useState('')
    const [refresh, setRefresh] = useState(0)
    const [allCount, setAllCount] = useState(0)
    const [stateQuestion, setStateQuestion] = useState(false)
@@ -44,7 +46,7 @@ const ListSurvey = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
-            let res = await Surveys.getAll()
+            let res = await Survey.getAll()
             setdata(res.data.content.data)
 
          } catch (err) {
@@ -56,12 +58,12 @@ const ListSurvey = () => {
    }, [order, filter, search, status, refresh])
 
    useEffect(() => {
-      Surveys.getOne(id)
+      Survey.getOne(id)
          .then((res) => setOneData(res.data.content))
    }, [id, refresh])
 
    const handleToggle = (idRow) => {
-      Surveys.changeStatus(idRow)
+      Survey.changeStatus(idRow)
          .then((res) => {
             if (res.data.message === 'Survey active') toast.success("Enquête activée !")
             else toast.success("Enquête désactivée !")
@@ -89,7 +91,7 @@ const ListSurvey = () => {
    }
 
    const detailsStatusChange = (id) => {
-      Surveys.changeStatus(id)
+      Survey.changeStatus(id)
          .then((res) => {
             if (res.data.message === 'Survey active') toast.success("Enquête activée !")
             else toast.success("Enquête désactivée !")
@@ -118,103 +120,61 @@ const ListSurvey = () => {
          })
    }
 
-   // modal
-   const DetailCompanyModal = (props) => {
-      return (
-         <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            className="modal-react-bootstrap"
-         >
-            <Modal.Header closeButton className="header-react-bootstrap">
-               <Modal.Title id="contained-modal-title-vcenter" className="title-react-bootstrap">
-                  Detail de l'enquête : {oneData.name}
-               </Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="body-react-bootstrap">
-               <div className="container">
-                  <div className="row ">
-                     <div className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        {
-                           <img className="object-fit-cover" crossorigin="anonymous" src={oneData.Company ? 'http://localhost:8000' + oneData.Company.picture : logoPlaceholder} alt="" width="100%" height="400px" />
-                        }
-                     </div>
+   const handleSubmit = (e) => {
+      e.preventDefault()
+      const data = {
+         idSurvey: id,
+         name: question
+      }
 
-                     <div className="col-md-6 infoDetail ml-4 ">
-                        <div className="fw-bold fs-5 mb-4">Entre. : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</div>
-                        <div className="mb-2 fw-bold p-2 shadow">Enquête: {oneData.name ? oneData.name : '---'}</div>
-                        <div className="mb-3"><AiOutlineFieldNumber className="icon" size={18} />{oneData.id ? oneData.id : '---'}</div>
-                        <div className="card-answers">
-                           <div className={stateQuestion ? "add-answers-none answers p-2 shadow" : "add-answers answers p-2 shadow"}>
-                              <label htmlFor="answers" className="fw-bold">Nom de l'enquête: </label>
-                              <textarea name="answers" id="answers"></textarea>
-                              <div className="d-flex justify-content-between">
-                                 <Button onClick={() => setStateQuestion(true)} className='Btn Success btn-sm me-2'><RemixIcons.RiAddLine />Ajouter</Button>
-                                 <Button onClick={() => setStateQuestion(false)} className="Btn Error btn-sm"><RemixIcons.RiCloseLine /></Button>
-                              </div>
-                           </div>
-                           <div className="ps-3 answers">
-                              <div className="mb-3"><RemixIcons.RiNumber1 className="icon" />{oneData.createdAt ? dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss') : '---'}</div>
-                              <div className="mb-3"><RemixIcons.RiNumber2 className="icon" />{oneData.email ? oneData.email : '---'}</div>
-                              <div className="mb-3"><RemixIcons.RiNumber3 className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
-                              <div className="mb-3"><RemixIcons.RiNumber4 className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
-                              <div className="mb-3"><RemixIcons.RiNumber5 className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
-                              <div className="site">
-                                 <RemixIcons.RiGlobalLine className="icon" />
-                                 <a href="https://www.allhcorp.com" target="_blank" rel="noopener noreferrer">
-                                    www.allhcorp.com
-                                 </a>
-                              </div>
-                           </div>
-                        </div>
-
-                     </div>
-                  </div>
-               </div>
-            </Modal.Body>
-            <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               <div className="d-flex">
-                  <Button onClick={() => Navigate(`/surveys/update/${oneData.id}`)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier infos</Button>
-                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
-                  <Button onClick={() => setStateQuestion(true)} className='Btn Success btn-sm me-2'><RemixIcons.RiAddLine />Nouvelle quest.</Button>
-               </div>
-               <div>
-                  <Button onClick={props.onHide} className="Btn Error btn-sm"><RemixIcons.RiCloseLine />fermer</Button>
-               </div>
-            </Modal.Footer>
-         </Modal >
-      );
+      if (question === "") {
+         toast.error("Entrez la question pour continuer !")
+      }
+      else {
+         Question.add(data)
+            .then((res) => {
+               toast.success("Question ajoutée avec succès !")
+               setQuestion('')
+               setStateQuestion(false)
+            })
+            .catch((err) => {
+               if (err.response.status === 400) {
+                  toast.error("Champs mal renseigné ou format inattendu !", {
+                     style: {
+                        textAlign: 'center'
+                     }
+                  })
+               }
+               else if (err.response.status === 401) {
+                  toast.error("La session a expiré !")
+                  Account.logout()
+                  Navigate("/auth/login")
+               }
+               else if (err.response.status === 403) {
+                  toast.error("Accès interdit !")
+               }
+               else if (err.response.status === 404) {
+                  toast.error("Ressource non trouvée !")
+               }
+               else if (err.response.status === 415) {
+                  toast.error("Erreur, contactez l'administrateur !")
+               }
+               else if (err.response.status === 500) {
+                  toast.error("Erreur interne du serveur !")
+               }
+               else {
+                  toast.error("Erreur de données organization(e)s !")
+                  Account.logout()
+                  Navigate("/auth/login")
+               }
+            })
+      }
    }
 
    // table
-   const customStyles = {
-      headRow: {
-         style: {
-            backgroundColor: 'var(--z-color-2)',
-            fontWeight: 'bold',
-            color: "var(--color-1)",
-         },
-      },
-      rows: {
-         style: {
-            height: '0px',
-         },
-      },
-      headCells: {
-         style: {
-            paddingLeft: '25px',
-         },
-      },
-      cells: {
-         style: {
-            paddingLeft: '25px',
-         },
-      },
-   }
-
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
+
+   console.log('oneData: ', oneData)
 
    const columns = [
       // {
@@ -266,7 +226,6 @@ const ListSurvey = () => {
             </div>
          )
       },
-
    ]
 
    return (
@@ -277,8 +236,8 @@ const ListSurvey = () => {
             <div className="AllOptionBox">
                <label htmlFor="">Trier par: </label>
                <select className="input ml-2" name={order} onChange={(e) => setOrder(e.target.value)}>
-                  <option value="asc">croisant</option>
-                  <option value="desc">Ordre décroisant</option>
+                  <option value="asc">croissant</option>
+                  <option value="desc">Ordre décroissant</option>
                </select>
             </div>
 
@@ -312,23 +271,87 @@ const ListSurvey = () => {
             </div>
          </div>
 
-         <DataTable
-            className="CustomerData"
+         <CustomDataTable
             columns={columns}
             data={data}
-            // selectableRows
-            responsive
-            pagination
-            striped
-            highlightOnHover
-            customStyles={customStyles}
-            expandableRowsComponent={ExpandedComponent}
+            ExpandedComponent={ExpandedComponent}
          />
-         {/* <!-- Logout Modal--> */}
-         <DetailCompanyModal
+
+         <Modal
             show={showDetailCompanyModal}
             onHide={hideModal}
-         />
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            className="modal-react-bootstrap"
+         >
+            <Modal.Header closeButton className="header-react-bootstrap">
+               <Modal.Title id="contained-modal-title-vcenter" className="title-react-bootstrap">
+                  Detail de l'enquête : {oneData.name}
+               </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="body-react-bootstrap">
+               <div className="container">
+                  <div className="row ">
+                     <div className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
+                        {
+                           <img className="object-fit-cover" crossorigin="anonymous" src={oneData.Company ? 'http://localhost:8000' + oneData.Company.picture : logoPlaceholder} alt="" width="100%" height="400px" />
+                        }
+                     </div>
+
+                     <div className="col-md-6 infoDetail ml-4 ">
+                        <div className="fw-bold fs-5 mb-4">Entre. : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</div>
+                        <div className="mb-2 fw-bold p-2 shadow">Enquête: {oneData.name ? oneData.name : '---'}</div>
+                        <div className="card-question">
+                           <form onSubmit={handleSubmit} className={stateQuestion ? "add-question-none question p-2 shadow" : "add-question question p-2 shadow"}>
+                              <label htmlFor="question" className="fw-bold">Nom de la question: </label>
+                              <textarea name="question" id="question" onChange={(e) => setQuestion(e.target.value)} value={question} placeholder="Entrez la question"></textarea>
+                              <div className="d-flex justify-content-between">
+                                 <Button onClick={() => setStateQuestion(true)} type="submit" className='Btn Success btn-sm me-2' title="Ajouter"><RemixIcons.RiAddLine /></Button>
+                                 <Button onClick={() => setStateQuestion(false)} className="Btn Error btn-sm" title="Germer"><RemixIcons.RiCloseLine /></Button>
+                              </div>
+                           </form>
+                           <div className="question-content-details">
+                              <div className="mb-3"><AiOutlineFieldNumber className="icon" size={18} />{oneData.id ? oneData.id : '---'}</div>
+                              <div className="mb-2 fw-bold p-2 shadow">Questions</div>
+                              <div className="question-update">
+                              <div className="d-flex justify-content-between">
+                                 <Button onClick={() => setStateQuestion(true)} type="submit" className='Btn Success btn-sm me-2' title="Ajouter"><RemixIcons.RiAddLine /></Button>
+                                 <Button onClick={() => setStateQuestion(false)} className="Btn Error btn-sm" title="Germer"><RemixIcons.RiArrowRightLine /></Button>
+                              </div>
+                              </div>
+                              <ol>
+                                 {
+                                    oneData.id && oneData.Questions.map((item, index) => {
+                                       return <li key={index + 1} className="mb-3 d-flex align-items p-2 shadow list-question">{index + 1}. {item.name.length >= 40 ? item.name.substring(0, 37) + '...' : item.name}</li>
+                                    })
+                                 }
+                              </ol>
+
+                              <div className="site">
+                                 <RemixIcons.RiGlobalLine className="icon" />
+                                 <a href="https://www.allhcorp.com" target="_blank" rel="noopener noreferrer">
+                                    www.allhcorp.com
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
+               </div>
+            </Modal.Body>
+            <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
+               <div className="d-flex">
+                  <Button onClick={() => Navigate(`/surveys/update/${oneData.id}`)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier infos</Button>
+                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
+                  <Button onClick={() => setStateQuestion(true)} className='Btn Success btn-sm me-2'><RemixIcons.RiAddLine />Nouvelle quest.</Button>
+               </div>
+               <div>
+                  <Button onClick={hideModal} className="Btn Error btn-sm"><RemixIcons.RiCloseLine />Fermer</Button>
+               </div>
+            </Modal.Footer>
+         </Modal >
       </div>
    )
 }

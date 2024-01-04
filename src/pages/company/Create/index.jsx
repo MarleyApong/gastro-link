@@ -1,35 +1,43 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
-import { useNavigate, useParams } from "react-router-dom"
-import { Account } from "../../../services/accountService"
+import { useNavigate } from "react-router-dom"
 import { Company } from "../../../services/companyService"
+import { Organization } from "../../../services/organizationService"
+import CustomSelect from "../../../components/CustomSelect"
 
-const UpdateCompany = () => {
+const CreateCompany = () => {
 	const Navigate = useNavigate()
-	const { id } = useParams()
+	const order = 'asc'
+	const filter = 'name'
+	const status = 1
+	const search = ''
+	const limit = 10000
+	const page = 0
 
-	const [lastData, setLastData] = useState({
-		name: "",
-		description: "",
-		email: "",
-		category: "",
-		phone: "",
-		city: "",
-		neighborhood: ""
-	})
+	const [file, setFile] = useState('')
+	const [organization, setOrganization] = useState([])
+	const [selectedValue, setSelectedValue] = useState({})
 	const [company, setCompany] = useState({
+		idOrganization: "",
+		idStatus: "",
 		name: "",
 		description: "",
-		email: "",
 		category: "",
 		phone: "",
+		email: "",
 		city: "",
-		neighborhood: ""
+		neighborhood: "",
 	})
 
-	const handleUpdate = (e) => {
+	const handleSelectedValue = useCallback((value) => {
+		setSelectedValue(value)
+	}, [])
+
+	company.idOrganization = selectedValue.value
+
+	const handleAdd = (e) => {
 		const { name, value } = e.target;
 		setCompany({
 			...company,
@@ -37,72 +45,60 @@ const UpdateCompany = () => {
 		})
 	}
 
+	const handleFileChange = (e) => {
+		const selectedFile = e.target.files[0];
+		setFile(selectedFile)
+	}
+
 	useEffect(() => {
-		Company.getOne(id)
+		Organization.getAll(order, filter, status, search, limit, page)
 			.then((res) => {
-				setCompany({
-					name: res.data.content.name,
-					description: res.data.content.description,
-					category: res.data.content.category,
-					email: res.data.content.email,
-					phone: res.data.content.phone,
-					city: res.data.content.city,
-					neighborhood: res.data.content.neighborhood
-				})
-				setLastData({
-					name: res.data.content.name,
-					description: res.data.content.description,
-					category: res.data.content.category,
-					email: res.data.content.email,
-					phone: res.data.content.phone,
-					city: res.data.content.city,
-					neighborhood: res.data.content.neighborhood
-				})
+				setOrganization(res.data.content.data)
 			})
-	}, [id])
+	}, [order, filter, status, search, limit, page])
+
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (
-			company.name === "" ||
-			company.description === "" ||
-			company.email === "" ||
-			company.category === "" ||
-			company.phone === "" ||
-			company.city === "" ||
-			company.neighborhood === "") {
+			selectedValue === false
+			|| company.name === ""
+			|| company.description === ""
+			|| company.email === ""
+			|| company.phone === ""
+			|| company.city === ""
+			|| company.neighborhood === ""
+			|| company.idStatus === "") {
 			toast.error("Les champs marqués par une etoile sont obligations !")
 		}
-		else if (
-			company.name === lastData.name &&
-			company.description === lastData.description &&
-			company.email === lastData.email &&
-			company.category === lastData.category &&
-			company.phone === lastData.phone &&
-			company.city === lastData.city &&
-			company.neighborhood === lastData.neighborhood
-		) {
-			toast.error("Aucune valeur n'a été modifiée.")
-			toast.error("Echec de l'opération  !")
-		}
 		else {
-			Company.update(id, company)
+			const formData = new FormData();
+			Object.keys(company).forEach((key) => {
+				formData.append(key, company[key]);
+			})
+
+			if (file) {
+				formData.append('picture', file);
+			}
+
+
+			Company.add(formData)
 				.then((res) => {
-					toast.success("Entreprise modifiée avec succès !")
+					toast.success("Entreprise ajoutée avec succès !")
 					Navigate('/companies/')
 				})
 				.catch((err) => {
-					console.log("Erreur: ", err);
 					if (err.response.status === 400) {
-						toast.error("Champs mal renseigné ou format inattendu !", {
-							style: {
-								textAlign: 'center'
-							}
-						})
+						// toast.error("Champs mal renseigné ou format inattendu !", {
+						// 	style: {
+						// 		textAlign: 'center'
+						// 	}
+						// })
+						console.log("erreur:", err);
 					}
 					else if (err.response.status === 401) {
 						toast.error("La session a expiré !")
-						Account.logout()
+						account_service.logoutAdmin()
 						Navigate("/auth/login")
 					}
 					else if (err.response.status === 403) {
@@ -117,11 +113,11 @@ const UpdateCompany = () => {
 					else if (err.response.status === 500) {
 						toast.error("Erreur interne du serveur !")
 					}
-					else {
-						toast.error("Erreur de données entreprise !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
+					// else {
+					// 	toast.error("Erreur de données company(e)s !")
+					// 	account_service.logout()
+					// 	Navigate("/auth/login")
+					// }
 				})
 		}
 	}
@@ -132,9 +128,16 @@ const UpdateCompany = () => {
 				<HeaderMain />
 
 				<div className="card-body CardBody card">
-					<h5>Modifiez les informations concernant votre entreprise.</h5>
+					<h5>Entrez les informations concernant votre entreprise.</h5>
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form" for>
+							<div className="col-md-6">
+								<label htmlFor="" className="form-label">
+									Nom de l'organisation:
+									<span className="text-danger taille_etoile">*</span>
+								</label>
+								<CustomSelect data={organization} placeholder="Selectionnez une organisation" onSelectedValue={handleSelectedValue} />
+							</div>
 							<div className="col-md-6">
 								<label htmlFor="name" className="form-label">
 									Nom de l'entreprise :
@@ -146,23 +149,23 @@ const UpdateCompany = () => {
 									id="name"
 									name="name"
 									value={company.name}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								/>
 							</div>
 							<div className="col-md-6">
-								<label htmlFor="name" className="form-label">
+								<label htmlFor="email" className="form-label">
 									Email :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
-									type="text"
+									type="email"
 									className="form-control no-focus-outline"
 									id="email"
 									name="email"
 									value={company.email}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								/>
@@ -178,24 +181,25 @@ const UpdateCompany = () => {
 									id="description"
 									name="description"
 									value={company.description}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								>
+
 								</textarea>
 							</div>
 							<div className="col-md-6">
-								<label htmlFor="phone" className="form-label">
+								<label htmlFor="secteur_ac" className="form-label">
 									Secteur d'activité :
-									<span className="text-danger taille_etoile">*</span>
+									<span className="text-danger fs-5">*</span>
 								</label>
 								<input
 									type="text"
 									className="form-control no-focus-outline"
-									id="category"
+									id="secteur_ac"
 									name="category"
 									value={company.category}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								/>
@@ -211,7 +215,7 @@ const UpdateCompany = () => {
 									id="phone"
 									name="phone"
 									value={company.phone}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								/>
@@ -228,10 +232,24 @@ const UpdateCompany = () => {
 									id="city"
 									name="city"
 									value={company.city}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								/>
+							</div>
+
+							<div className="col-md-6 ">
+								<label htmlFor="idStatus" className="form-label">
+									Status :
+									<span className="text-danger taille_etoile">*</span>
+								</label>
+								<select className="form-control no-focus-outline p-2 custom-select" name="idStatus" id="idStatus" value={company.idStatus} required
+									onChange={handleAdd}
+									autoComplete='off'>
+									<option value=""></option>
+									<option value="1">actif</option>
+									<option value="2">inactif</option>
+								</select>
 							</div>
 
 							<div className="col-md-6 ">
@@ -245,21 +263,35 @@ const UpdateCompany = () => {
 									id="neighborhood"
 									name="neighborhood"
 									value={company.neighborhood}
-									onChange={handleUpdate}
+									onChange={handleAdd}
 									autoComplete='off'
 									required
 								/>
 							</div>
 
-							<div className="col-md-12 d-flex gap-2 justify-content-between">
+							<div className="col-md-6 ">
+								<label htmlFor="picture" className="form-label">Logo :</label>
+								<input
+									type="file"
+									className="form-control no-focus-outline"
+									id="picture"
+									name="picture"
+									onChange={handleFileChange}
+								/>
+							</div>
+
+							<div className="col-md-12 d-flex gap-2">
 								<button type="submit" className="Btn Send btn-sm">
-									<RemixIcons.RiEditCircleLine />
-									Modifier
+									<RemixIcons.RiSendPlaneLine />
+									Enregistrer
 								</button>
-								<button className="Btn Error btn-sm" onClick={() => Navigate('/companies')}>
+								<button type="reset" className="Btn Error btn-sm">
 									<RemixIcons.RiCloseLine />
-									Annuler / Retour
+									Annuler
 								</button>
+								{/* <Link to="/admin/company" className="btn btn-success retour">
+                  Retour
+                </Link> */}
 							</div>
 						</form>
 					</blockquote>
@@ -271,4 +303,4 @@ const UpdateCompany = () => {
 
 
 
-export default UpdateCompany
+export default CreateCompany
