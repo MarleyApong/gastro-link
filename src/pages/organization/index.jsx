@@ -246,12 +246,6 @@ const ListOrganization = () => {
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
 
    const columns = [
-      // {
-      //    name: '#',
-      //    selector: row => row.id,
-      //    sortable: true,
-      //    wrap: true,
-      // },
       {
          name: 'Nom',
          selector: row => row.name,
@@ -292,10 +286,10 @@ const ListOrganization = () => {
          name: 'Actions',
          cell: (row) => (
             <div className="d-flex ">
-               <button className="btn btn-primary btn-sm voir" title="Détails" onClick={() => patch(row.id)}>
+               <button className="Btn Update" title="Détails" onClick={() => patch(row.id)}>
                   <RemixIcons.RiEyeLine fontSize={15} />
                </button>
-               <button className="btn btn-warning btn-sm" title="Modifier" onClick={() => Navigate(`/organizations/update/${row.id}`)}>
+               <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/organizations/update/${row.id}`)}>
                   <RemixIcons.RiPenNibLine fontSize={15} />
                </button>
             </div>

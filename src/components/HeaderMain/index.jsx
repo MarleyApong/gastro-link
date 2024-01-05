@@ -38,6 +38,12 @@ const HeaderMain = ({ total }) => {
         else if (urlLink.includes('customers')) {
             return "liste clients"
         }
+        else if (urlLink.includes('users') && !urlLink.includes('new')) {
+            return "liste utilisateurs"
+        }
+        else if (urlLink.includes('users/new')) {
+            return "ajout utilisateur"
+        }
         else if (urlLink.includes('settings')) {
             return "paramètres"
         }

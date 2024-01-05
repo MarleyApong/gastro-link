@@ -288,10 +288,10 @@ const ListCompany = () => {
          name: 'Actions',
          cell: (row) => (
             <div className="d-flex ">
-               <button className="btn btn-primary btn-sm voir" title="Voir plus" onClick={() => patch(row.id)}>
+               <button className="Btn Update" title="Voir plus" onClick={() => patch(row.id)}>
                   <RemixIcons.RiEyeLine />
                </button>
-               <button className="btn btn-warning btn-sm" title="Modifier" onClick={() => Navigate(`/companies/update/${row.id}`)}>
+               <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/companies/update/${row.id}`)}>
                   <RemixIcons.RiPenNibLine fontSize={15} />
                </button>
             </div>

@@ -1,6 +1,7 @@
 .modal-content {
    background: red;
    border: none !important;
+   border-radius: 0 !important;
 }
 
 .modal-react-bootstrap {
@@ -8,6 +9,7 @@
       background: var(--color-modal-head);
       height: 0px;
       padding: 20px;
+      border-radius: 0 !important;
 
       .title-react-bootstrap {
          color: var(--color-1);
@@ -106,57 +108,79 @@
 // =================================
 .card-question {
    position: relative;
-   height: 300px;
+   height: 320px;
    overflow: hidden;
 
-   .question {
+   .question,
+   .survey,
+   .question-update {
       position: absolute;
       display: flex;
       flex-direction: column;
+      background: #fff;
       gap: 5px;
       width: 100%;
       height: auto;
-      transition: .5s;
-   }
-
-   .add-question,
-   .add-question-none {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      width: 100%;
-      background: #fff;
       transform: translateX(1000%);
       transition: .5s;
-      z-index: 100;
-
-      textarea {
-         width: auto;
-         height: 200px;
-         padding: 5px;
-         resize: none;
-      }
 
       button {
          border-radius: 50%;
       }
    }
 
-   .add-question-none {
+   .transition-update-question {
       transform: translateX(0%);
-      transition: .5s;
+      z-index: 100;
+   }
+   .transition-survey {
+      transform: translateX(0%);
+      z-index: 100;
+   }
+   .transition-add-question {
+      transform: translateX(0%);
+      z-index: 100;
+   }
+
+   textarea {
+      width: auto;
+      height: 250px;
+      padding: 5px;
+      resize: none;
+      border: 1px solid #00000038;
+      border-style: dashed;
    }
 
    .question-content-details {
       position: relative;
+
+      ol {
+         padding: 0 0 0 20px;
+
+         li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         }
+      }
+
       .list-question {
          cursor: pointer;
-   
+
          &:hover {
             background: var(--color-modal-head);
             color: var(--color-1);
          }
+      }
+
+      .question-update {
+         gap: 10px;
+         z-index: 9;
+
+         textarea {
+            height: 200px;
+         }
+
       }
    }
 }

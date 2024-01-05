@@ -65,7 +65,7 @@ body::-webkit-scrollbar-thumb {
   padding: 8px;
   outline: none;
   border: none;
-  border-radius: 20px;
+  // border-radius: 5px;
   background: #abababe1;
   color: var(--color-1);
   font-size: 12px;
@@ -82,9 +82,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 .Send {
-  background: #033750;
+  background: #036d9e;
   &:hover {
-    background: #044f72;
+    background: #0892d2;
   }
 }
 
@@ -141,8 +141,6 @@ textarea {
   outline: none;
 }
 
-
-
 .Pages {
   display: flex;
   flex-direction: column;
@@ -164,7 +162,7 @@ textarea {
   width: calc(100% - 230px);
   left: 230px;
   padding-left: .5rem;
-  border-radius: 5px;
+  // border-radius: 5px;
   transition: 1s all;
 }
 
@@ -212,15 +210,14 @@ textarea {
 
 .CustomerData {
   box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color), 2px -2px 3px var(--shadow-color), -2px 2px 3px var(--shadow-color) !important;
-  height: calc(100vh - 14.7rem) !important;
+  height: calc(100vh - 14rem) !important;
   background: var(--color-1);
-
-  
 }
 
 .CardBody {
   box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
   border: none;
+  border-radius: 0;
 
   input {
     padding: 8px;

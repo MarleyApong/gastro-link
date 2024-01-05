@@ -65,7 +65,12 @@ export const ItemsInternalAdmin = [
     {
         Icon: RemixIcons.RiUserHeartLine,
         Display: "Clients",
-        Link: "/customer",
+        Link: "/customers",
+    },
+    {
+        Icon: RemixIcons.RiUserSettingsLine,
+        Display: "Utilisateurs",
+        Link: "/users",
     },
     {
         Icon: RemixIcons.RiSoundModuleLine,

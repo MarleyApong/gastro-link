@@ -14,7 +14,7 @@ import { Account } from "../../services/accountService"
 import CustomDataTable from "../../components/CustomDataTable"
 import { Question } from "../../services/questionService"
 
-const ListSurvey = () => {
+const ListUser = () => {
    const Navigate = useNavigate()
 
    const [data, setdata] = useState([])
@@ -456,4 +456,4 @@ const ListSurvey = () => {
    )
 }
 
-export default ListSurvey
+export default ListUser

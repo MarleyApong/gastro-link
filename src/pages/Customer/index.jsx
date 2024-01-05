@@ -14,7 +14,7 @@ import { Account } from "../../services/accountService"
 import CustomDataTable from "../../components/CustomDataTable"
 import { Question } from "../../services/questionService"
 
-const ListSurvey = () => {
+const ListCustomer = () => {
    const Navigate = useNavigate()
 
    const [data, setdata] = useState([])
@@ -271,14 +271,20 @@ const ListSurvey = () => {
 
    const columns = [
       {
-         name: 'Enquête',
+         name: 'Nom',
          selector: row => row.name,
          sortable: true,
          wrap: true,
       },
       {
-         name: 'Status',
-         selector: row => <ToggleButton checked={row.idStatus === 1 ? true : false} onChange={() => handleToggle(row.id)} />,
+         name: 'Téléphone',
+         selector: row => row.name,
+         sortable: true,
+         wrap: true,
+      },
+      {
+         name: 'Enquête',
+         selector: row => row.name,
          sortable: true,
          wrap: true,
       },
@@ -335,15 +341,8 @@ const ListSurvey = () => {
                <label htmlFor="">Filtrer par: </label>
                <select className="input ml-2" name={filter} onChange={(e) => setFilter(e.target.value)}>
                   <option value="name">Nom</option>
+                  <option value="phone">Téléphone</option>
                   <option value="createdAt">date de créat.</option>
-               </select>
-            </div>
-
-            <div className="AllOptionBox">
-               <label htmlFor="">Statut: </label>
-               <select className="input ml-2" name={status} onChange={(e) => setStatus(e.target.value)}>
-                  <option value="1">Actif</option>
-                  <option value="2">Inactif</option>
                </select>
             </div>
 
@@ -456,4 +455,4 @@ const ListSurvey = () => {
    )
 }
 
-export default ListSurvey
+export default ListCustomer

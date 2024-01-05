@@ -14,12 +14,8 @@ const add = (data) => {
    return Axios.put(`/${route}`, data)
 }
 
-const update = (data) => {
-   return Axios.patch(`/${route}`, data)
-}
-
-const changeProfil = (data) => {
-   return Axios.patch(`/${route}/${id}/profile-image`, data)
+const update = (id, data) => {
+   return Axios.patch(`/${route}/${id}`, data)
 }
 
 const changeStatus = (id) => {
@@ -35,7 +31,6 @@ export const Question = {
    getOne,
    add,
    update,
-   changeProfil,
    changeStatus,
    deleted
 }
