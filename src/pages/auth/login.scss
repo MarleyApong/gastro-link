@@ -98,9 +98,8 @@
                display: flex;
                align-items: center;
                border-bottom: 1px solid #00000013;
-               box-shadow: inset 5px 5px 10px rgb(0, 0, 0, .1), inset -5px -5px 10px #fff;
+               // box-shadow: inset 5px 5px 10px rgb(0, 0, 0, .1), inset -5px -5px 10px #fff;
                padding: 5px;
-               border-radius: 3px;
                gap: 5px;
 
                .Icon {
@@ -120,14 +119,14 @@
 
                &:last-child {
                   margin-top: 10px;
-                  box-shadow: 1px 1px 5px var(--logo-color), -1px -1px 5px rgba(63, 1, 1, 0.733), inset 5px 5px 10px rgba(195, 8, 8, 0.1), inset -5px -5px 10px var(--logo-color);
                   background: var(--logo-color);
                   border: none;
                   padding: 13px;
+                  transition: 1s;
                   cursor: pointer;
 
                   &:hover {
-                     box-shadow: 4px 4px 5px rgb(232, 1, 1), -2px -2px 5px rgba(166, 3, 3, 0.733), inset 5px 5px 10px rgba(195, 8, 8, 0.1), inset -5px -5px 10px var(--logo-color);
+                     transform: rotate(-1deg);
                      transition: 1s;
                   }
 

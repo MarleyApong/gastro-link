@@ -6,28 +6,29 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import toast from "react-hot-toast"
 import dateFormat from 'dateformat'
-import logoPlaceholder from "../../assets/img/avatar/logo-placeholder.jpg"
+import logoPlaceholder from "../../assets/img/avatar/user.jpg"
 import HeaderMain from "../../components/HeaderMain"
 import ToggleButton from "../../components/ToggleButton"
-import { Survey } from "../../services/surveyService"
 import { Account } from "../../services/accountService"
 import CustomDataTable from "../../components/CustomDataTable"
-import { Question } from "../../services/questionService"
+import { User } from "../../services/userService"
+import { Role } from "../../services/roleService"
 
 const ListUser = () => {
    const Navigate = useNavigate()
 
    const [data, setdata] = useState([])
    const [oneData, setOneData] = useState([])
+   const [roleData, setRoleData] = useState([])
    const [order, setOrder] = useState('asc')
-   const [filter, setFilter] = useState('name')
-   const [status, setStatus] = useState(1)
+   const [filter, setFilter] = useState('firstName')
+   const [status, setStatus] = useState('')
    const [search, setSearch] = useState('')
+   const [limit, setLimit] = useState(20)
+   const [page, setPage] = useState(0)
+   const [env, setEnv] = useState('')
+   const [role, setRole] = useState('')
    const [id, setId] = useState('')
-   const [idUpdateQuestion, setIdUpdateQuestion] = useState('')
-   const [idSurveyUpdate, setIdSurveyUpdate] = useState('')
-   const [questionUpdateCheck, setQuestionUpdateCheck] = useState('')
-   const [surveyUpdateCheck, setSurveyUpdateCheck] = useState('')
    const [question, setQuestion] = useState('')
    const [questionUpdade, setQuestionUpdade] = useState('')
    const [surveyUpdade, setSurveyUpdade] = useState('')
@@ -66,44 +67,36 @@ const ListUser = () => {
       setSurveyUpdateCheck(name)
    }
 
-   const addQuestion = (length) => {
-      if (length >= 5) {
-         toast.error("Limit des questions atteinte.")
-         toast.error("Impossible d'ajouter !")
-      }
-      else {
-         setStateQuestion(true)
-         setStateSurvey(false)
-         setStateQuestionUpdade(false)
-      }
-   }
+   useEffect(() => {
+      Role.getAll().then((res) => setRoleData(res.data.content))
+   },[])
 
    useEffect(() => {
       const loadData = async () => {
          try {
-            let res = await Survey.getAll()
+            let res = await User.getAll(order, filter, status, role, env, search, limit, page)
             setdata(res.data.content.data)
-            
-            res = await Survey.getAll()
+
+            res = await User.getCount()
             setAllCount(res.data.content.totalElements)
+
          } catch (err) {
             console.log("Load: ", err)
          }
       }
 
       loadData()
-   }, [order, filter, search, status, refresh])
+   }, [order, filter, search, status, role, env, refresh])
 
    useEffect(() => {
-      Survey.getOne(id)
+      User.getOne(id)
          .then((res) => setOneData(res.data.content))
    }, [id, refresh])
 
    const handleToggle = (idRow) => {
-      Survey.changeStatus(idRow)
+      User.changeStatus(idRow)
          .then((res) => {
-            if (res.data.message === 'Survey active') toast.success("Enquête activée !")
-            else toast.success("Enquête désactivée !")
+            if (res.data.message === 'Status modified') toast.success("Statut modifié !")
             setRefresh((current) => current + 1)
          })
          .catch((err) => {
@@ -128,10 +121,10 @@ const ListUser = () => {
    }
 
    const detailsStatusChange = (id) => {
-      Survey.changeStatus(id)
+      User.changeStatus(id)
          .then((res) => {
-            if (res.data.message === 'Survey active') toast.success("Enquête activée !")
-            else toast.success("Enquête désactivée !")
+            if (res.data.message === 'User active') toast.success("Utilisateur activé !")
+            else toast.success("Utilisateur désactivé !")
             setRefresh((current) => current + 1)
          })
          .catch((err) => {
@@ -157,109 +150,12 @@ const ListUser = () => {
          })
    }
 
-   const handleSubmit = (e) => {
-      e.preventDefault()
-      const data = {
-         idSurvey: id,
-         name: question
-      }
-
-      if (question === "") {
-         toast.error("Entrez la question pour continuer !")
-      }
-      else {
-         Question.add(data)
-            .then((res) => {
-               toast.success("Question ajoutée avec succès !")
-               setQuestion('')
-               setStateQuestion(false)
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => {
-               if (err.response.status === 400) {
-                  toast.error("Champs mal renseigné ou format inattendu !", {
-                     style: {
-                        textAlign: 'center'
-                     }
-                  })
-               }
-               else if (err.response.status === 401) {
-                  toast.error("La session a expiré !")
-                  Account.logout()
-                  Navigate("/auth/login")
-               }
-               else if (err.response.status === 403) {
-                  toast.error("Accès interdit !")
-               }
-               else if (err.response.status === 404) {
-                  toast.error("Ressource non trouvée !")
-               }
-               else if (err.response.status === 415) {
-                  toast.error("Erreur, contactez l'administrateur !")
-               }
-               else if (err.response.status === 500) {
-                  toast.error("Erreur interne du serveur !")
-               }
-               else {
-                  toast.error("Erreur de données organization(e)s !")
-                  Account.logout()
-                  Navigate("/auth/login")
-               }
-            })
-      }
-   }
-
-   const handleUpdateQuestion = (e) => {
-      e.preventDefault()
-      const data = { name: questionUpdade }
-      if (questionUpdade === "") {
-         toast.error("La question ne peut être vide !")
-      }
-      Question.update(idUpdateQuestion, data)
-         .then((res) => {
-            toast.success("La question a été bien modifiée !")
-            setStateQuestionUpdade(false)
-            setRefresh((current) => current + 1)
-            setQuestionUpdade('')
-         })
-         .catch((err) => console.log("error: ", err))
-   }
-
-   const handleUpdateSurvey = (e) => {
-      e.preventDefault()
-      alert(idSurveyUpdate)
-      const data = { name: surveyUpdade }
-      if (surveyUpdade === "") {
-         toast.error("L'enquête ne peut être vide !")
-      }
-      Survey.update(idSurveyUpdate, data)
-         .then((res) => {
-            toast.success("L'enquête a été bien modifiée !")
-            setStateSurvey(false)
-            setRefresh((current) => current + 1)
-            setSurveyUpdade('')
-         })
-         .catch((err) => console.log("error: ", err))
-   }
-
-   const deleteQuestion = (id) => {
+   const deleteUser = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
-         Question.deleted(id)
+         User.deleted(id)
             .then((res) => {
-               toast.success("Question supprimée avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => console.log("error: ", err))
-      }
-   }
-
-   const deleteSurvey = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Survey.deleted(id)
-            .then((res) => {
-               toast.success("Enquête supprimée avec succès !")
+               toast.success("Utilisateur supprimé avec succès !")
                setRefresh((current) => current + 1)
             })
             .catch((err) => console.log("error: ", err))
@@ -271,26 +167,44 @@ const ListUser = () => {
 
    const columns = [
       {
-         name: 'Enquête',
-         selector: row => row.name,
+         name: 'Nom',
+         selector: row => row.firstName,
+         sortable: true,
+         wrap: true,
+      },
+      {
+         name: 'Prenom',
+         selector: row => row.lastName,
+         sortable: true,
+         wrap: true,
+      },
+      {
+         name: 'Email',
+         selector: row => row.email,
+         sortable: true,
+         wrap: true,
+      },
+      {
+         name: 'Env.',
+         selector: row => row.idEnv === 1 ? "interne" : "externe",
+         sortable: true,
+         wrap: true,
+      },
+      {
+         name: 'Role',
+         selector: row => row.idRole === 1 ? "user" : row.idRole === 2 ? "admin" : "super admin",
          sortable: true,
          wrap: true,
       },
       {
          name: 'Status',
-         selector: row => <ToggleButton checked={row.idStatus === 1 ? true : false} onChange={() => handleToggle(row.id)} />,
-         sortable: true,
-         wrap: true,
-      },
-      {
-         name: 'Entreprise',
-         selector: row => row.Company.name,
-         sortable: true,
-         wrap: true,
-      },
-      {
-         name: 'Organisation',
-         selector: row => row.Company.Organization.name,
+         cell: (row) => (
+            <ToggleButton
+               checked={row.idStatus === 1 ? true : false}
+               onChange={(id) => handleToggle(id)}
+               id={row.id}
+            />
+         ),
          sortable: true,
          wrap: true,
       },
@@ -307,10 +221,10 @@ const ListUser = () => {
                <button className="Btn Update" title="Détails" onClick={() => patch(row.id)}>
                   <RemixIcons.RiEyeLine fontSize={15} />
                </button>
-               <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/organizations/update/${row.id}`)}>
+               <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/users/update/${row.id}`)}>
                   <RemixIcons.RiPenNibLine fontSize={15} />
                </button>
-               <button className="Btn Error" title="Supprimer" onClick={() => deleteSurvey(row.id)}>
+               <button className="Btn Error" title="Supprimer" onClick={() => deleteUser(row.id)}>
                   <RemixIcons.RiDeleteBin2Line fontSize={15} />
                </button>
             </div>
@@ -326,24 +240,46 @@ const ListUser = () => {
             <div className="AllOptionBox">
                <label htmlFor="">Trier par: </label>
                <select className="input ml-2" name={order} onChange={(e) => setOrder(e.target.value)}>
-                  <option value="asc">croissant</option>
-                  <option value="desc">Ordre décroissant</option>
+                  <option value="asc">ordre croissant</option>
+                  <option value="desc">ordre décroissant</option>
                </select>
             </div>
 
             <div className="AllOptionBox">
-               <label htmlFor="">Filtrer par: </label>
-               <select className="input ml-2" name={filter} onChange={(e) => setFilter(e.target.value)}>
-                  <option value="name">Nom</option>
+               <label htmlFor="filter">Filtrer par: </label>
+               <select className="input ml-2" id="filter" name={filter} onChange={(e) => setFilter(e.target.value)}>
+                  <option value="firstName">nom</option>
+                  <option value="lastName">prénom</option>
+                  <option value="email">email</option>
                   <option value="createdAt">date de créat.</option>
                </select>
             </div>
 
             <div className="AllOptionBox">
-               <label htmlFor="">Statut: </label>
-               <select className="input ml-2" name={status} onChange={(e) => setStatus(e.target.value)}>
-                  <option value="1">Actif</option>
-                  <option value="2">Inactif</option>
+               <label htmlFor="status">Statut: </label>
+               <select className="input ml-2" id="status" name={status} onChange={(e) => setStatus(e.target.value)}>
+                  <option value="">tous</option>
+                  <option value="1">actif</option>
+                  <option value="2">inactif</option>
+               </select>
+            </div>
+
+            <div className="AllOptionBox">
+               <label htmlFor="env">Env. : </label>
+               <select className="input ml-2" id="env" name={env} onChange={(e) => setEnv(e.target.value)}>
+                  <option value="">tous</option>
+                  <option value="1">interne</option>
+                  <option value="2">externe</option>
+               </select>
+            </div>
+
+            <div className="AllOptionBox">
+               <label htmlFor="role">Role : </label>
+               <select className="input ml-2" id="role" name={role} onChange={(e) => setRole(e.target.value)}>
+                  <option value="">tous</option>
+                  {roleData.map((item) => (
+                     <option key={item.id} value={item.id}>{item.name}</option>
+                  ))}
                </select>
             </div>
 
@@ -375,77 +311,45 @@ const ListUser = () => {
          >
             <Modal.Header closeButton className="header-react-bootstrap">
                <Modal.Title id="contained-modal-title-vcenter" className="title-react-bootstrap">
-                  Detail de l'enquête : {oneData.name}
+                  Detail de l'utilisateur : {oneData.firstName + " " + oneData.lastName}
                </Modal.Title>
             </Modal.Header>
             <Modal.Body className="body-react-bootstrap">
                <div className="container">
                   <div className="row ">
                      <div className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        {
-                           <img className="object-fit-cover" crossorigin="anonymous" src={oneData.Company ? 'http://localhost:8000' + oneData.Company.picture : logoPlaceholder} alt="" width="100%" height="400px" />
-                        }
+                        <img className="object-fit-cover" crossorigin="anonymous" src={logoPlaceholder} alt="" width="100%" height="400px" />
                      </div>
 
-                     <div className="col-md-6 infoDetail ml-4 ">
-                        <div className="fw-bold fs-5 mb-4">Entre. : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</div>
-                        <div className="mb-2 fw-bold p-2 shadow">Enquête: {oneData.name ? oneData.name : '---'}</div>
-                        <div className="card-question">
-                           <form onSubmit={handleSubmit} className={stateQuestion ? "question transition-add-question p-2 shadow" : "question p-2 shadow"}>
-                              <label htmlFor="question" className="fw-bold">Nom de la question: </label>
-                              <textarea name="question" onChange={(e) => setQuestion(e.target.value)} value={question} placeholder="Entrez la question"></textarea>
-                              <div className="d-flex justify-content-between">
-                                 <Button onClick={() => setStateQuestion(true)} type="submit" className='Btn Success btn-sm me-2' title="Ajouter"><RemixIcons.RiAddLine /></Button>
-                                 <Button onClick={() => setStateQuestion(false)} className="Btn Error btn-sm" title="Retour"><RemixIcons.RiArrowRightLine /></Button>
-                              </div>
-                           </form>
-
-                           <form onSubmit={handleUpdateSurvey} className={stateSurvey ? "survey transition-survey p-2 shadow" : "survey p-2 shadow"}>
-                              <label htmlFor="survey-update" className="fw-bold">Nom de l'enquête: </label>
-                              <textarea name="survey-update" onChange={(e) => setSurveyUpdade(e.target.value)} value={surveyUpdade} placeholder="Modifiez l'enquête"></textarea>
-                              <div className="d-flex justify-content-between">
-                                 <Button onClick={() => setStateSurvey(true)} type="submit" className='Btn Send btn-sm me-2' title="Modifier" disabled={surveyUpdateCheck === surveyUpdade}><RemixIcons.RiPenNibLine /></Button>
-                                 <Button onClick={() => setStateSurvey(false)} className="Btn Error btn-sm" title="Retour"><RemixIcons.RiArrowRightLine /></Button>
-                              </div>
-                           </form>
-                           <div className="question-content-details">
-                              <div className="mb-3"><AiOutlineFieldNumber className="icon" size={18} />{oneData.id ? oneData.id : '---'}</div>
-                              <div className="mb-2 fw-bold p-2 shadow">Questions</div>
-                              <form onSubmit={handleUpdateQuestion} className={stateQuestionUpdade ? "question-update transition-update-question" : "question-update"}>
-                                 <textarea name="area-question" onChange={(e) => setQuestionUpdade(e.target.value)} value={questionUpdade} placeholder="Modifiez la question"></textarea>
-                                 <div className="d-flex justify-content-between">
-                                    <Button onClick={() => setStateQuestionUpdade(true)} type="submit" className='Btn Send btn-sm me-2' title="Ajouter" disabled={questionUpdateCheck === questionUpdade}><RemixIcons.RiPenNibLine /></Button>
-                                    <Button onClick={() => setStateQuestionUpdade(false)} className="Btn Error btn-sm" title="Retour"><RemixIcons.RiArrowRightLine /></Button>
-                                 </div>
-                              </form>
-                              <ol>
-                                 {
-                                    oneData.id && oneData.Questions.map((item, index) => {
-                                       return <li key={index + 1} className="mb-3 d-flex align-items p-1 shadow list-question">
-                                          <span onClick={() => questionUpdateModal(item.id, item.name)}>{index + 1}. {item.name.length >= 40 ? item.name.substring(0, 45) + '...' : item.name}</span>
-                                          <RemixIcons.RiDeleteBinLine onClick={() => deleteQuestion(item.id)} title="Supprimer"/>
-                                       </li>
-                                    })
-                                 }
-                              </ol>
+                     <div className="col-md-6 infoDetail ml-4">
+                        <div>
+                           <h5 className="mb-3 p-2 shadow">Infos</h5>
+                           <div className="ps-4">
+                              <p className="mb-2"><span className="fw-bold">Nom :</span> {oneData.firstName}</p>
+                              <p className="mb-2"><span className="fw-bold">Prénom :</span> {oneData.lastName}</p>
+                              <p className="mb-2"><span className="fw-bold">Email :</span> {oneData.email}</p>
+                              <p className="mb-2"><span className="fw-bold">Téléphone :</span> {oneData.phone}</p>
+                              <p className="mb-2"><span className="fw-bold">Environnement :</span> {oneData.idEnv === 1 ? "interne" : "externe"}</p>
+                              <p className="mb-2"><span className="fw-bold">Rôle :</span> {oneData.idRole === 1 ? "user" : oneData.idRole === 2 ? "admin" : "super admin"}</p>
+                              <p className="mb-2"><span className="fw-bold">Statut :</span> {oneData.idStatut === 1 ? "actif" : "inactif"}</p>
+                              <p className="mb-2"><span className="fw-bold">Date de création :</span> {oneData.id && dateFormat(new Date(oneData.createdAt), 'dd-mm-yyyy HH:MM:ss')}</p>
+                              <p className="mb-2"><span className="fw-bold">Date de modif :</span> {oneData.id && dateFormat(new Date(oneData.updatedAt), 'dd-mm-yyyy HH:MM:ss')}</p>
                            </div>
                         </div>
-
+                        <div className="">
+                           <h5 className="mb-3 mt-3 p-2 shadow">Affiliation</h5>
+                           <div className="ps-4">
+                              <p className="mb-2"><span className="fw-bold">Organisation :</span> Aucun</p>
+                           </div>
+                        </div>
                      </div>
                   </div>
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
                <div className="d-flex">
-                  <Button onClick={() => surveyUpdateModal(oneData.id, oneData.name)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier l'enquête</Button>
+                  <Button onClick={() => surveyUpdateModal(oneData.id, oneData.name)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier</Button>
                   <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
-                  <Button onClick={() => addQuestion(oneData.Questions.length)} className={oneData.id && oneData.Questions.length >= 5 ? 'Btn Error btn-sm me-2' : 'Btn Success btn-sm me-2'}><RemixIcons.RiAddLine />Nouvelle quest.</Button>
-                  <div className="site">
-                     <RemixIcons.RiGlobalLine className="icon" />
-                     <a href="https://www.allhcorp.com" target="_blank" rel="noopener noreferrer">
-                        www.allhcorp.com
-                     </a>
-                  </div>
                </div>
                <div>
                   <Button onClick={hideModal} className="Btn Error btn-sm"><RemixIcons.RiCloseLine />Fermer</Button>

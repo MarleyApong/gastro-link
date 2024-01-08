@@ -285,13 +285,6 @@ const CreateCompany = () => {
 									<RemixIcons.RiSendPlaneLine />
 									Enregistrer
 								</button>
-								<button type="reset" className="Btn Error btn-sm">
-									<RemixIcons.RiCloseLine />
-									Annuler
-								</button>
-								{/* <Link to="/admin/company" className="btn btn-success retour">
-                  Retour
-                </Link> */}
 							</div>
 						</form>
 					</blockquote>

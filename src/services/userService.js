@@ -1,8 +1,12 @@
 import Axios from "./callerService"
 
-const route = 'Users'
+const route = 'users'
 
-const getAll = () => {
+const getAll = (order, filter, status, role, env, search, limit, page) => {
+   return Axios.get(`/${route}?limit=${limit}&page=${page}&sort=${order}&status=${status}&role=${role}&env=${env}&filter=${filter}&k=${search}`)
+}
+
+const getCount = () => {
    return Axios.get(`/${route}`)
 }
 
@@ -28,6 +32,7 @@ const deleted = (id) => {
 
 export const User = {
    getAll,
+   getCount,
    getOne,
    add,
    changeStatus,

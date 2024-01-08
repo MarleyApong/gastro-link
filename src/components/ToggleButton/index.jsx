@@ -1,16 +1,22 @@
 import React from 'react'
 import './toggleButton.scss'
 
-const ToggleButton = ({ checked, onChange }) => {
+const ToggleButton = ({ checked, onChange, id }) => {
+
+   const handleToggle = () => {
+      onChange(id)
+   }
 
    return (
       <div className='ToggleButton'>
-         <input type="checkbox"
+         <input
+            type="checkbox"
             checked={checked}
-            onChange={onChange}
-            id='check-button'
+            onChange={handleToggle}
+            id={`check-button-${id}`}
+            className='check-button'
          />
-         <label htmlFor="check-button" className='slide-button'></label>
+         <label htmlFor={`check-button-${id}`} className='slide-button'></label>
       </div>
    )
 }

@@ -36,7 +36,7 @@ export const FirstGroupInternal = ({companies, surveys}) => {
             <div className="Element">
                <span>Entreprise bloquée</span>
                <div className="Length">
-                  {surveys.blocked}
+                  {companies.blocked}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiCloseCircleLine /></div>

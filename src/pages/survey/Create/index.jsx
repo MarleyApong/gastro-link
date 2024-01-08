@@ -168,10 +168,6 @@ const CreateSurvey = () => {
 									<RemixIcons.RiSendPlaneLine />
 									Enregistrer
 								</button>
-								<button type="reset" className="Btn Error btn-sm">
-									<RemixIcons.RiCloseLine />
-									Annuler
-								</button>
 							</div>
 						</form>
 					</blockquote>

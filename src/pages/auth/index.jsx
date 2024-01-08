@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { PulseLoader } from 'react-spinners'
 import * as RemixIcons from "react-icons/ri"
-import './login.scss'
-import logo from '../../assets/img/logo/cs-logo-red.png'
 import { Authentification } from '../../services/authentificationService'
 import { Account } from '../../services/accountService'
+import logo from '../../assets/img/logo/cs-logo-red.png'
+import './login.scss'
 
 const Login = () => {
    const Navigate = useNavigate()
@@ -34,7 +34,6 @@ const Login = () => {
 
          } catch (err) {
             setWait(true)
-            console.log("Err: ", err)
             if (err.response) {
                if (err.response.data.error.name === 'NotFound') {
                   toast.error("Email ou mot de passe incorrect !")
@@ -44,6 +43,10 @@ const Login = () => {
                }
                else if (err.response.data.error.name === 'MissingData') {
                   toast.error("Veuillez remplir tous les champs !")
+               }
+               else if (err.response.data.error.name === 'AccessForbidden') {
+                  toast.error("Contactez votre administrateur.")
+                  toast.error("Accès réfusé !")
                }
                else {
                   toast.error("Oups ! Quelque chose a mal tournée.", {

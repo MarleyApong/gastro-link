@@ -107,7 +107,7 @@ const ListCompany = () => {
    const handleToggle = (idRow) => {
       Company.changeStatus(idRow)
          .then((res) => {
-            if (res.data.message === 'Company active') toast.success("Entreprise activée !")
+            if (res.data.message === 'company active') toast.success("Entreprise activée !")
             else toast.success("Entreprise désactivée !")
             setRefresh((current) => current + 1)
          })
@@ -138,7 +138,7 @@ const ListCompany = () => {
    const detailsStatusChange = (id) => {
       Company.changeStatus(id)
          .then((res) => {
-            if (res.data.message === 'Company active') toast.success("Entreprise activée !")
+            if (res.data.message === 'company active') toast.success("Entreprise activée !")
             else toast.success("Entreprise désactivée !")
             setRefresh((current) => current + 1)
          })
@@ -274,7 +274,13 @@ const ListCompany = () => {
       },
       {
          name: 'Status',
-         selector: row => <ToggleButton checked={row.idStatus === 1 ? true : false} onChange={() => handleToggle(row.id)} />,
+         cell: (row) => (
+            <ToggleButton
+               checked={row.idStatus === 1 ? true : false}
+               onChange={(id) => handleToggle(id)}
+               id={row.id}
+            />
+         ),
          sortable: true,
          wrap: true,
       },
@@ -306,31 +312,32 @@ const ListCompany = () => {
 
          <div className="OptionFilter">
             <div className="AllOptionBox">
-               <label htmlFor="">Trier par: </label>
-               <select className="input ml-2" name={order} onChange={(e) => setOrder(e.target.value)}>
-                  <option value="asc">croissant</option>
-                  <option value="desc">Ordre décroissant</option>
+               <label htmlFor="sort">Trier par: </label>
+               <select className="input ml-2" id="sort"  name={order} onChange={(e) => setOrder(e.target.value)}>
+                  <option value="asc">order croissant</option>
+                  <option value="desc">ordre décroissant</option>
                </select>
             </div>
 
             <div className="AllOptionBox">
-               <label htmlFor="">Filtrer par: </label>
-               <select className="input ml-2" name={filter} onChange={(e) => setFilter(e.target.value)}>
-                  <option value="name">Nom</option>
-                  <option value="phone">Téléphone</option>
-                  <option value="email">Email</option>
-                  <option value="city">Ville</option>
-                  <option value="neigborhood">Quartier</option>
-                  <option value="category">Secteur</option>
+               <label htmlFor="filter">Filtrer par: </label>
+               <select className="input ml-2" id="filter" name={filter} onChange={(e) => setFilter(e.target.value)}>
+                  <option value="name">nom</option>
+                  <option value="phone">téléphone</option>
+                  <option value="email">email</option>
+                  <option value="city">ville</option>
+                  <option value="neigborhood">quartier</option>
+                  <option value="category">secteur</option>
                   <option value="createdAt">date de créat.</option>
                </select>
             </div>
 
             <div className="AllOptionBox">
-               <label htmlFor="">Statut: </label>
-               <select className="input ml-2" name={status} onChange={(e) => setStatus(e.target.value)}>
-                  <option value="1">Actif</option>
-                  <option value="2">Inactif</option>
+               <label htmlFor="status">Statut: </label>
+               <select className="input ml-2" id="status" name={status} onChange={(e) => setStatus(e.target.value)}>
+                  <option value="">tous</option>
+                  <option value="1">actif</option>
+                  <option value="2">inactif</option>
                </select>
             </div>
 

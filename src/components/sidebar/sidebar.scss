@@ -8,6 +8,7 @@
     height: calc(100vh);
     border-radius: 5px;
     transition: 1s all;
+    z-index: 100;
 
     .User {
         display: flex;
@@ -67,7 +68,7 @@
             font-weight: 600;
             text-decoration: none;
             padding: 15px;
-            padding-left: 40px;
+            padding-left: 30px;
             display: flex;
             gap: 5px;
             align-items: center;
@@ -117,7 +118,7 @@
 
         .sousMenu {
             padding: 10px 5px;
-            margin: 0 50px;
+            margin: 0 40px;
             color: var(--aside-text-color);
             font-weight: 400;
             width: 100%;
@@ -131,6 +132,7 @@
 
             i {
                 font-size: 16px;
+                margin-right: 10px;
             }
 
             span {
@@ -186,6 +188,41 @@
 
 @media screen and (max-width: 1000px) {
 
+    .SidebarMin {
+        width: 229px;
+
+        .User {
+            width: 229px;
+            padding: 0 10px;
+    
+            .Avatar {
+                width: 60px;
+                height: 60px;
+            }
+    
+            .InfoUser {
+                display: flex;
+            }
+        }
+    
+
+        .Navigation {
+
+            a {
+                padding: 15px;
+                padding-left: 15px;
+            }
+
+            .sousMenu {
+                padding: 10px 5px;
+                margin: 0 10px;
+
+                span {
+                    display: flex;
+                }
+            }
+        }
+    }
     .Sidebar {
         width: 50px;
 

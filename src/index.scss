@@ -54,7 +54,7 @@ body::-webkit-scrollbar-track {
 .Survey-Cont::-webkit-scrollbar-thumb,
 .CustomerData::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
-  border: 3px solid var(--z-color-2);
+  border: 3px solid var(--user-color);
   border-radius: 10px;
 }
 
@@ -123,6 +123,16 @@ td {
   font-size: 13px;
 }
 
+td {
+  min-width: 100px !important;
+}
+
+.rdt_TableCell{
+  div {
+    min-width: 100px;
+  }
+}
+
 small {
   font-size: 12px;
 }
@@ -133,12 +143,17 @@ label {
 
 select,
 input,
+button,
 textarea {
   padding: 2px;
   font-size: 13px !important;
-  border-radius: 5px;
+  border-radius: 0px !important;
   border-color: var(--color-2);
   outline: none;
+}
+
+textarea {
+  resize: none;
 }
 
 .Pages {

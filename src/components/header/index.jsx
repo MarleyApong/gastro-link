@@ -14,6 +14,7 @@ const Header = ({ sidebar, setSidebar }) => {
     const newOrganization = () => Navigate('/organizations/new')
     const newCompany = () => Navigate('/companies/new')
     const newSurveys = () => Navigate('/surveys/new')
+    const newUsers = () => Navigate('/users/new')
 
     return (
         <header>
@@ -34,13 +35,16 @@ const Header = ({ sidebar, setSidebar }) => {
                             <button className='Btn Success'>
                                 <RemixIcons.RiAddLine />
                                 {
-                                    location.pathname.includes('compan') ?
+                                    location.pathname.includes('organizations') && !location.pathname.includes('new') ?
                                         <small onClick={newOrganization}>Nouvelle Organizat.</small> :
-                                        location.pathname.includes('organizat') ?
-                                            <small  onClick={newCompany}>Nouvelle Entreprise</small> : 
-                                            location.pathname.includes('surve') ?
-                                            <small onClick={newSurveys}>Nouvelle Enquête</small> :  <small>Nouvelle Enquête</small>
-                                }       
+                                        location.pathname.includes('companies') && !location.pathname.includes('new') ?
+                                            <small onClick={newCompany}>Nouvelle Entreprise</small> :
+                                            location.pathname.includes('surveys') && !location.pathname.includes('new') ?
+                                                <small onClick={newSurveys}>Nouvelle Enquête</small> :
+                                                location.pathname.includes('users') && !location.pathname.includes('new') ?
+                                                    <small onClick={newUsers}>Nouveau utilisateur</small> :
+                                                    <small onClick={newSurveys}>Nouvelle Enquête</small>
+                                }
                             </button> :
                             access === 11 ?
                                 "" :

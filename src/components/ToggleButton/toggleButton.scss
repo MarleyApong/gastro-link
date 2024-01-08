@@ -21,14 +21,14 @@
       }
    }
 
-   #check-button {
+   .check-button {
       display: none;
 
-      &:checked +.slide-button {
+      &:checked + .slide-button {
          background-color: var(--toggle-color);
       }
 
-      &:checked+.slide-button::before {
+      &:checked + .slide-button::before {
          transform: translateX(20px);
       }
    }

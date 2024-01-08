@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Dashboard, Layout, ListCompany, ListOrganization, ListSurvey, CreateCompany, CreateOrganization, CreateSurvey, UpdateCompany, UpdateOrganization, ListCustomer } from '../pages'
+import { Dashboard, Layout, ListCompany, ListOrganization, ListSurvey, CreateCompany, CreateOrganization, CreateSurvey, UpdateCompany, UpdateOrganization, ListCustomer, ListUser, CreateUser, UpdateUser } from '../pages'
 import Profil from '../components/Profil'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
@@ -43,6 +43,10 @@ const PrivateRoute = () => {
                      <Route path='/surveys/list' element={<ListSurvey />} />
                      <Route path='/surveys/new' element={<CreateSurvey />} />
                      <Route path='/customers' element={<ListCustomer />} />
+                     <Route path='/users/new' element={<CreateUser />} />
+                     <Route path='/users' element={<ListUser />} />
+                     <Route path='/users/list' element={<ListUser />} />
+                     <Route path='/users/update/:id' element={<UpdateUser />} />
                      {/*<Route path='/survey/list' element={<ListeEnquete />} />
                      <Route path='/survey' element={<ListeEnquete />} />
                      <Route path='survey/note' element={<ListeNote />} />

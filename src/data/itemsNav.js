@@ -46,7 +46,7 @@ export const ItemsInternalAdmin = [
         Link: "/surveys",
         subNav: [
             {
-                Icon: RemixIcons.RiListRadio,
+                Icon: RemixIcons.RiAddLine,
                 Display: "Nouvelle enquête",
                 Link: "/surveys/new",
             },
@@ -71,6 +71,19 @@ export const ItemsInternalAdmin = [
         Icon: RemixIcons.RiUserSettingsLine,
         Display: "Utilisateurs",
         Link: "/users",
+        subNav: [
+            {
+                Icon: RemixIcons.RiAddLine,
+                Display: "Nouveau utilisateur",
+                Link: "/users/new",
+            },
+            {
+                Icon: RemixIcons.RiListRadio,
+                Display: "Liste des utilisateurs",
+                Link: "/users/list",
+            }
+        ]
+        
     },
     {
         Icon: RemixIcons.RiSoundModuleLine,

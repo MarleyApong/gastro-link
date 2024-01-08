@@ -21,8 +21,10 @@ const ListSurvey = () => {
    const [oneData, setOneData] = useState([])
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('name')
-   const [status, setStatus] = useState(1)
+   const [status, setStatus] = useState('')
    const [search, setSearch] = useState('')
+   const [limit, setLimit] = useState(10)
+   const [page, setPage] = useState(0)
    const [id, setId] = useState('')
    const [idUpdateQuestion, setIdUpdateQuestion] = useState('')
    const [idSurveyUpdate, setIdSurveyUpdate] = useState('')
@@ -81,9 +83,9 @@ const ListSurvey = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
-            let res = await Survey.getAll()
+            let res = await Survey.getAll(order, filter, status, search, limit, page)
             setdata(res.data.content.data)
-            
+
             res = await Survey.getAll()
             setAllCount(res.data.content.totalElements)
          } catch (err) {
@@ -278,7 +280,13 @@ const ListSurvey = () => {
       },
       {
          name: 'Status',
-         selector: row => <ToggleButton checked={row.idStatus === 1 ? true : false} onChange={() => handleToggle(row.id)} />,
+         cell: (row) => (
+            <ToggleButton
+               checked={row.idStatus === 1 ? true : false}
+               onChange={(id) => handleToggle(id)}
+               id={row.id}
+            />
+         ),
          sortable: true,
          wrap: true,
       },
@@ -307,9 +315,9 @@ const ListSurvey = () => {
                <button className="Btn Update" title="Détails" onClick={() => patch(row.id)}>
                   <RemixIcons.RiEyeLine fontSize={15} />
                </button>
-               <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/organizations/update/${row.id}`)}>
+               {/* <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/organizations/update/${row.id}`)}>
                   <RemixIcons.RiPenNibLine fontSize={15} />
-               </button>
+               </button> */}
                <button className="Btn Error" title="Supprimer" onClick={() => deleteSurvey(row.id)}>
                   <RemixIcons.RiDeleteBin2Line fontSize={15} />
                </button>
@@ -326,15 +334,15 @@ const ListSurvey = () => {
             <div className="AllOptionBox">
                <label htmlFor="">Trier par: </label>
                <select className="input ml-2" name={order} onChange={(e) => setOrder(e.target.value)}>
-                  <option value="asc">croissant</option>
-                  <option value="desc">Ordre décroissant</option>
+                  <option value="asc">ordre croissant</option>
+                  <option value="desc">ordre décroissant</option>
                </select>
             </div>
 
             <div className="AllOptionBox">
                <label htmlFor="">Filtrer par: </label>
                <select className="input ml-2" name={filter} onChange={(e) => setFilter(e.target.value)}>
-                  <option value="name">Nom</option>
+                  <option value="name">nom</option>
                   <option value="createdAt">date de créat.</option>
                </select>
             </div>
@@ -342,8 +350,9 @@ const ListSurvey = () => {
             <div className="AllOptionBox">
                <label htmlFor="">Statut: </label>
                <select className="input ml-2" name={status} onChange={(e) => setStatus(e.target.value)}>
-                  <option value="1">Actif</option>
-                  <option value="2">Inactif</option>
+                  <option value="">tous</option>
+                  <option value="1">actif</option>
+                  <option value="2">inactif</option>
                </select>
             </div>
 
@@ -423,7 +432,7 @@ const ListSurvey = () => {
                                     oneData.id && oneData.Questions.map((item, index) => {
                                        return <li key={index + 1} className="mb-3 d-flex align-items p-1 shadow list-question">
                                           <span onClick={() => questionUpdateModal(item.id, item.name)}>{index + 1}. {item.name.length >= 40 ? item.name.substring(0, 45) + '...' : item.name}</span>
-                                          <RemixIcons.RiDeleteBinLine onClick={() => deleteQuestion(item.id)} title="Supprimer"/>
+                                          <RemixIcons.RiDeleteBinLine onClick={() => deleteQuestion(item.id)} title="Supprimer" />
                                        </li>
                                     })
                                  }

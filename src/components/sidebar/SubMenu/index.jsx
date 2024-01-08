@@ -17,7 +17,7 @@ const SubMenu = ({ item }) => {
             subnav && item.subNav.map((item, index) => {
                return (
                   <NavLink to={item.Link} key={index} className={(Link) => (Link.isActive ? "LinkActive2 sousMenu" : "sousMenu")}>
-                     {item.Icon}
+                     <i> <item.Icon/></i>
                      <span>{item.Display}</span>
                   </NavLink>
                )

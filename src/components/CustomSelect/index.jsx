@@ -33,7 +33,7 @@ const customStyles = {
    }),
    option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isFocused ? 'var(--z-color-2)' : 'white',
+      backgroundColor: state.isFocused ? 'var(--user-color)' : 'white',
       color: state.isFocused ? 'white' : 'black',
       padding: '0px',
       fontSize: '13px',
@@ -50,7 +50,7 @@ const customStyles = {
    }),
 }
 
-const CustomSelect = ({ data, setId, placeholder, onSelectedValue }) => {
+const CustomSelect = ({ data, placeholder, onSelectedValue }) => {
    const [selectedData, setSelectedData] = useState(null)
 
    const options = data.map(data => ({
@@ -61,7 +61,6 @@ const CustomSelect = ({ data, setId, placeholder, onSelectedValue }) => {
    const handleSelectChange = selectedOption => {
       setSelectedData(selectedOption)
       onSelectedValue(selectedOption)
-      setId(selectedOption.value)
    }
 
    return (
