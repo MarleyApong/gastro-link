@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as RemixIcons from "react-icons/ri"
 import { useLocation, useNavigate } from 'react-router-dom'
 import logo from '../../assets/img/logo/cs-logo-red.png'
@@ -11,10 +11,16 @@ const Header = ({ sidebar, setSidebar }) => {
     const location = useLocation()
     const access = Access()
 
+    const id = localStorage.getItem("id")
+
     const newOrganization = () => Navigate('/organizations/new')
     const newCompany = () => Navigate('/companies/new')
     const newSurveys = () => Navigate('/surveys/new')
     const newUsers = () => Navigate('/users/new')
+
+    useEffect(() => {
+
+    },[])
 
     return (
         <header>
@@ -55,16 +61,6 @@ const Header = ({ sidebar, setSidebar }) => {
                                     </button> :
                                     access === 21 ?
                                         "" : ""
-
-                    }
-                    {
-                        access === 11 || access === 12 || access === 13 ?
-                            "" :
-                            access === 21 || access === 22 ?
-                                <Link to='http://localhost:3000/customer-space' target='_blank' className="NotificationIcon">
-                                    <RemixIcons.RiGlobalLine />
-                                </Link> :
-                                ""
 
                     }
 

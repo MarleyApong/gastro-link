@@ -3,81 +3,96 @@ import { useNavigate, useParams } from "react-router-dom"
 import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
-import { Organization } from "../../../services/organizationService"
+import { User } from "../../../services/userService"
 import { Account } from "../../../services/accountService"
+import { Role } from "../../../services/roleService"
 
 const UpdateUser = () => {
 	const Navigate = useNavigate()
 	const { id } = useParams()
 
+	// USER OWNERSHIP
 	const [lastData, setLastData] = useState({
-		name: "",
-		description: "",
+		firstName: "",
+		lastName: "",
+		email: "",
 		phone: "",
-		city: "",
-		neighborhood: ""
-	})
-	const [organization, setOrganization] = useState({
-		name: "",
-		description: "",
-		phone: "",
-		city: "",
-		neighborhood: ""
+		idRole: "",	
+		idStatus: ""
 	})
 
+	// USER OWNERSHIP
+	const [user, setUser] = useState({
+		firstName: "",
+		lastName: "",
+		email: "",
+		phone: "",
+		idRole: "",	
+		idStatus: ""
+	})
+
+	// // ROLEDATA OWNERSHIP
+	const [roleData, setRoleData] = useState([])
+
+	// SET ALL VALUE
 	const handleUpdate = (e) => {
 		const { name, value } = e.target;
-		setOrganization({
-			...organization,
+		setUser({
+			...user,
 			[name]: value,
 		})
 	}
 
+	// GET ONE DATA API
 	useEffect(() => {
-		Organization.getOne(id)
+		User.getOne(id)
 			.then((res) => {
-				setOrganization({
-					name: res.data.content.name,
-					description: res.data.content.description,
+				setUser({
+					firstName: res.data.content.firstName,
+					lastName: res.data.content.lastName,
+					email: res.data.content.email,
 					phone: res.data.content.phone,
-					city: res.data.content.city,
-					neighborhood: res.data.content.neighborhood
+					role: res.data.content.role,
+					status: res.data.content.status
 				})
 				setLastData({
-					name: res.data.content.name,
-					description: res.data.content.description,
+					firstName: res.data.content.firstName,
+					lastName: res.data.content.lastName,
+					email: res.data.content.email,
 					phone: res.data.content.phone,
-					city: res.data.content.city,
-					neighborhood: res.data.content.neighborhood
+					role: res.data.content.role,
+					status: res.data.content.status
 				})
 			})
 	}, [id])
 
+	// GET ALL ROLE DATA API
+	useEffect(() => {
+		Role.getAll().then((res) => setRoleData(res.data.content))
+	}, [])
+
+	// UPDATE USER
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		if (
-			organization.name === "" ||
-			organization.description === "" ||
-			organization.phone === "" ||
-			organization.city === "" ||
-			organization.neighborhood === "") {
-			toast.error("Les champs marqués par une etoile sont obligations !")
+		if (user.firstName === "" || user.phone === "" || user.email === "" || user.idRole === "" || user.idStatus === "") {
+			toast.error("Les champs marqués par une étoile sont obligations !")
 		}
 		else if (
-			organization.name === lastData.name &&
-			organization.description === lastData.description &&
-			organization.phone === lastData.phone &&
-			organization.city === lastData.city &&
-			organization.neighborhood === lastData.neighborhood
-		) {
+			user.firstName === lastData.firstName &&
+			user.lastName === lastData.lastName &&
+			user.email === lastData.email &&
+			user.phone === lastData.phone &&
+			user.idRole === lastData.role &&
+			user.idStatus === lastData.idStatus
+			) {
 			toast.error("Aucune valeur n'a été modifiée.")
-			toast.error("Echec de l'opération  !")
+			toast.error("Echec de l'opération !")
 		}
 		else {
-			Organization.update(id, organization)
+			User.update(id, user)
 				.then((res) => {
-					toast.success("organization modifiée avec succès !")
-					Navigate('/organizations/')
+					toast.success("Utilisateur modifié avec succès !")
+					Navigate('/users/')
 				})
 				.catch((err) => {
 					console.log("Erreur: ", err);
@@ -106,7 +121,7 @@ const UpdateUser = () => {
 						toast.error("Erreur interne du serveur !")
 					}
 					else {
-						toast.error("Erreur de données organization(e)s !")
+						toast.error("Erreur de données l'utilisateur !")
 						Account.logout()
 						Navigate("/auth/login")
 					}
@@ -124,54 +139,50 @@ const UpdateUser = () => {
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form" for>
 							<div className="col-md-6">
-								<label htmlFor="name" className="form-label">
+								<label htmlFor="firstName" className="form-label">
 									Nom :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
 									type="text"
 									className="form-control no-focus-outline"
-									id="name"
-									name="name"
-									value={organization.name}
+									id="firstName"
+									name="firstName"
+									value={user.firstName}
 									onChange={handleUpdate}
 									autoComplete='off'
 									required
-
 								/>
 							</div>
 							<div className="col-md-6">
-								<label htmlFor="name" className="form-label">
+								<label htmlFor="lastName" className="form-label">
 									Prénom :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
 									type="text"
 									className="form-control no-focus-outline"
-									id="name"
-									name="name"
-									value={organization.name}
+									id="lastName"
+									name="lastName"
+									value={user.lastName}
 									onChange={handleUpdate}
 									autoComplete='off'
-									required
-
 								/>
 							</div>
 							<div className="col-md-6">
-								<label htmlFor="name" className="form-label">
+								<label htmlFor="email" className="form-label">
 									Email :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
 									type="text"
 									className="form-control no-focus-outline"
-									id="name"
-									name="name"
-									value={organization.name}
+									id="email"
+									name="email"
+									value={user.email}
 									onChange={handleUpdate}
 									autoComplete='off'
 									required
-
 								/>
 							</div>
 							<div className="col-md-6">
@@ -184,31 +195,35 @@ const UpdateUser = () => {
 									className="form-control no-focus-outline"
 									id="phone"
 									name="phone"
-									value={organization.phone}
+									value={user.phone}
 									onChange={handleUpdate}
 									autoComplete='off'
 									required
 								/>
 							</div>
 							<div className="col-md-6">
-								<label htmlFor="phone" className="form-label">
+								<label htmlFor="idRole" className="form-label">
 									Rôle :
-									<span className="text-danger taille_etoile">*</span>
+									<span className="text-danger taille_etoile"></span>
 								</label>
-								<select name="" id="" className="form-control no-focus-outline">
-									<option value="">admin</option>
+								<select name="idRole" id="idRole" onChange={handleUpdate} className="form-control no-focus-outline">
+									<option value=""></option>
+									{roleData.map((item) => (
+										<option key={item.id} value={item.id}>{item.name}</option>
+									))}
 								</select>
 							</div>
 							<div className="col-md-6">
-								<label htmlFor="phone" className="form-label">
+								<label htmlFor="status" className="form-label">
 									Statut :
-									<span className="text-danger taille_etoile">*</span>
+									<span className="text-danger taille_etoile"></span>
 								</label>
-								<select name="" id="" className="form-control no-focus-outline">
-
+								<select name="idStatus" id="idStatus" onChange={handleUpdate} className="form-control no-focus-outline">
+									<option value=""></option>
+									<option value="1">actif</option>
+									<option value="2">inactif</option>
 								</select>
 							</div>
-
 
 							<div className="col-md-12 d-flex gap-2 justify-content-between">
 								<button type="submit" className="Btn Send btn-sm">
@@ -225,9 +240,7 @@ const UpdateUser = () => {
 				</div>
 			</div>
 		</>
-	);
-};
-
-
+	)
+}
 
 export default UpdateUser

@@ -10,15 +10,7 @@ const UpdateCompany = () => {
 	const Navigate = useNavigate()
 	const { id } = useParams()
 
-	const [lastData, setLastData] = useState({
-		name: "",
-		description: "",
-		email: "",
-		category: "",
-		phone: "",
-		city: "",
-		neighborhood: ""
-	})
+	// COMPANY OWNERSHIP
 	const [company, setCompany] = useState({
 		name: "",
 		description: "",
@@ -29,6 +21,18 @@ const UpdateCompany = () => {
 		neighborhood: ""
 	})
 
+	// COMPANY OWNERSHIP COPY
+	const [lastData, setLastData] = useState({
+		name: "",
+		description: "",
+		email: "",
+		category: "",
+		phone: "",
+		city: "",
+		neighborhood: ""
+	})
+
+	// SET ALL VALUE
 	const handleUpdate = (e) => {
 		const { name, value } = e.target;
 		setCompany({
@@ -37,6 +41,7 @@ const UpdateCompany = () => {
 		})
 	}
 
+	// GET ONE DATA API
 	useEffect(() => {
 		Company.getOne(id)
 			.then((res) => {
@@ -61,6 +66,7 @@ const UpdateCompany = () => {
 			})
 	}, [id])
 
+	// ADD COMPANY
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (
@@ -266,9 +272,7 @@ const UpdateCompany = () => {
 				</div>
 			</div>
 		</>
-	);
-};
-
-
+	)
+}
 
 export default UpdateCompany

@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import * as RemixIcons from "react-icons/ri"
-import { AiOutlineFieldNumber } from 'react-icons/ai'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import toast from "react-hot-toast"
@@ -13,9 +12,14 @@ import { Account } from "../../services/accountService"
 import CustomDataTable from "../../components/CustomDataTable"
 import { User } from "../../services/userService"
 import { Role } from "../../services/roleService"
+import SelectOption from "../../components/SelectOption"
+import { envOption, sortOption, statusOption } from "../../data/optionFilter"
+import SearchInput from "../../components/SearchInput"
+import Access from "../../utils/utilsAccess"
 
 const ListUser = () => {
    const Navigate = useNavigate()
+   const access = Access()
 
    const [data, setdata] = useState([])
    const [oneData, setOneData] = useState([])
@@ -29,48 +33,65 @@ const ListUser = () => {
    const [env, setEnv] = useState('')
    const [role, setRole] = useState('')
    const [id, setId] = useState('')
-   const [question, setQuestion] = useState('')
-   const [questionUpdade, setQuestionUpdade] = useState('')
-   const [surveyUpdade, setSurveyUpdade] = useState('')
    const [refresh, setRefresh] = useState(0)
    const [allCount, setAllCount] = useState(0)
-   const [stateQuestion, setStateQuestion] = useState(false)
-   const [stateQuestionUpdade, setStateQuestionUpdade] = useState(false)
-   const [stateSurvey, setStateSurvey] = useState(false)
    const [showDetailCompanyModal, setshowDetailCompanyModal] = useState(false)
 
-   const date = new Date()
-   const nowDate = dateFormat(date, "yyyy-mm-dd")
-
+   // RECOVERING THE ID OF THE SELECTED LINE
    const patch = (itemId) => {
       setshowDetailCompanyModal(true)
       setId(itemId)
    }
 
+   // CLOSE THE TEMPLATE MODAL
    const hideModal = () => {
       setshowDetailCompanyModal(false)
       setRefresh((current) => current + 1)
    }
 
-   const questionUpdateModal = (id, name) => {
-      setStateQuestionUpdade(true)
-      setIdUpdateQuestion(id)
-      setQuestionUpdade(name)
-      setQuestionUpdateCheck(name)
+   // GET ORDER VALUE
+   const handleOrderChange = (e) => {
+      setOrder(e.target.value)
    }
 
+   // GET FILTER VALUE
+   const handleFilterChange = (e) => {
+      setFilter(e.target.value)
+   }
+
+   // GET STATUS VALUE
+   const handleStatusChange = (e) => {
+      setStatus(e.target.value)
+   }
+
+   // GET ENV VALUE
+   const handleEnvChange = (e) => {
+      setEnv(e.target.value)
+   }
+
+   // GET ROLE VALUE
+   const handleRoleChange = (e) => {
+      setRole(e.target.value)
+   }
+
+   // GET RESEARCH VALUE
+   const handleSearchChange = (e) => {
+      setSearch(e.target.value)
+   }
+
+   // SHOW SURVEY MODAL
    const surveyUpdateModal = (id, name) => {
       setStateSurvey(true)
       setStateQuestion(false)
-      setIdSurveyUpdate(id)
       setSurveyUpdade(name)
-      setSurveyUpdateCheck(name)
    }
 
+   // GET ALL ROLE DATA API
    useEffect(() => {
       Role.getAll().then((res) => setRoleData(res.data.content))
-   },[])
+   }, [])
 
+   // GET ALL DATA API
    useEffect(() => {
       const loadData = async () => {
          try {
@@ -88,11 +109,13 @@ const ListUser = () => {
       loadData()
    }, [order, filter, search, status, role, env, refresh])
 
+   // GET ONE DATA API
    useEffect(() => {
       User.getOne(id)
          .then((res) => setOneData(res.data.content))
    }, [id, refresh])
 
+   // CHANGE STATUS WITH TOGGLE BUTTON
    const handleToggle = (idRow) => {
       User.changeStatus(idRow)
          .then((res) => {
@@ -120,6 +143,7 @@ const ListUser = () => {
          })
    }
 
+   // CHANGE STATUS WITH SIMPLE BUTTON
    const detailsStatusChange = (id) => {
       User.changeStatus(id)
          .then((res) => {
@@ -150,6 +174,7 @@ const ListUser = () => {
          })
    }
 
+   // DELETED USER
    const deleteUser = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
@@ -162,9 +187,14 @@ const ListUser = () => {
       }
    }
 
-   // table
+   // FILTER THE DATA TO RETRIEVE ONLY THOSE WITH THE 'SUPER ADMIN' ROLE.
+   const filteredData = data.filter(row => row.idRole === 3)
+   const countFilteredData = filteredData.length
+
+   // FORMATTING JSON DATA TO MAKE IT MORE READABLE
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>
 
+   // HEADING AND DISPLAY PRINCIPLE OF THE TABLE
    const columns = [
       {
          name: 'Nom',
@@ -224,80 +254,93 @@ const ListUser = () => {
                <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/users/update/${row.id}`)}>
                   <RemixIcons.RiPenNibLine fontSize={15} />
                </button>
-               <button className="Btn Error" title="Supprimer" onClick={() => deleteUser(row.id)}>
+               {access === 13 && row.idRole !== 3 && <button className="Btn Error" title="Supprimer" onClick={() => deleteUser(row.id)}>
                   <RemixIcons.RiDeleteBin2Line fontSize={15} />
-               </button>
+               </button>}
             </div>
          )
       },
    ]
 
+   // FILTER SELECT TAG DATA
+   const filterOptions = [
+      { value: 'firstName', label: 'nom' },
+      { value: 'lastName', label: 'prénom' },
+      { value: 'email', label: 'email' },
+      { value: 'createdAt', label: 'date de créat.' },
+   ]
+
+   // ROLE SELECT TAG DATA
+   const roleOptions = [
+      { value: '', label: 'tous' },
+      ...roleData.map((item) => ({
+         value: item.id,
+         label: item.name
+      }))
+   ]
+
    return (
       <div>
-         <HeaderMain total={allCount} />
+         <HeaderMain total={access === 13 ? allCount : allCount - countFilteredData} />
 
          <div className="OptionFilter">
-            <div className="AllOptionBox">
-               <label htmlFor="">Trier par: </label>
-               <select className="input ml-2" name={order} onChange={(e) => setOrder(e.target.value)}>
-                  <option value="asc">ordre croissant</option>
-                  <option value="desc">ordre décroissant</option>
-               </select>
-            </div>
+            <SelectOption
+               label="Trier par"
+               id="sort"
+               name={order}
+               value={order}
+               onChange={handleOrderChange}
+               options={sortOption}
+            />
 
-            <div className="AllOptionBox">
-               <label htmlFor="filter">Filtrer par: </label>
-               <select className="input ml-2" id="filter" name={filter} onChange={(e) => setFilter(e.target.value)}>
-                  <option value="firstName">nom</option>
-                  <option value="lastName">prénom</option>
-                  <option value="email">email</option>
-                  <option value="createdAt">date de créat.</option>
-               </select>
-            </div>
+            <SelectOption
+               label="Filtrer par"
+               id="filter"
+               name={filter}
+               value={filter}
+               onChange={handleFilterChange}
+               options={filterOptions}
+            />
 
-            <div className="AllOptionBox">
-               <label htmlFor="status">Statut: </label>
-               <select className="input ml-2" id="status" name={status} onChange={(e) => setStatus(e.target.value)}>
-                  <option value="">tous</option>
-                  <option value="1">actif</option>
-                  <option value="2">inactif</option>
-               </select>
-            </div>
+            <SelectOption
+               label="Statut"
+               id="status"
+               name={status}
+               value={status}
+               onChange={handleStatusChange}
+               options={statusOption}
+            />
 
-            <div className="AllOptionBox">
-               <label htmlFor="env">Env. : </label>
-               <select className="input ml-2" id="env" name={env} onChange={(e) => setEnv(e.target.value)}>
-                  <option value="">tous</option>
-                  <option value="1">interne</option>
-                  <option value="2">externe</option>
-               </select>
-            </div>
+            <SelectOption
+               label="Env."
+               id="env"
+               name={env}
+               value={env}
+               onChange={handleEnvChange}
+               options={envOption}
+            />
 
-            <div className="AllOptionBox">
-               <label htmlFor="role">Role : </label>
-               <select className="input ml-2" id="role" name={role} onChange={(e) => setRole(e.target.value)}>
-                  <option value="">tous</option>
-                  {roleData.map((item) => (
-                     <option key={item.id} value={item.id}>{item.name}</option>
-                  ))}
-               </select>
-            </div>
+            <SelectOption
+               label="Rôle"
+               id="role"
+               name={role}
+               value={role}
+               onChange={handleRoleChange}
+               options={roleOptions}
+            />
 
-            <div className="AllOptionBox">
-               <input
-                  className="input search"
-                  type={filter === 'createdAt' ? 'date' : 'text'}
-                  placeholder="Tapez ici.."
-                  aria-label="Search"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-               />
-            </div>
+            <SearchInput
+               filter={filter}
+               placeholder="Tapez ici.."
+               ariaLabel="Search"
+               value={search}
+               onChange={handleSearchChange}
+            />
          </div>
 
          <CustomDataTable
             columns={columns}
-            data={data}
+            data={access === 13 ? data : filteredData}
             ExpandedComponent={ExpandedComponent}
          />
 
@@ -307,8 +350,7 @@ const ListUser = () => {
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
-            className="modal-react-bootstrap"
-         >
+            className="modal-react-bootstrap">
             <Modal.Header closeButton className="header-react-bootstrap">
                <Modal.Title id="contained-modal-title-vcenter" className="title-react-bootstrap">
                   Detail de l'utilisateur : {oneData.firstName + " " + oneData.lastName}
@@ -348,7 +390,7 @@ const ListUser = () => {
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
                <div className="d-flex">
-                  <Button onClick={() => surveyUpdateModal(oneData.id, oneData.name)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier</Button>
+                  <Button onClick={() => Navigate(`/users/update/${oneData.id}`)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier</Button>
                   <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
                </div>
                <div>

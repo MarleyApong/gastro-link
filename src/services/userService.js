@@ -18,12 +18,19 @@ const add = (data) => {
    return Axios.put(`/${route}`, data)
 }
 
+const update = (id, data) => {
+   return Axios.patch(`/${route}/${id}`, data)
+}
+
 const changeStatus = (id) => {
    return Axios.patch(`/${route}/${id}/status`)
 }
 
-const changeRole = (id, role) => {
-   return Axios.patch(`/${route}/${id}/${role}`)
+const changeRole = (id, data) => {
+   return Axios.patch(`/${route}/${id}/${data}`)
+}
+const changePassword = (id, data) => {
+   return Axios.patch(`/${route}/${id}/password`, data)
 }
 
 const deleted = (id) => {
@@ -35,7 +42,9 @@ export const User = {
    getCount,
    getOne,
    add,
+   update,
    changeStatus,
    changeRole,
+   changePassword,
    deleted
 }

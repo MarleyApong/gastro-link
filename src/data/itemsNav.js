@@ -102,18 +102,11 @@ export const ItemsInternalUser = [
         Icon: RemixIcons.RiOrganizationChart,
         Display: "Organisations",
         Link: "/organizations",
-        subNav: [
-            {
-                Icon: RemixIcons.RiListRadio,
-                Display: "Liste des organisations",
-                Link: "/organizations/list",
-            }
-        ]
     },
     {
         Icon: RemixIcons.RiBuildingLine,
         Display: "Entreprises",
-        Link: "/company",
+        Link: "/companies",
     },
     {
         Icon: RemixIcons.RiSurveyLine,
@@ -153,34 +146,22 @@ export const ItemsExternalAdmin = [
     {
         Icon: RemixIcons.RiBuildingLine,
         Display: "Entreprises",
-        Link: "/company",
-        subNav: [
-            {
-                Icon: RemixIcons.RiAddLine,
-                Display: "Nouvelle entreprise",
-                Link: "/company/new",
-            },
-            {
-                Icon: RemixIcons.RiListRadio,
-                Display: "Liste des entreprises",
-                Link: "/company/list",
-            }
-        ]
+        Link: "/companies",
     },
     {
         Icon: RemixIcons.RiSurveyLine,
         Display: "Enquêtes",
-        Link: "/survey",
+        Link: "/surveys",
         subNav: [
             {
                 Icon: RemixIcons.RiListRadio,
                 Display: "Liste des enquêtes",
-                Link: "/survey/list",
+                Link: "/surveys/list",
             },
             {
                 Icon: RemixIcons.RiStickyNoteLine,
                 Display: "Liste des notes",
-                Link: "/survey/note",
+                Link: "/surveys/note",
             }
         ]
     },
@@ -210,7 +191,7 @@ export const ItemsExternalUser = [
     {
         Icon: RemixIcons.RiSurveyLine,
         Display: "Enquêtes",
-        Link: "/survey",
+        Link: "/surveys",
         subNav: [
             {
                 Icon: RemixIcons.RiListRadio,

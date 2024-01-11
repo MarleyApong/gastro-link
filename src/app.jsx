@@ -3,6 +3,7 @@ import AuthGuard from './utils/utilsAuthGuard'
 import PrivateRoute from './routes/PrivateRoute'
 import AuthRoute from './routes/AuthRoute'
 import './styles/modalFromReactBootstrap.scss'
+import { Website } from './pages'
 
 const App = () => {
    return (
@@ -14,6 +15,7 @@ const App = () => {
          }
          />
          <Route path="/auth/*" element={<AuthRoute />} />
+         <Route path='/page/:id' element={<Website />} />
       </Routes>
    )
 }

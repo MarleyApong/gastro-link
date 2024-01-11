@@ -8,6 +8,7 @@ import { Survey } from "../../../services/surveyService"
 import { Account } from "../../../services/accountService"
 import HeaderMain from "../../../components/HeaderMain"
 import CustomSelect from "../../../components/CustomSelect"
+import PleaseNote from "../../../components/PleaseNote"
 
 const CreateSurvey = () => {
 	const Navigate = useNavigate()
@@ -28,15 +29,20 @@ const CreateSurvey = () => {
 		name: "",
 	})
 
+	// RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
 	const handleOrganizationValue = useCallback((value) => {
 		setSelectedValue(value)
 	}, [])
 
+	// RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
 	const handleCompanyValue = useCallback((value) => {
 		setSelectedValue(value)
 	}, [])
+
+	// PUSH SELECTED ID OF ORGANIZATION
 	survey.idCompany = selectedValue.value
 
+	// SET ALL VALUE
 	const handleAdd = (e) => {
 		const { name, value } = e.target;
 		setSurvey({
@@ -45,20 +51,24 @@ const CreateSurvey = () => {
 		})
 	}
 
+	// CHOISE PICTURE
 	useEffect(() => {
 		Organization.getAll(order, filter, status, search, limit, page)
 			.then((res) => setOrganization(res.data.content.data))
 
 	}, [order, filter, status, search, limit, page])
 
+	// FETCH ALL DATA
 	useEffect(() => {
 		Company.getAll(order, filter, search, status)
 			.then((res) => setCompany(res.data.content.data))
 			.catch((err) => console.log("Erreur: ", err))
 	}, [idOrganization])
 
+	// RECOVERY OF COMPANIES WHOSE ID MATCHES WITH SELECTED ID
 	const filterCompany = company.filter((item) => item.idOrganization === idOrganization)
 
+	// ADD SURVEY
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (
@@ -116,6 +126,7 @@ const CreateSurvey = () => {
 
 				<div className="card-body CardBody card">
 					<h5>Entrez les informations concernant l'enquête.</h5>
+					<PleaseNote/>
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form">
 							<div className="col-md-6 ">
@@ -174,9 +185,7 @@ const CreateSurvey = () => {
 				</div>
 			</div>
 		</>
-	);
-};
-
-
+	)
+}
 
 export default CreateSurvey

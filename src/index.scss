@@ -16,6 +16,8 @@
   --shadow-color: #1400000d;
   --color-err: #5d0606;
   --color-err-hv: #Ed1f24;
+
+  --website-color: #Ed1f24;
 }
 
 * {
@@ -36,7 +38,6 @@ body::-webkit-scrollbar {
   border-radius: 10px;
   background: var(--color-2);
 }
-
 
 .Navigation::-webkit-scrollbar-track,
 .TBoxx::-webkit-scrollbar-track,

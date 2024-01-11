@@ -5,10 +5,13 @@ import HeaderMain from "../../../components/HeaderMain"
 import { Organization } from "../../../services/organizationService"
 import { useNavigate } from "react-router-dom"
 import { Account } from "../../../services/accountService"
+import PleaseNote from "../../../components/PleaseNote"
 
 const CreateOrganization = () => {
 	const Navigate = useNavigate()
 	const [file, setFile] = useState('')
+
+	// ORGANIZATION OWNERSHIP
 	const [organization, setOrganization] = useState({
 		name: "",
 		description: "",
@@ -18,6 +21,7 @@ const CreateOrganization = () => {
 		idStatus: ""
 	})
 
+	// SET ALL VALUE
 	const handleAdd = (e) => {
 		const { name, value } = e.target;
 		setOrganization({
@@ -26,11 +30,13 @@ const CreateOrganization = () => {
 		})
 	}
 
+	// CHOISE PICTURE
 	const handleFileChange = (e) => {
 		const selectedFile = e.target.files[0];
 		setFile(selectedFile);
 	}
 
+	// ADD ORGANIZATION
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (
@@ -97,6 +103,7 @@ const CreateOrganization = () => {
 
 				<div className="card-body CardBody card">
 					<h5>Entrez les informations concernant votre organisation.</h5>
+					<PleaseNote/>
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form" for>
 							<div className="col-md-6">
@@ -219,9 +226,7 @@ const CreateOrganization = () => {
 				</div>
 			</div>
 		</>
-	);
-};
-
-
+	)
+}
 
 export default CreateOrganization

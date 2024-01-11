@@ -13,9 +13,14 @@ import { Survey } from "../../services/surveyService"
 import { Account } from "../../services/accountService"
 import CustomDataTable from "../../components/CustomDataTable"
 import { Question } from "../../services/questionService"
+import SelectOption from "../../components/SelectOption"
+import { sortOption, statusOption } from "../../data/optionFilter"
+import SearchInput from "../../components/SearchInput"
+import Access from "../../utils/utilsAccess"
 
 const ListSurvey = () => {
    const Navigate = useNavigate()
+   const access = Access
 
    const [data, setdata] = useState([])
    const [oneData, setOneData] = useState([])
@@ -40,19 +45,39 @@ const ListSurvey = () => {
    const [stateSurvey, setStateSurvey] = useState(false)
    const [showDetailCompanyModal, setshowDetailCompanyModal] = useState(false)
 
-   const date = new Date()
-   const nowDate = dateFormat(date, "yyyy-mm-dd")
-
+   // RECOVERING THE ID OF THE SELECTED LINE
    const patch = (itemId) => {
       setshowDetailCompanyModal(true)
       setId(itemId)
    }
 
+   // CLOSE THE TEMPLATE MODAL
    const hideModal = () => {
       setshowDetailCompanyModal(false)
       setRefresh((current) => current + 1)
    }
 
+   // GET ORDER VALUE
+   const handleOrderChange = (e) => {
+      setOrder(e.target.value)
+   }
+
+   // GET FILTER VALUE
+   const handleFilterChange = (e) => {
+      setFilter(e.target.value)
+   }
+
+   // GET STATUS VALUE
+   const handleStatusChange = (e) => {
+      setStatus(e.target.value)
+   }
+
+   // GET RESEARCH VALUE
+   const handleSearchChange = (e) => {
+      setSearch(e.target.value)
+   }
+
+   // SHOW MODAL FOR UPDATE QUESTION
    const questionUpdateModal = (id, name) => {
       setStateQuestionUpdade(true)
       setIdUpdateQuestion(id)
@@ -60,6 +85,7 @@ const ListSurvey = () => {
       setQuestionUpdateCheck(name)
    }
 
+   // SHOW MODAL FOR UPDATE SURVEY
    const surveyUpdateModal = (id, name) => {
       setStateSurvey(true)
       setStateQuestion(false)
@@ -68,6 +94,7 @@ const ListSurvey = () => {
       setSurveyUpdateCheck(name)
    }
 
+   // RULE FOR ADDING QUESTIONS 
    const addQuestion = (length) => {
       if (length >= 5) {
          toast.error("Limit des questions atteinte.")
@@ -80,6 +107,7 @@ const ListSurvey = () => {
       }
    }
 
+   // GET ALL DATA API
    useEffect(() => {
       const loadData = async () => {
          try {
@@ -96,11 +124,13 @@ const ListSurvey = () => {
       loadData()
    }, [order, filter, search, status, refresh])
 
+   // GET ONE DATA API
    useEffect(() => {
       Survey.getOne(id)
          .then((res) => setOneData(res.data.content))
    }, [id, refresh])
 
+   // CHANGE STATUS WITH TOGGLE BUTTON
    const handleToggle = (idRow) => {
       Survey.changeStatus(idRow)
          .then((res) => {
@@ -129,6 +159,7 @@ const ListSurvey = () => {
          })
    }
 
+   // CHANGE STATUS WITH SIMPLE BUTTON
    const detailsStatusChange = (id) => {
       Survey.changeStatus(id)
          .then((res) => {
@@ -159,6 +190,7 @@ const ListSurvey = () => {
          })
    }
 
+   // ADD QUESTION
    const handleSubmit = (e) => {
       e.preventDefault()
       const data = {
@@ -211,6 +243,7 @@ const ListSurvey = () => {
       }
    }
 
+   // UPDATE QUESTION
    const handleUpdateQuestion = (e) => {
       e.preventDefault()
       const data = { name: questionUpdade }
@@ -227,6 +260,7 @@ const ListSurvey = () => {
          .catch((err) => console.log("error: ", err))
    }
 
+   // UPDATE SURVEY
    const handleUpdateSurvey = (e) => {
       e.preventDefault()
       alert(idSurveyUpdate)
@@ -244,6 +278,7 @@ const ListSurvey = () => {
          .catch((err) => console.log("error: ", err))
    }
 
+   // DELETE QUESTION
    const deleteQuestion = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
@@ -256,6 +291,7 @@ const ListSurvey = () => {
       }
    }
 
+   // DELETE SURVEY
    const deleteSurvey = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
@@ -268,9 +304,10 @@ const ListSurvey = () => {
       }
    }
 
-   // table
+   // FORMATTING JSON DATA TO MAKE IT MORE READABLE
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>
 
+   // HEADING AND DISPLAY PRINCIPLE OF THE TABLE
    const columns = [
       {
          name: 'Enquête',
@@ -326,46 +363,51 @@ const ListSurvey = () => {
       },
    ]
 
+   // FILTER SELECT TAG DATA
+   const filterOptions = [
+      { value: 'name', label: 'nom' },
+      { value: 'createdAt', label: 'date de créat.' },
+   ]
+
    return (
       <div>
          <HeaderMain total={allCount} />
 
          <div className="OptionFilter">
-            <div className="AllOptionBox">
-               <label htmlFor="">Trier par: </label>
-               <select className="input ml-2" name={order} onChange={(e) => setOrder(e.target.value)}>
-                  <option value="asc">ordre croissant</option>
-                  <option value="desc">ordre décroissant</option>
-               </select>
-            </div>
+            <SelectOption
+               label="Trier par"
+               id="sort"
+               name={order}
+               value={order}
+               onChange={handleOrderChange}
+               options={sortOption}
+            />
 
-            <div className="AllOptionBox">
-               <label htmlFor="">Filtrer par: </label>
-               <select className="input ml-2" name={filter} onChange={(e) => setFilter(e.target.value)}>
-                  <option value="name">nom</option>
-                  <option value="createdAt">date de créat.</option>
-               </select>
-            </div>
+            <SelectOption
+               label="Filtrer par"
+               id="filter"
+               name={filter}
+               value={filter}
+               onChange={handleFilterChange}
+               options={filterOptions}
+            />
 
-            <div className="AllOptionBox">
-               <label htmlFor="">Statut: </label>
-               <select className="input ml-2" name={status} onChange={(e) => setStatus(e.target.value)}>
-                  <option value="">tous</option>
-                  <option value="1">actif</option>
-                  <option value="2">inactif</option>
-               </select>
-            </div>
+            <SelectOption
+               label="Statut"
+               id="status"
+               name={status}
+               value={status}
+               onChange={handleStatusChange}
+               options={statusOption}
+            />
 
-            <div className="AllOptionBox">
-               <input
-                  className="input search"
-                  type={filter === 'createdAt' ? 'date' : 'text'}
-                  placeholder="Tapez ici.."
-                  aria-label="Search"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-               />
-            </div>
+            <SearchInput
+               filter={filter}
+               placeholder="Tapez ici.."
+               ariaLabel="Search"
+               value={search}
+               onChange={handleSearchChange}
+            />
          </div>
 
          <CustomDataTable
@@ -391,9 +433,7 @@ const ListSurvey = () => {
                <div className="container">
                   <div className="row ">
                      <div className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        {
-                           <img className="object-fit-cover" crossorigin="anonymous" src={oneData.Company ? 'http://localhost:8000' + oneData.Company.picture : logoPlaceholder} alt="" width="100%" height="400px" />
-                        }
+                        <img className="object-fit-cover" crossorigin="anonymous" src={oneData.Company ? 'http://localhost:8000' + oneData.Company.picture : logoPlaceholder} alt="" width="100%" height="400px" />
                      </div>
 
                      <div className="col-md-6 infoDetail ml-4 ">
@@ -418,7 +458,6 @@ const ListSurvey = () => {
                               </div>
                            </form>
                            <div className="question-content-details">
-                              <div className="mb-3"><AiOutlineFieldNumber className="icon" size={18} />{oneData.id ? oneData.id : '---'}</div>
                               <div className="mb-2 fw-bold p-2 shadow">Questions</div>
                               <form onSubmit={handleUpdateQuestion} className={stateQuestionUpdade ? "question-update transition-update-question" : "question-update"}>
                                  <textarea name="area-question" onChange={(e) => setQuestionUpdade(e.target.value)} value={questionUpdade} placeholder="Modifiez la question"></textarea>
@@ -430,7 +469,7 @@ const ListSurvey = () => {
                               <ol>
                                  {
                                     oneData.id && oneData.Questions.map((item, index) => {
-                                       return <li key={index + 1} className="mb-3 d-flex align-items p-1 shadow list-question">
+                                       return <li key={index + 1} className="mb-3 d-flex align-items p-2 shadow list-question">
                                           <span onClick={() => questionUpdateModal(item.id, item.name)}>{index + 1}. {item.name.length >= 40 ? item.name.substring(0, 45) + '...' : item.name}</span>
                                           <RemixIcons.RiDeleteBinLine onClick={() => deleteQuestion(item.id)} title="Supprimer" />
                                        </li>
@@ -439,7 +478,12 @@ const ListSurvey = () => {
                               </ol>
                            </div>
                         </div>
-
+                        <div className="site">
+                           <RemixIcons.RiGlobalLine className="icon" />
+                           <a href="https://www.allhcorp.com" target="_blank" rel="noopener noreferrer">
+                              www.allhcorp.com
+                           </a>
+                        </div>
                      </div>
                   </div>
                </div>
@@ -447,14 +491,10 @@ const ListSurvey = () => {
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
                <div className="d-flex">
                   <Button onClick={() => surveyUpdateModal(oneData.id, oneData.name)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier l'enquête</Button>
-                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
+                  {access === 12 || access === 13 &&
+                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
+                  }
                   <Button onClick={() => addQuestion(oneData.Questions.length)} className={oneData.id && oneData.Questions.length >= 5 ? 'Btn Error btn-sm me-2' : 'Btn Success btn-sm me-2'}><RemixIcons.RiAddLine />Nouvelle quest.</Button>
-                  <div className="site">
-                     <RemixIcons.RiGlobalLine className="icon" />
-                     <a href="https://www.allhcorp.com" target="_blank" rel="noopener noreferrer">
-                        www.allhcorp.com
-                     </a>
-                  </div>
                </div>
                <div>
                   <Button onClick={hideModal} className="Btn Error btn-sm"><RemixIcons.RiCloseLine />Fermer</Button>

@@ -15,9 +15,11 @@ import CustomDataTable from "../../components/CustomDataTable"
 import SelectOption from "../../components/SelectOption"
 import { sortOption, statusOption } from "../../data/optionFilter"
 import SearchInput from "../../components/SearchInput"
+import Access from "../../utils/utilsAccess"
 
 const ListOrganization = () => {
    const Navigate = useNavigate()
+   const access = Access()
 
    const [data, setdata] = useState([])
    const [oneData, setOneData] = useState([])
@@ -101,7 +103,6 @@ const ListOrganization = () => {
             .then((res) => {
                toast.success("Logo importé avec succès !")
                setRefresh((current) => current + 1)
-               // Navigate(`/companies/details/${id}`)
                setGetImage('')
             })
             .catch((err) => {
@@ -169,6 +170,7 @@ const ListOrganization = () => {
    const imageToShow = getImageToShow(getImage, oneData, imageTypes, logoPlaceholder)
    // END PROCESSING IMAGE RENDERING =======================================================
 
+   // CHANGE STATUS WITH TOGGLE BUTTON
    const handleToggle = (idRow) => {
       Organization.changeStatus(idRow)
          .then((res) => {
@@ -198,6 +200,7 @@ const ListOrganization = () => {
          })
    }
 
+   // CHANGE STATUS WITH SIMPLE BUTTON
    const detailsStatusChange = (id) => {
       Organization.changeStatus(id)
          .then((res) => {
@@ -226,6 +229,19 @@ const ListOrganization = () => {
                }
             }
          })
+   }
+
+   // DELETED ORGANIZATION
+   const deleteOrganization = (id) => {
+      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
+      if (confirm) {
+         Organization.deleted(id)
+            .then((res) => {
+               toast.success("Organization supprimée avec succès !")
+               setRefresh((current) => current + 1)
+            })
+            .catch((err) => console.log("error: ", err))
+      }
    }
 
    // FORMATTING JSON DATA TO MAKE IT MORE READABLE
@@ -285,6 +301,10 @@ const ListOrganization = () => {
                <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/organizations/update/${row.id}`)}>
                   <RemixIcons.RiPenNibLine fontSize={15} />
                </button>
+               {access === 13 && <button className="Btn Error" title="Supprimer" onClick={() => deleteOrganization(row.id)}>
+                  <RemixIcons.RiDeleteBin2Line fontSize={15} />
+               </button>}
+
             </div>
          )
       },

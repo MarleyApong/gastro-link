@@ -1,0 +1,282 @@
+.Website {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+
+    span {
+        font-size: 18px;
+    }
+
+    .Btn {
+        padding: 10px 20px;
+        background: var(--website-color);
+        color: var(--color-1);
+    }
+
+    .Description {
+        width: 30%;
+        height: 100%;
+        box-shadow: 1px 1px 10px #f5f5f5, -1px -1px 10px #f5f5f5;
+
+        .Desc {
+            padding: 10px;
+
+            p {
+                padding: 10px;
+                text-align: justify;
+            }
+        }
+
+        .Img-Des {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+    }
+
+    .Cont {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: .4rem;
+        width: 70%;
+        height: 100%;
+        overflow: hidden;
+
+        .Survey {
+            position: relative;
+            padding: 10px;
+            width: 80%;
+            height: 80%;
+            box-shadow: 1px 1px 10px #f5f5f5, 1px -1px 10px #f5f5f5;
+            overflow: hidden;
+
+            .First {
+
+                // position: absolute;
+                .Head {
+                    margin-bottom: 40px;
+
+                    hr {
+                        width: 100px;
+                        height: 5px;
+                        background: var(--color-3);
+                    }
+                }
+
+                .Body {
+                    margin-left: 10px;
+
+                    .Name-Survey {
+                        font-size: 18px;
+                    }
+
+                    .Survey-Cont {
+                        margin-bottom: 10px;
+
+                        .Quest-Content {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 5px;
+                            margin-top: 50px;
+
+                            textarea {
+                                outline: none;
+                                border: none;
+                                background: #f1f0f0;
+                                border-radius: 5px;
+                                padding: 10px;
+                                max-width: 70%;
+                                max-height: 200px;
+                                margin-bottom: 20px;
+                                resize: none;
+                            }
+                        }
+
+                    }
+
+                    .Nav-Step {
+                        // position: absolute;
+                        bottom: 10px;
+                        display: flex;
+                        gap: .4rem;
+                    }
+
+                }
+            }
+
+            .Second {
+                animation: service_ok 1s ease;
+
+                .Survey-Success {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    margin-bottom: 50px;
+                    text-align: center;
+
+                    .Circle-check {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100px;
+                        height: 100px;
+                        border-radius: 50%;
+
+                        .Icon-Check {
+                            font-size: 30px;
+                        }
+                    }
+                }
+
+                .Form-Subscribe {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                    margin-top: 20px;
+
+                    input {
+                        border: none;
+                        outline: none;
+                        background: #f1f0f0;
+                        // width: 55%;
+                        padding: 15px;
+                    }
+
+                    .Nav-Step {
+                        display: flex;
+                        // justify-content: center;
+                        align-items: center;
+                        gap: 10px;
+                        margin-top: 20px;
+
+                    }
+                }
+
+                .Back-Image {
+                    position: absolute;
+                    bottom: 0;
+                    right: -40px;
+                    width: 40%;
+                    // z-index: -1;
+                }
+            }
+
+            @keyframes service_ok {
+                0% {
+                    transform: translateX(100%);
+                }
+
+                100% {
+                    transform: translateX(0);
+                }
+            }
+
+        }
+
+        .Step-Cont {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .Step,
+            .Step-Active {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: var(--color-1);
+                box-shadow: 3px 3px 5px #f5f5f5, -3px -3px 5px #f5f5f5, -3px 3px 5px #f5f5f5, 3px -3px 5px #f5f5f5;
+
+            }
+
+            .Step-Active {
+                background: var(--website-color);
+                color: var(--color-1);
+            }
+
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .Website {
+        height: 100%;
+        flex-direction: column-reverse;
+        gap: 30px;
+        padding: 30px 50px;
+
+        .Description {
+            width: 100%;
+            box-shadow: 1px 1px 10px #f5f5f5, -1px -1px 10px #f5f5f5;
+
+            .Desc {
+                p {
+                    text-align: left;
+                }
+            }
+
+        }
+
+        .Cont {
+            width: 100%;
+            height: 100%;
+            box-shadow: 1px 1px 10px #f5f5f5, 1px -1px 10px #f5f5f5;
+            overflow: hidden;
+
+            .Survey {
+                position: relative;
+                padding: 10px;
+                width: 100%;
+                height: 100%;
+                box-shadow: 1px 1px 10px #f5f5f5, 1px -1px 10px #f5f5f5;
+                overflow: hidden;
+            }
+
+            .Second {
+                animation: service_ok 1s ease;
+
+                .Back-Image {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 452px) {
+    .Website {
+        height: 100%;
+        flex-direction: column-reverse;
+        gap: 30px;
+        padding: 20px;
+
+        p {
+            font-size: 14px;
+        }
+        .Cont {
+            span {
+                font-size: 14px;
+            }
+    
+            .Step-Cont {
+    
+                .Step,
+                .Step-Active {
+                    width: 22px !important;
+                    height: 22px !important;
+                    font-size: 8px;
+                }
+    
+            }
+        }
+    }
+   
+}

@@ -10,14 +10,7 @@ const UpdateOrganization = () => {
 	const Navigate = useNavigate()
 	const { id } = useParams()
 
-	const [file, setFile] = useState('')
-	const [lastData, setLastData] = useState({
-		name: "",
-		description: "",
-		phone: "",
-		city: "",
-		neighborhood: ""
-	})
+	// ORGANIZATION OWNERSHIP
 	const [organization, setOrganization] = useState({
 		name: "",
 		description: "",
@@ -26,6 +19,16 @@ const UpdateOrganization = () => {
 		neighborhood: ""
 	})
 
+	// ORGANIZATION OWNERSHIP COPY
+	const [lastData, setLastData] = useState({
+		name: "",
+		description: "",
+		phone: "",
+		city: "",
+		neighborhood: ""
+	})
+
+	// SET ALL VALUE
 	const handleUpdate = (e) => {
 		const { name, value } = e.target;
 		setOrganization({
@@ -34,6 +37,7 @@ const UpdateOrganization = () => {
 		})
 	}
 
+	// GET ONE DATA API
 	useEffect(() => {
 		Organization.getOne(id)
 			.then((res) => {
@@ -54,6 +58,7 @@ const UpdateOrganization = () => {
 			})
 	}, [id])
 
+	// UPDATE ORGANIZATION
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (
@@ -225,9 +230,7 @@ const UpdateOrganization = () => {
 				</div>
 			</div>
 		</>
-	);
-};
-
-
+	)
+}
 
 export default UpdateOrganization

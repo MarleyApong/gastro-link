@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { Company } from "../../../services/companyService"
 import { Organization } from "../../../services/organizationService"
 import CustomSelect from "../../../components/CustomSelect"
+import PleaseNote from "../../../components/PleaseNote"
 
 const CreateCompany = () => {
 	const Navigate = useNavigate()
@@ -31,12 +32,15 @@ const CreateCompany = () => {
 		neighborhood: "",
 	})
 
+	// RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
 	const handleSelectedValue = useCallback((value) => {
 		setSelectedValue(value)
 	}, [])
 
+	// PUSH SELECTED ID OF ORGANIZATION 
 	company.idOrganization = selectedValue.value
 
+	// SET ALL VALUE
 	const handleAdd = (e) => {
 		const { name, value } = e.target;
 		setCompany({
@@ -45,11 +49,13 @@ const CreateCompany = () => {
 		})
 	}
 
+	// CHOISE PICTURE
 	const handleFileChange = (e) => {
 		const selectedFile = e.target.files[0];
 		setFile(selectedFile)
 	}
 
+	// FETCH ALL DATA
 	useEffect(() => {
 		Organization.getAll(order, filter, status, search, limit, page)
 			.then((res) => {
@@ -57,7 +63,7 @@ const CreateCompany = () => {
 			})
 	}, [order, filter, status, search, limit, page])
 
-
+	// ADD COMPANY
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (
@@ -129,6 +135,7 @@ const CreateCompany = () => {
 
 				<div className="card-body CardBody card">
 					<h5>Entrez les informations concernant votre entreprise.</h5>
+					<PleaseNote/>
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form" for>
 							<div className="col-md-6">
@@ -291,9 +298,7 @@ const CreateCompany = () => {
 				</div>
 			</div>
 		</>
-	);
-};
-
-
+	)
+}
 
 export default CreateCompany

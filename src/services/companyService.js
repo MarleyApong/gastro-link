@@ -14,6 +14,10 @@ const getOne = (id) => {
    return Axios.get(`/${route}/${id}`)
 }
 
+const getWebpage = (id) => {
+   return Axios.get(`/${route}/page/${id}`)
+}
+
 const add = (data) => {
    return Axios.put(`/${route}`, data)
 }
@@ -38,6 +42,7 @@ export const Company = {
    getCount,
    getAll,
    getOne,
+   getWebpage,
    add,
    update,
    changeProfil,
