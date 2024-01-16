@@ -394,12 +394,12 @@ const ListCompany = () => {
                         <div className="email mb-3"><AiOutlineMail className="icon" />{oneData.email ? oneData.email : '---'}</div>
                         <div className="telephone mb-3"><AiOutlinePhone className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
                         <div className="ville mb-3"><FaCity className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
-                        <div className="site">
+                        <span className="site">
                            <RemixIcons.RiGlobalLine className="icon" />
                            <a href={`http://localhost:5173/page/${oneData.webpage}`} target="_blank" rel="noopener noreferrer">
                               page web
                            </a>
-                        </div>
+                        </span>
                      </div>
                   </div>
                </div>

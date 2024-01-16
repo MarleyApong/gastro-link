@@ -27,7 +27,7 @@ const Header = ({ sidebar, setSidebar }) => {
             <div className="Left">
                 <div className="Company">
                     <img src={logo} alt="" />
-                    <span>All HIGHT Corp</span>
+                    <span>CUSTOMER SPACE</span>
                 </div>
             </div>
             {/* <div className="Middle">

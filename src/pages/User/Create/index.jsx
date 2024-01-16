@@ -98,6 +98,7 @@ const UpdateUser = () => {
 							toast.error("Désolé, cet utilisateur existe déjà !")
 						}
 					}
+					
 					// if (err.response.status === 400) {
 					// 	// toast.error("Champs mal renseigné ou format inattendu !", {
 					// 	// 	style: {

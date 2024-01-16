@@ -5,20 +5,19 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import toast from "react-hot-toast"
 import dateFormat from 'dateformat'
-import logoPlaceholder from "../../assets/img/avatar/logo-placeholder.jpg"
-import HeaderMain from "../../components/HeaderMain"
-import ToggleButton from "../../components/ToggleButton"
-import { Survey } from "../../services/surveyService"
-import { Account } from "../../services/accountService"
-import CustomDataTable from "../../components/CustomDataTable"
-import { Question } from "../../services/questionService"
-import SelectOption from "../../components/SelectOption"
-import { sortOption, statusOption } from "../../data/optionFilter"
-import SearchInput from "../../components/SearchInput"
-import Access from "../../utils/utilsAccess"
-import { Average } from "../../services/average"
+import logoPlaceholder from "../../../assets/img/avatar/logo-placeholder.jpg"
+import HeaderMain from "../../../components/HeaderMain"
+import ToggleButton from "../../../components/ToggleButton"
+import { Survey } from "../../../services/surveyService"
+import { Account } from "../../../services/accountService"
+import CustomDataTable from "../../../components/CustomDataTable"
+import { Question } from "../../../services/questionService"
+import SelectOption from "../../../components/SelectOption"
+import { sortOption, statusOption } from "../../../data/optionFilter"
+import SearchInput from "../../../components/SearchInput"
+import Access from "../../../utils/utilsAccess"
 
-const ListSurvey = () => {
+const ListNote = () => {
    const Navigate = useNavigate()
    const access = Access
 
@@ -40,9 +39,6 @@ const ListSurvey = () => {
    const [surveyUpdade, setSurveyUpdade] = useState('')
    const [refresh, setRefresh] = useState(0)
    const [allCount, setAllCount] = useState(0)
-   const [averageSurvey, setAverageSurvey] = useState(0)
-   const [averageQuestion, setAverageQuestion] = useState(0)
-   const [averageCompany, setAverageCompany] = useState(0)
    const [stateQuestion, setStateQuestion] = useState(false)
    const [stateQuestionUpdade, setStateQuestionUpdade] = useState(false)
    const [stateSurvey, setStateSurvey] = useState(false)
@@ -114,24 +110,11 @@ const ListSurvey = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
-            // RETRIEVE ALL SURVEYS
-            const res = await Survey.getAll(order, filter, status, search, limit, page)
-            const surveys = res.data.content.data
+            let res = await Survey.getAll(order, filter, status, search, limit, page)
+            setdata(res.data.content.data)
 
-            // RETRIEVE THE AVERAGE FOR EACH SURVEY
-            const averages = await Promise.all(surveys.map(survey => Average.averageSurvey(survey.id)
-            .then((res) => res.data.average)
-            ))
-
-            // ADD THE AVERAGE TO EACH SURVEY OBJECT
-            const surveysWithAverage = surveys.map((survey, index) => ({ ...survey, average: averages[index] }))
-
-            // UPDATE THE STATE WITH THE ENRICHED DATA
-            setdata(surveysWithAverage)
-
-            // RETRIEVE THE TOTAL NUMBER OF SURVEYS
-            const totalSurveys = await Survey.getAll()
-            setAllCount(totalSurveys.data.content.totalElements)
+            res = await Survey.getAll()
+            setAllCount(res.data.content.totalElements)
          } catch (err) {
             console.log("Load: ", err)
          }
@@ -140,12 +123,10 @@ const ListSurvey = () => {
       loadData()
    }, [order, filter, search, status, refresh])
 
-   console.log(data)
-
    // GET ONE DATA API
    useEffect(() => {
-      Survey.getOne(id).then((res) => setOneData(res.data.content))
-      Average.averageSurvey(id).then((res) => setAverageSurvey(res.data.average))
+      Survey.getOne(id)
+         .then((res) => setOneData(res.data.content))
    }, [id, refresh])
 
    // CHANGE STATUS WITH TOGGLE BUTTON
@@ -296,61 +277,11 @@ const ListSurvey = () => {
          .catch((err) => console.log("error: ", err))
    }
 
-   // DELETE QUESTION
-   const deleteQuestion = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Question.deleted(id)
-            .then((res) => {
-               toast.success("Question supprimée avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => console.log("error: ", err))
-      }
-   }
-
-   // DELETE SURVEY
-   const deleteSurvey = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Survey.deleted(id)
-            .then((res) => {
-               toast.success("Enquête supprimée avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => console.log("error: ", err))
-      }
-   }
-
    // FORMATTING JSON DATA TO MAKE IT MORE READABLE
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>
 
    // HEADING AND DISPLAY PRINCIPLE OF THE TABLE
    const columns = [
-      {
-         name: 'Enquête',
-         selector: row => row.name,
-         sortable: true,
-         wrap: true,
-      },
-      {
-         name: 'Note',
-         selector: row => row.average,
-         sortable: true,
-         wrap: true,
-      },
-      {
-         name: 'Status',
-         cell: (row) => (
-            <ToggleButton
-               checked={row.idStatus === 1 ? true : false}
-               onChange={(id) => handleToggle(id)}
-               id={row.id}
-            />
-         ),
-         sortable: true,
-         wrap: true,
-      },
       {
          name: 'Entreprise',
          selector: row => row.Company.name,
@@ -359,6 +290,18 @@ const ListSurvey = () => {
       },
       {
          name: 'Organisation',
+         selector: row => row.Company.Organization.name,
+         sortable: true,
+         wrap: true,
+      },
+      {
+         name: 'Enquête',
+         selector: row => row.Company.Organization.name,
+         sortable: true,
+         wrap: true,
+      },
+      {
+         name: 'Note',
          selector: row => row.Company.Organization.name,
          sortable: true,
          wrap: true,
@@ -376,12 +319,6 @@ const ListSurvey = () => {
                <button className="Btn Update" title="Détails" onClick={() => patch(row.id)}>
                   <RemixIcons.RiEyeLine fontSize={15} />
                </button>
-               {/* <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/organizations/update/${row.id}`)}>
-                  <RemixIcons.RiPenNibLine fontSize={15} />
-               </button> */}
-               <button className="Btn Error" title="Supprimer" onClick={() => deleteSurvey(row.id)}>
-                  <RemixIcons.RiDeleteBin2Line fontSize={15} />
-               </button>
             </div>
          )
       },
@@ -392,7 +329,6 @@ const ListSurvey = () => {
       { value: 'name', label: 'nom' },
       { value: 'createdAt', label: 'date de créat.' },
    ]
-
    return (
       <div>
          <HeaderMain total={allCount} />
@@ -456,76 +392,17 @@ const ListSurvey = () => {
             <Modal.Body className="body-react-bootstrap">
                <div className="container">
                   <div className="row ">
-                     <div className="col-md-12 infoDetail ml-4 ">
-                        <div className="mb-4 d-flex justify-content-between">
-                           <div className="fw-bold fs-5">Entreprise : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</div>
-                           <div className="fw-bold fs-5">{averageSurvey}/5</div>
-                        </div>
-                        <div className="mb-2 fw-bold p-2 shadow d-flex justify-content-between align-items-center">Enquête: {oneData.name ? oneData.name : '---'} <span className={averageSurvey >2.5 ? "note Success": "note Error"}>Note: {averageSurvey}/5</span></div>
-                        <div className="card-question">
-                           <form onSubmit={handleSubmit} className={stateQuestion ? "question transition-add-question p-2 shadow" : "question p-2 shadow"}>
-                              <label htmlFor="question" className="fw-bold">Nom de la question: </label>
-                              <textarea name="question" onChange={(e) => setQuestion(e.target.value)} value={question} placeholder="Entrez la question"></textarea>
-                              <div className="d-flex justify-content-between">
-                                 <Button onClick={() => setStateQuestion(true)} type="submit" className='Btn Success btn-sm me-2' title="Ajouter"><RemixIcons.RiAddLine /></Button>
-                                 <Button onClick={() => setStateQuestion(false)} className="Btn Error btn-sm" title="Retour"><RemixIcons.RiArrowRightLine /></Button>
-                              </div>
-                           </form>
 
-                           <form onSubmit={handleUpdateSurvey} className={stateSurvey ? "survey transition-survey p-2 shadow" : "survey p-2 shadow"}>
-                              <label htmlFor="survey-update" className="fw-bold">Nom de l'enquête: </label>
-                              <textarea name="survey-update" onChange={(e) => setSurveyUpdade(e.target.value)} value={surveyUpdade} placeholder="Modifiez l'enquête"></textarea>
-                              <div className="d-flex justify-content-between">
-                                 <Button onClick={() => setStateSurvey(true)} type="submit" className='Btn Send btn-sm me-2' title="Modifier" disabled={surveyUpdateCheck === surveyUpdade}><RemixIcons.RiPenNibLine /></Button>
-                                 <Button onClick={() => setStateSurvey(false)} className="Btn Error btn-sm" title="Retour"><RemixIcons.RiArrowRightLine /></Button>
-                              </div>
-                           </form>
-                           <div className="question-content-details">
-                              <div className="mb-2 fw-bold">Questions</div>
-                              <form onSubmit={handleUpdateQuestion} className={stateQuestionUpdade ? "question-update transition-update-question" : "question-update"}>
-                                 <textarea name="area-question" onChange={(e) => setQuestionUpdade(e.target.value)} value={questionUpdade} placeholder="Modifiez la question"></textarea>
-                                 <div className="d-flex justify-content-between">
-                                    <Button onClick={() => setStateQuestionUpdade(true)} type="submit" className='Btn Send btn-sm me-2' title="Ajouter" disabled={questionUpdateCheck === questionUpdade}><RemixIcons.RiPenNibLine /></Button>
-                                    <Button onClick={() => setStateQuestionUpdade(false)} className="Btn Error btn-sm" title="Retour"><RemixIcons.RiArrowRightLine /></Button>
-                                 </div>
-                              </form>
-                              <ol>
-                                 {
-                                    oneData.id && oneData.Questions.map((item, index) => {
-                                       return <li key={index + 1} className="mb-3 d-flex align-items p-2 shadow list-question">
-                                          <span onClick={() => questionUpdateModal(item.id, item.name)}>{index + 1}. {item.name}</span>
-                                          <RemixIcons.RiDeleteBinLine onClick={() => deleteQuestion(item.id)} title="Supprimer" />
-                                       </li>
-                                    })
-                                 }
-                              </ol>
-                           </div>
-                        </div>
-                        <span className="site">
-                           <RemixIcons.RiGlobalLine className="icon" />
-                           <a href={`http://localhost:5173/page/${oneData.id && oneData.Company.webpage}`} target="_blank" rel="noopener noreferrer">
-                              {oneData.id && oneData.Company.name}
-                           </a>
-                        </span>
-                     </div>
+                    
                   </div>
                </div>
             </Modal.Body>
-            <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               <div className="d-flex">
-                  <Button onClick={() => surveyUpdateModal(oneData.id, oneData.name)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier l'enquête</Button>
-                  {access === 12 || access === 13 &&
-                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
-                  }
-                  <Button onClick={() => addQuestion(oneData.Questions.length)} className={oneData.id && oneData.Questions.length >= 5 ? 'Btn Error btn-sm me-2' : 'Btn Success btn-sm me-2'}><RemixIcons.RiAddLine />Nouvelle quest.</Button>
-               </div>
-               <div>
-                  <Button onClick={hideModal} className="Btn Error btn-sm"><RemixIcons.RiCloseLine />Fermer</Button>
-               </div>
+            <Modal.Footer className="footer-react-bootstrap">
+               <Button onClick={hideModal} className="Btn Error btn-sm"><RemixIcons.RiCloseLine />Fermer</Button>
             </Modal.Footer>
          </Modal >
       </div>
    )
 }
 
-export default ListSurvey
+export default ListNote

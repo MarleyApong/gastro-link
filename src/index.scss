@@ -84,13 +84,15 @@ body::-webkit-scrollbar-thumb {
 
 .Send {
   background: #036d9e;
+
   &:hover {
     background: #0892d2;
   }
 }
 
 .Error {
-  background: #9a0707;
+  background: #Ed1f24;
+
   &:hover {
     background: #b60505;
   }
@@ -98,8 +100,31 @@ body::-webkit-scrollbar-thumb {
 
 .Update {
   background: #c35a04;
+
   &:hover {
     background: #f97001;
+  }
+}
+
+.site {
+  color: var(--color-1);
+  background: var(--color-modal-head);
+  padding: 5px;
+  border-radius: 5px;
+  width: auto;
+  animation: slide 2s linear infinite;
+  a {
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-1);
+  }
+}
+
+@keyframes slide {
+  50% {
+    transform: translateY(0);
+    background: black;
   }
 }
 
@@ -128,7 +153,7 @@ td {
   min-width: 100px !important;
 }
 
-.rdt_TableCell{
+.rdt_TableCell {
   div {
     min-width: 100px;
   }
@@ -451,7 +476,6 @@ select.form-select.no-focus-outline:active {
   box-shadow: none;
 }
 
-
 // .custom-data-table td,
 // .custom-data-table th {
 //   border: 1px solid #ccc;
@@ -488,7 +512,6 @@ select.form-select.no-focus-outline:active {
 .select_company:hover {
   transition: background-color 0.3s ease, width 0.5s linear, opacity 1s ease-in-out;
   color: #9c3b3b;
-
 }
 
 .input_size {

@@ -401,12 +401,12 @@ const ListOrganization = () => {
                            {oneData.idStatus === 1 ? 'actif' : 'inactif'}
                         </div>
 
-                        <div className="site">
+                        <span className="site">
                            <RemixIcons.RiGlobalLine className="icon" />
                            <a href="https://www.allhcorp.com" className="text-danger" target="_blank" rel="noopener noreferrer">
                               www.allhcorp.com
                            </a>
-                        </div>
+                        </span>
                      </div>
                   </div>
                </div>
