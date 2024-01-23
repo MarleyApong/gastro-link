@@ -54,11 +54,6 @@ export const ItemsInternalAdmin = [
                 Icon: RemixIcons.RiListRadio,
                 Display: "Liste des enquêtes",
                 Link: "/surveys/list",
-            },
-            {
-                Icon: RemixIcons.RiStickyNoteLine,
-                Display: "Liste des notes",
-                Link: "/surveys/note",
             }
         ]
     },
@@ -117,11 +112,6 @@ export const ItemsInternalUser = [
                 Icon: RemixIcons.RiListRadio,
                 Display: "Liste des enquêtes",
                 Link: "/survey/list",
-            },
-            {
-                Icon: RemixIcons.RiStickyNoteLine,
-                Display: "Liste des notes",
-                Link: "/survey/note",
             }
         ]
     },
@@ -157,11 +147,6 @@ export const ItemsExternalAdmin = [
                 Icon: RemixIcons.RiListRadio,
                 Display: "Liste des enquêtes",
                 Link: "/surveys/list",
-            },
-            {
-                Icon: RemixIcons.RiStickyNoteLine,
-                Display: "Liste des notes",
-                Link: "/surveys/note",
             }
         ]
     },

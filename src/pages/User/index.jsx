@@ -24,12 +24,14 @@ const ListUser = () => {
    const [data, setdata] = useState([])
    const [oneData, setOneData] = useState([])
    const [roleData, setRoleData] = useState([])
+   const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('firstName')
    const [status, setStatus] = useState('')
    const [search, setSearch] = useState('')
-   const [limit, setLimit] = useState(20)
-   const [page, setPage] = useState(0)
+   const [limit, setLimit] = useState(10)
+   const [page, setPage] = useState(1)
+   const [totalPages, setTotalPages] = useState(0)
    const [env, setEnv] = useState('')
    const [role, setRole] = useState('')
    const [id, setId] = useState('')
@@ -95,6 +97,7 @@ const ListUser = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
+            setLoading(true)
             let res = await User.getAll(order, filter, status, role, env, search, limit, page)
             setdata(res.data.content.data)
 
@@ -103,6 +106,8 @@ const ListUser = () => {
 
          } catch (err) {
             console.log("Load: ", err)
+         } finally {
+            setLoading(false)
          }
       }
 
@@ -187,6 +192,15 @@ const ListUser = () => {
       }
    }
 
+   // SYSTEM PAGINATION
+   const handlePageChange = (newPage) => {
+      setPage(newPage)
+   }
+
+   const handleLimitChange = (newLimit) => {
+      setLimit(newLimit)
+   }
+
    // FILTER THE DATA TO RETRIEVE ONLY THOSE WITH THE 'SUPER ADMIN' ROLE.
    const filteredData = data.filter(row => row.idRole === 3)
    const countFilteredData = filteredData.length
@@ -197,51 +211,38 @@ const ListUser = () => {
    // HEADING AND DISPLAY PRINCIPLE OF THE TABLE
    const columns = [
       {
+         name: "#",
+         cell: (row, index) => index + 1,
+         maxWidth: '50px'
+      },
+      {
          name: 'Nom',
          selector: row => row.firstName,
-         sortable: true,
          wrap: true,
       },
       {
          name: 'Prenom',
          selector: row => row.lastName,
-         sortable: true,
          wrap: true,
       },
       {
          name: 'Email',
          selector: row => row.email,
-         sortable: true,
          wrap: true,
       },
       {
          name: 'Env.',
          selector: row => row.idEnv === 1 ? "interne" : "externe",
-         sortable: true,
          wrap: true,
       },
       {
          name: 'Role',
          selector: row => row.idRole === 1 ? "user" : row.idRole === 2 ? "admin" : "super admin",
-         sortable: true,
-         wrap: true,
-      },
-      {
-         name: 'Status',
-         cell: (row) => (
-            <ToggleButton
-               checked={row.idStatus === 1 ? true : false}
-               onChange={(id) => handleToggle(id)}
-               id={row.id}
-            />
-         ),
-         sortable: true,
          wrap: true,
       },
       {
          name: 'Date créat.',
          selector: row => dateFormat(new Date(row.createdAt), 'dd-mm-yyyy HH:MM:ss'),
-         sortable: true,
          wrap: true,
       },
       {
@@ -270,9 +271,28 @@ const ListUser = () => {
       { value: 'createdAt', label: 'date de créat.' },
    ]
 
+   // ADD 'Status' COLUMNS IF USER HAVE ACCESS
+   /*
+      4 -> the position at which elements will be added or removed
+      0 -> existing items to deleted
+   */
+   if (access === 11 || access === 12 || access === 13) {
+      columns.splice(4, 0, {
+         name: 'Status',
+         cell: (row) => (
+            <ToggleButton
+               checked={row.idStatus === 1 ? true : false}
+               onChange={(id) => handleToggle(id)}
+               id={row.id}
+            />
+         ),
+         wrap: true,
+      })
+   }
+
    // ROLE SELECT TAG DATA
    const roleOptions = [
-      { value: '', label: 'tous' },
+      { value: '', label: '---' },
       ...roleData.map((item) => ({
          value: item.id,
          label: item.name
@@ -339,9 +359,16 @@ const ListUser = () => {
          </div>
 
          <CustomDataTable
+            loading={loading}
             columns={columns}
             data={access === 13 ? data : filteredData}
             ExpandedComponent={ExpandedComponent}
+            paginationPerPage={limit}
+            paginationTotalRows={allCount}
+            currentPage={page}
+            totalPages={totalPages}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleLimitChange}
          />
 
          <Modal

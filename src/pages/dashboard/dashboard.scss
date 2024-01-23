@@ -107,11 +107,11 @@
 
                 h2,
                 h3 {
-                    color: var(--color-primary);
+                    color: var(--user-color);
                 }
 
                 .Return {
-                    border-color: var(--color-primary);
+                    border-color: var(--user-color);
                 }
             }
         }
@@ -119,6 +119,12 @@
         &:last-child {
             grid-row: span 3;
             grid-column: span 2;
+
+            .TBoxx-head {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
     }
 
@@ -148,7 +154,6 @@
                         text-align: center;
 
                         &:last-child {
-                            cursor: pointer;
                             display: flex;
                             justify-content: center;
                         }

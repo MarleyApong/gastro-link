@@ -23,7 +23,7 @@
 
    .note {
       color: var(--color-1);
-      padding: 5px;
+      padding: 3px 5px;
       border-radius: 20px;
    }
 
@@ -114,7 +114,7 @@
 // =================================
 .card-question {
    position: relative;
-   height: 320px;
+   min-height: 320px;
    overflow: hidden;
 
    .question,
@@ -126,7 +126,7 @@
       background: #fff;
       gap: 5px;
       width: 100%;
-      height: auto;
+      min-height: 270px;
       transform: translateX(1000%);
       transition: .5s;
 

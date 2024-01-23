@@ -21,14 +21,16 @@ const ListOrganization = () => {
    const Navigate = useNavigate()
    const access = Access()
 
-   const [data, setdata] = useState([])
+   const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])
+   const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('name')
    const [status, setStatus] = useState('')
    const [search, setSearch] = useState('')
    const [limit, setLimit] = useState(10)
-   const [page, setPage] = useState(0)
+   const [page, setPage] = useState(1)
+   const [totalPages, setTotalPages] = useState(0)
    const [id, setId] = useState('')
    const [showDetailCompanyModal, setshowDetailCompanyModal] = useState(false)
    const [refresh, setRefresh] = useState(0)
@@ -72,19 +74,21 @@ const ListOrganization = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
-            let res = await Organization.getAll(order, filter, status, search)
-            setdata(res.data.content.data)
-
-            res = await Organization.getCount()
-            setAllCount(res.data.content)
-
-         } catch (err) {
+            const res = await Organization.getAll(order, filter, status, search, limit, page)
+            setData(res.data.content.data)
+            setAllCount(res.data.content.totalElements)
+            setTotalPages(res.data.content.totalPages)
+         } 
+         catch (err) {
             console.log("Load: ", err)
+         } 
+         finally {
+            setLoading(false)
          }
       }
 
       loadData()
-   }, [order, filter, search, status, refresh])
+   }, [order, filter, search, status, refresh, limit, page])
 
    // FETCH ONE DATA
    useEffect(() => {
@@ -244,51 +248,48 @@ const ListOrganization = () => {
       }
    }
 
+   // SYSTEM PAGINATION
+   const handlePageChange = (newPage) => {
+      setPage(newPage)
+   }
+
+   const handleLimitChange = (newLimit) => {
+      setLimit(newLimit)
+   }
+
    // FORMATTING JSON DATA TO MAKE IT MORE READABLE
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>
 
    // HEADING AND DISPLAY PRINCIPLE OF THE TABLE
    const columns = [
       {
+         name: "#",
+         cell: (row, index) => index + 1,
+         maxWidth: '50px'
+      },
+      {
          name: 'Nom',
          selector: row => row.name,
-         sortable: true,
          wrap: true,
       },
       {
          name: 'Téléphone',
          selector: row => row.phone,
-         sortable: true,
          wrap: true,
       },
       {
          name: 'Ville',
          selector: row => row.city,
-         sortable: true,
          wrap: true,
       },
       {
          name: 'Quartier',
          selector: row => row.neighborhood,
-         sortable: true,
-         wrap: true,
-      },
-      {
-         name: 'Status',
-         cell: (row) => (
-            <ToggleButton
-               checked={row.idStatus === 1 ? true : false}
-               onChange={(id) => handleToggle(id)}
-               id={row.id}
-            />
-         ),
-         sortable: true,
          wrap: true,
       },
       {
          name: 'Date créat.',
          selector: row => dateFormat(new Date(row.createdAt), 'dd-mm-yyyy HH:MM:ss'),
-         sortable: true,
          wrap: true,
       },
       {
@@ -304,19 +305,36 @@ const ListOrganization = () => {
                {access === 13 && <button className="Btn Error" title="Supprimer" onClick={() => deleteOrganization(row.id)}>
                   <RemixIcons.RiDeleteBin2Line fontSize={15} />
                </button>}
-
             </div>
          )
       },
-
    ]
+
+   // ADD 'Status' COLUMNS IF USER HAVE ACCESS
+   /*
+      4 -> the position at which elements will be added or removed
+      0 -> existing items to deleted
+   */
+   if (access === 11 || access === 12 || access === 13) {
+      columns.splice(4, 0, {
+         name: 'Status',
+         cell: (row) => (
+            <ToggleButton
+               checked={row.idStatus === 1 ? true : false}
+               onChange={(id) => handleToggle(id)}
+               id={row.id}
+            />
+         ),
+         wrap: true,
+      })
+   }
 
    // FILTER SELECT TAG DATA
    const filterOptions = [
       { value: 'name', label: 'nom' },
       { value: 'phone', label: 'téléphone' },
       { value: 'city', label: 'ville' },
-      { value: 'neigborhood', label: 'quartier' },
+      { value: 'neighborhood', label: 'quartier' },
       { value: 'createdAt', label: 'date de créat.' },
    ]
 
@@ -362,9 +380,16 @@ const ListOrganization = () => {
          </div>
 
          <CustomDataTable
+            loading={loading}
             columns={columns}
             data={data}
             ExpandedComponent={ExpandedComponent}
+            paginationPerPage={limit}
+            paginationTotalRows={allCount}
+            currentPage={page}
+            totalPages={totalPages}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleLimitChange}
          />
 
          <Modal
@@ -387,7 +412,7 @@ const ListOrganization = () => {
                         <input type="file" id="Profil" hidden ref={imageRef} accept=".jpg, .jpeg, .png" onChange={(e) => setGetImage(e.target.files[0])} />
                      </div>
                      <div className="col-md-6 infoDetail ml-4 ">
-                        <div className="nomEntr fw-bold fs-2">{oneData.name ? oneData.name.toUpperCase() : '---'}</div>
+                        <div className="nomEntr fw-bold fs-2 shadow p-2 mb-2">{oneData.name ? oneData.name.toUpperCase() : '---'}</div>
                         <div className="secteurAc mb-4 ">
                            <p className="fw-bold me-1 text-center">Description </p>
                            {oneData.description ? oneData.description : '---'}
@@ -413,14 +438,14 @@ const ListOrganization = () => {
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
                <div className="d-flex">
-                  <Button onClick={buttonAction} className={buttonClass}>
-                     <RemixIcons.RiPictureInPictureLine />{buttonLabel}
+                  <Button onClick={buttonAction} className={buttonClass} title={buttonLabel}>
+                     <RemixIcons.RiPictureInPictureLine />
                   </Button>
-                  <Button onClick={() => Navigate(`/organizations/update/${oneData.id}`)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier infos</Button>
-                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
+                  <Button onClick={() => Navigate(`/organizations/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos"><RemixIcons.RiPenNibLine /></Button>
+                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error  me-2' : 'Btn Send  me-2'} title={oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}><RemixIcons.RiExchangeBoxLine /></Button>
                </div>
                <div>
-                  <Button onClick={hideModal} className="Btn Error btn-sm"><RemixIcons.RiCloseLine />fermer</Button>
+                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
                </div>
             </Modal.Footer>
          </Modal >

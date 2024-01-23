@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Account } from '../services/accountService'
 import { useNavigate } from 'react-router-dom'
+import { User } from '../services/userService'
+import { Status } from '../services/statusService'
 
 const Access = () => {
    const Navigate = useNavigate()
@@ -11,6 +13,9 @@ const Access = () => {
    const [token, setToken] = useState(localStorage.getItem('lkiy-'))
    const [id, setId] = useState(localStorage.getItem('id'))
    const [data, setData] = useState(0)
+   const [user, setUser] = useState({})
+   const [statusData, setStatusData] = useState([])
+   const [idStatusActif, setIdStatusActif] = useState(null)
 
    useEffect(() => {
       const timer = window.setInterval(() => {
@@ -20,7 +25,7 @@ const Access = () => {
          const currentToken = localStorage.getItem('lkiy-')
          const currentId = localStorage.getItem('id')
 
-         if (currentRole !== role || currentEnv !== env || currentStatus !== status || currentToken !== token || currentId !== id ) {
+         if (currentRole !== role || currentEnv !== env || currentStatus !== status || currentToken !== token || currentId !== id) {
             setRole(currentRole)
             setEnv(currentEnv)
             setStatus(currentStatus)
@@ -35,65 +40,83 @@ const Access = () => {
    }, [role, env, status, token, id])
 
    useEffect(() => {
-      const loadData = () => {
-         if (status !== 'gt6m06768-rq0835gdgd-bvdf56-45rds4mbvpo' || !token || !id) {
-            setData(0)
-            setTimeout(() => {
-               Account.logout()
-            }, 1000)
-         } 
-         else {
-            let newData = 0
-            switch (env) {
-               case 'fkc76rew4-sef590kmlkm-1drds4w323-tpfz6r6':
-                  switch (role) {
-                     case 'zg450354b-2d9cv-4a42-904b-1700f57863d5':
-                        newData = 11
-                        break
-                     case 'zg450354b-2d9cv-4a42-904b-2700f57863d5':
-                        newData = 12
-                        break
-                     case 'zg450354b-2d9cv-4a42-904b-3700f57863d5':
-                        newData = 13
-                        break
-                     default:
-                        handleLogout(0)
-                        return
-                  }
-                  break
-               case 'fkc76rew4-sef590kmlkm-2drds4w323-tpfz6r6':
-                  switch (role) {
-                     case 'zg450354b-2d9cv-4a42-904b-1700f57863d5':
-                        newData = 21
-                        break
-                     case 'zg450354b-2d9cv-4a42-904b-2700f57863d5':
-                        newData = 22
-                        break
-                     case 'zg450354b-2d9cv-4a42-904b-3700f57863d5':
-                        newData = 23
-                        break
-                     default:
-                        handleLogout(300)
-                        return
-                  }
-                  break
-               default:
-                  handleLogout(300)
-                  return
-            }
-            setData(newData)
+      const loadUser = async () => {
+         try {
+            const userData = await User.getOne(id)
+            const user = userData.data.content
+
+            const statusData = await Status.getAll()
+            const status = statusData.data.content
+            filterStatusData(user, status)
+         } catch (error) {
+            console.error("Erreur lors du chargement des données :", error)
          }
       }
 
-      const handleLogout = (code) => {
-         setData(0)
-         setTimeout(() => {
-            Account.logout(code)
-         }, 1000)
+      const filterStatusData = async (user, statusData) => {
+         try {
+            const objetActif = statusData.find((objet) => objet.name === "actif")
+            const idStatusActif = objetActif ? objetActif.id : null
+
+            console.log("idStatusActif:", idStatusActif);
+            console.log("status:", status);
+            console.log("user: ", user);
+
+            if (status !== idStatusActif || !token || !id) {
+               setData(0)
+               setTimeout(() => {
+                  Account.logout()
+               }, 1000)
+               console.log("user.Env.name", user.Env.name);
+            } else {
+               let newData = 0
+               switch (user.Env.name) {
+                  case 'internal':
+                     switch (user.Role.name) {
+                        case 'simple user':
+                           newData = 11
+                           break
+                        case 'admin':
+                           newData = 12
+                           break
+                        case 'super admin':
+                           newData = 13
+                           break
+                        default:
+                           handleLogout(0)
+                           return
+                     }
+                     break
+                  case 'external':
+                     switch (user.Role.name) {
+                        case 'simple user':
+                           newData = 21
+                           break
+                        case 'admin':
+                           newData = 22
+                           break
+                        case 'super admin':
+                           newData = 23
+                           break
+                        default:
+                           handleLogout(300)
+                           return
+                     }
+                     break
+                  default:
+                     handleLogout(300)
+                     return
+               }
+               setData(newData)
+            }
+         } catch (error) {
+            console.error("Erreur lors du filtrage des données de statut :", error)
+         }
       }
 
-      loadData()
-   }, [status, role, env, data, token, id])
+      loadUser()
+   }, [])
+
 
    return data
 }

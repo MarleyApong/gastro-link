@@ -6,7 +6,6 @@ import { FirstGroupInternal, FirstGroupExternal } from '../../components/Dashboa
 import { SecondGroupExternal, SecondGroupInternal } from '../../components/Dashboard//SecondGroup'
 import { Company } from '../../services/companyService'
 import { Survey } from '../../services/surveyService'
-import Pagination from '../../components/Pagination'
 import Access from '../../utils/utilsAccess'
 import './dashboard.scss'
 
@@ -17,18 +16,26 @@ const Dashboard = () => {
    const [surveys, setSurveys] = useState([])
    const [chart, setChart] = useState([])
 
+   const firstGroupDataInternal = async () => {
+      let res = await Company.getCount()
+      setAllCount(res.data.content)
+      setCompanies(res.data.content.data)
+
+      res = await Survey.getAll()
+      setSurveys(res.data.content)
+   }
+
+   const firstGroupDataExternal = async () => {
+      let res = await Company.getCount()
+      setAllCount(res.data.content)
+      setCompanies(res.data.content.data)
+
+      res = await Survey.getAll()
+      setSurveys(res.data.content)
+   }
+
    useEffect(() => {
-      const firstGroupData = async () => {
-         let res = await Company.getCount()
-         setAllCount(res.data.content)
-
-         res = await Company.getCount()
-         setCompanies(res.data.content.data)
-
-         res = await Survey.getAll()
-         setSurveys(res.data.content)
-      }
-      firstGroupData()
+      firstGroupDataInternal()
    }, [])
 
    useEffect(() => {
@@ -53,9 +60,7 @@ const Dashboard = () => {
       }
       secondGroupData()
    }, [companies])
-   // const [pageable, setPageable] = useState({
-
-   // })
+   
    return (
       <>
          <IconContext.Provider value={{ size: '2.5rem' }}>

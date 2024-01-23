@@ -42,7 +42,7 @@ const PrivateRoute = () => {
                      <Route path='/surveys' element={<ListSurvey />} />
                      <Route path='/surveys/list' element={<ListSurvey />} />
                      <Route path='/surveys/new' element={<CreateSurvey />} />
-                     <Route path='/surveys/note' element={<ListNote />} />
+                     <Route path='/surveys/questions/:id' element={<ListNote />} />
                      <Route path='/customers' element={<ListCustomer />} />
                      <Route path='/users/new' element={<CreateUser />} />
                      <Route path='/users' element={<ListUser />} />

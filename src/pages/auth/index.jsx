@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+import * as RemixIcons from "react-icons/ri"
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { PulseLoader } from 'react-spinners'
-import * as RemixIcons from "react-icons/ri"
 import { Authentification } from '../../services/authentificationService'
 import { Account } from '../../services/accountService'
 import logo from '../../assets/img/logo/cs-logo-red.png'
@@ -24,15 +24,16 @@ const Login = () => {
          try {
             const res = await Authentification.login(email, password)
             setWait(true)
-            if (res.data.status !== 1) {
+            if (res.data.status.name !== 'actif') {
                toast.error("Accès non authorisé !")
             }
             else {
-               Account.saveToken(res.data.token, res.data.id, res.data.role, res.data.env)
+               Account.saveToken(res.data.token, res.data.id, res.data.role.id, res.data.env.id, res.data.status.id)
                Navigate("/dashboard")
             }
 
          } catch (err) {
+            console.log(err);
             setWait(true)
             if (err.response) {
                if (err.response.data.error.name === 'NotFound') {

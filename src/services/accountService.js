@@ -1,26 +1,12 @@
 import toast from "react-hot-toast"
 import Access from "../utils/utilsAccess"
 
-const saveToken = (token, id, role, env) => {
+const saveToken = (token, id, role, env, status) => {
     localStorage.setItem('lkiy-', token)
     localStorage.setItem('id', id)
-    localStorage.setItem('lero',
-        role === 1
-            ? 'zg450354b-2d9cv-4a42-904b-1700f57863d5'
-            : role === 2
-                ? 'zg450354b-2d9cv-4a42-904b-2700f57863d5'
-                : role === 3
-                    ? 'zg450354b-2d9cv-4a42-904b-3700f57863d5'
-                    : ''
-    )
-
-    localStorage.setItem('env',
-        env === 1
-            ? 'fkc76rew4-sef590kmlkm-1drds4w323-tpfz6r6'
-            : 'fkc76rew4-sef590kmlkm-2drds4w323-tpfz6r6'
-    )
-
-    localStorage.setItem('status', 'gt6m06768-rq0835gdgd-bvdf56-45rds4mbvpo')
+    localStorage.setItem('lero', role)
+    localStorage.setItem('env', env)
+    localStorage.setItem('status', status)
 }
 
 let logoutAlreadyTriggered = false
