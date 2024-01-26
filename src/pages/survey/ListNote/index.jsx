@@ -8,7 +8,7 @@ import { Survey } from "../../../services/surveyService"
 import { Account } from "../../../services/accountService"
 import CustomDataTable from "../../../components/CustomDataTable"
 import SelectOption from "../../../components/SelectOption"
-import { sortOption, statusOption } from "../../../data/optionFilter"
+import { sortOption, StatusOption } from "../../../data/optionFilter"
 import SearchInput from "../../../components/SearchInput"
 import Access from "../../../utils/utilsAccess"
 import { Average } from "../../../services/average"
@@ -17,6 +17,7 @@ import { QuestionAnswer } from "../../../services/questionAnswerService"
 const ListNote = () => {
    const Navigate = useNavigate()
    const access = Access
+   const statusOption = StatusOption()
    const { id } = useParams()
 
    const [data, setData] = useState([])

@@ -127,7 +127,9 @@ export const ItemsInternalUser = [
     }
 ]
 
-export const ItemsExternalAdmin = [
+//==============================================
+
+export const ItemsExternalSuperAdmin = [
     {
         Icon: RemixIcons.RiHomeOfficeLine,
         Display: "Tableau de bord",
@@ -137,12 +139,82 @@ export const ItemsExternalAdmin = [
         Icon: RemixIcons.RiBuildingLine,
         Display: "Entreprises",
         Link: "/companies",
+        subNav: [
+            {
+                Icon: RemixIcons.RiAddLine,
+                Display: "Nouvelle entreprise",
+                Link: "/companies/new",
+            },
+            {
+                Icon: RemixIcons.RiListRadio,
+                Display: "Liste des entreprises",
+                Link: "/companies/list",
+            }
+        ]
     },
     {
         Icon: RemixIcons.RiSurveyLine,
         Display: "Enquêtes",
         Link: "/surveys",
         subNav: [
+            {
+                Icon: RemixIcons.RiAddLine,
+                Display: "Nouvelle enquête",
+                Link: "/surveys/new",
+            },
+            {
+                Icon: RemixIcons.RiListRadio,
+                Display: "Liste des enquêtes",
+                Link: "/surveys/list",
+            }
+        ]
+    },
+    {
+        Icon: RemixIcons.RiUserHeartLine,
+        Display: "Clients",
+        Link: "/customers",
+    },
+    {
+        Icon: RemixIcons.RiUserSettingsLine,
+        Display: "Utilisateurs",
+        Link: "/users",
+        subNav: [
+            {
+                Icon: RemixIcons.RiAddLine,
+                Display: "Nouveau utilisateur",
+                Link: "/users/new",
+            },
+            {
+                Icon: RemixIcons.RiListRadio,
+                Display: "Liste des utilisateurs",
+                Link: "/users/list",
+            }
+        ]
+        
+    },
+    {
+        Icon: RemixIcons.RiSoundModuleLine,
+        Display: "Paramètres",
+        Link: "/settings",
+    }
+]
+
+export const ItemsExternalAdmin = [
+    {
+        Icon: RemixIcons.RiHomeOfficeLine,
+        Display: "Tableau de bord",
+        Link: "/dashboard"
+    },
+    {
+        Icon: RemixIcons.RiSurveyLine,
+        Display: "Enquêtes",
+        Link: "/surveys",
+        subNav: [
+            {
+                Icon: RemixIcons.RiAddLine,
+                Display: "Nouvelle enquête",
+                Link: "/surveys/new",
+            },
             {
                 Icon: RemixIcons.RiListRadio,
                 Display: "Liste des enquêtes",

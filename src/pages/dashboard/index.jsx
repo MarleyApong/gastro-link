@@ -71,7 +71,7 @@ const Dashboard = () => {
                         companies={allCount}
                         surveys={surveys}
                      /> :
-                     access === 21 || access === 22 ?
+                     access === 21 || access === 22 || access === 23 ?
                         <FirstGroupExternal /> : ""
                }
             </div>
@@ -83,7 +83,7 @@ const Dashboard = () => {
                         companies={companies}
                         chart={chart}
                      /> :
-                     access === 21 || access === 22 ?
+                     access === 21 || access === 22 || access === 23?
                         <SecondGroupExternal /> : ""
                }
             </div>

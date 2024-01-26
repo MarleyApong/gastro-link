@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import * as RemixIcons from "react-icons/ri"
 import SubMenu from './SubMenu'
-import { ItemsExternalAdmin, ItemsExternalUser, ItemsInternalAdmin, ItemsInternalUser } from '../../data/itemsNav'
+import { ItemsExternalAdmin, ItemsExternalSuperAdmin, ItemsExternalUser, ItemsInternalAdmin, ItemsInternalUser } from '../../data/itemsNav'
 import avatar from '../../assets/img/avatar/Marley.jpg'
 import Access from '../../utils/utilsAccess'
 import { Account } from '../../services/accountService'
@@ -48,6 +48,9 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
                                     return <SubMenu item={item} key={index} />
                                 }) :
                                     access === 22 ? ItemsExternalAdmin.map((item, index) => {
+                                        return <SubMenu item={item} key={index} />
+                                    }) : 
+                                    access === 23 ? ItemsExternalSuperAdmin.map((item, index) => {
                                         return <SubMenu item={item} key={index} />
                                     }) : ""
                 }

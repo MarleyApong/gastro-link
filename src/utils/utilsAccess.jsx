@@ -58,16 +58,11 @@ const Access = () => {
             const objetActif = statusData.find((objet) => objet.name === "actif")
             const idStatusActif = objetActif ? objetActif.id : null
 
-            console.log("idStatusActif:", idStatusActif);
-            console.log("status:", status);
-            console.log("user: ", user);
-
             if (status !== idStatusActif || !token || !id) {
                setData(0)
                setTimeout(() => {
                   Account.logout()
                }, 1000)
-               console.log("user.Env.name", user.Env.name);
             } else {
                let newData = 0
                switch (user.Env.name) {

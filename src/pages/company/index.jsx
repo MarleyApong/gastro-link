@@ -14,19 +14,22 @@ import { Company } from "../../services/companyService"
 import CustomDataTable from "../../components/CustomDataTable"
 import SearchInput from "../../components/SearchInput"
 import SelectOption from "../../components/SelectOption"
-import { sortOption, statusOption } from "../../data/optionFilter"
+import { sortOption, StatusOption } from "../../data/optionFilter"
 import Access from "../../utils/utilsAccess"
 
 const ListCompany = () => {
    const Navigate = useNavigate()
    const access = Access()
+   const statusOption = StatusOption()
+   const idUser = localStorage.getItem('id')
 
    const [data, setData] = useState([])
+   const [companiesExternal, setCompaniesExternal] = useState([])
    const [oneData, setOneData] = useState([])
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('name')
-   const [status, setStatus] = useState(1)
+   const [status, setStatus] = useState('')
    const [search, setSearch] = useState('')
    const [limit, setLimit] = useState(10)
    const [page, setPage] = useState(1)
@@ -74,10 +77,18 @@ const ListCompany = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
-            const res = await Company.getAll(order, filter, search, status, limit, page)
-            setData(res.data.content.data)
-            setAllCount(res.data.content.totalElements)
-            setTotalPages(res.data.content.totalPages)
+            if (access === 23) {
+               const res = await Company.getCompanyByUser(idUser, order, filter, search, status, limit, page)
+               setData(res.data.content.data)
+               setAllCount(res.data.content.totalElements)
+               setTotalPages(res.data.content.totalPages)
+            }
+            else if (access === 12 || access === 13) {
+               const res = await Company.getAll(order, filter, search, status, limit, page)
+               setData(res.data.content.data)
+               setAllCount(res.data.content.totalElements)
+               setTotalPages(res.data.content.totalPages)
+            }
          }
          catch (err) {
             console.log("Load: ", err)
@@ -88,7 +99,7 @@ const ListCompany = () => {
       }
 
       loadData()
-   }, [order, filter, search, status, refresh, limit, page])
+   }, [access,order, filter, search, status, refresh, limit, page])
 
    // FECTH ONE DATA
    useEffect(() => {
@@ -320,7 +331,7 @@ const ListCompany = () => {
          name: 'Status',
          cell: (row) => (
             <ToggleButton
-               checked={row.idStatus === 1 ? true : false}
+               checked={row.Status && row.Status.name === 'actif' ? true : false}
                onChange={(id) => handleToggle(id)}
                id={row.id}
             />
@@ -444,7 +455,7 @@ const ListCompany = () => {
                   </Button>
                   <Button onClick={() => Navigate(`/companies/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos"><RemixIcons.RiPenNibLine /></Button>
                   {access === 12 || access === 13 &&
-                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error  me-2' : 'Btn Send  me-2'} title={oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}><RemixIcons.RiExchangeBoxLine /></Button>
+                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.Status && oneData.Status.name === 'actif' ? ' Btn Error  me-2' : 'Btn Send  me-2'} title={oneData.Status && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}><RemixIcons.RiExchangeBoxLine /></Button>
                   }
                </div>
                <div>

@@ -14,6 +14,10 @@ const getOne = (id) => {
    return Axios.get(`/${route}/${id}`)
 }
 
+const getOrganizationCompany = (id) => {
+   return Axios.get(`/${route}/organization-company/${id}`)
+}
+
 const add = (data) => {
    return Axios.put(`/${route}`, data)
 }
@@ -41,6 +45,7 @@ export const User = {
    getAll,
    getCount,
    getOne,
+   getOrganizationCompany,
    add,
    update,
    changeStatus,

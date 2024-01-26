@@ -6,9 +6,11 @@ import HeaderMain from "../../../components/HeaderMain"
 import { User } from "../../../services/userService"
 import { Account } from "../../../services/accountService"
 import { Role } from "../../../services/roleService"
+import { StatusOption } from "../../../data/optionFilter"
 
 const UpdateUser = () => {
 	const Navigate = useNavigate()
+	const statusOption = StatusOption()
 	const { id } = useParams()
 
 	// USER OWNERSHIP
@@ -17,7 +19,7 @@ const UpdateUser = () => {
 		lastName: "",
 		email: "",
 		phone: "",
-		idRole: "",	
+		idRole: "",
 		idStatus: ""
 	})
 
@@ -27,7 +29,7 @@ const UpdateUser = () => {
 		lastName: "",
 		email: "",
 		phone: "",
-		idRole: "",	
+		idRole: "",
 		idStatus: ""
 	})
 
@@ -84,7 +86,7 @@ const UpdateUser = () => {
 			user.phone === lastData.phone &&
 			user.idRole === lastData.role &&
 			user.idStatus === lastData.idStatus
-			) {
+		) {
 			toast.error("Aucune valeur n'a été modifiée.")
 			toast.error("Echec de l'opération !")
 		}
@@ -219,9 +221,9 @@ const UpdateUser = () => {
 									<span className="text-danger taille_etoile"></span>
 								</label>
 								<select name="idStatus" id="idStatus" onChange={handleUpdate} className="form-control no-focus-outline">
-									<option value=""></option>
-									<option value="1">actif</option>
-									<option value="2">inactif</option>
+									{statusOption.map((item) => (
+										<option key={item.value} value={item.value}>{item.label}</option>
+									))}
 								</select>
 							</div>
 

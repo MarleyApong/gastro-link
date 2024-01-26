@@ -13,17 +13,20 @@ import CustomDataTable from "../../components/CustomDataTable"
 import { User } from "../../services/userService"
 import { Role } from "../../services/roleService"
 import SelectOption from "../../components/SelectOption"
-import { envOption, sortOption, statusOption } from "../../data/optionFilter"
+import { EnvOption, sortOption, StatusOption, RoleOption } from "../../data/optionFilter"
 import SearchInput from "../../components/SearchInput"
 import Access from "../../utils/utilsAccess"
 
 const ListUser = () => {
    const Navigate = useNavigate()
    const access = Access()
+   const statusOption = StatusOption()
+   const envOption = EnvOption()
+   const roleOption = RoleOption()
 
    const [data, setdata] = useState([])
    const [oneData, setOneData] = useState([])
-   const [roleData, setRoleData] = useState([])
+   const [affiliation, setAffiliation] = useState({})
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('firstName')
@@ -81,18 +84,6 @@ const ListUser = () => {
       setSearch(e.target.value)
    }
 
-   // SHOW SURVEY MODAL
-   const surveyUpdateModal = (id, name) => {
-      setStateSurvey(true)
-      setStateQuestion(false)
-      setSurveyUpdade(name)
-   }
-
-   // GET ALL ROLE DATA API
-   useEffect(() => {
-      Role.getAll().then((res) => setRoleData(res.data.content))
-   }, [])
-
    // GET ALL DATA API
    useEffect(() => {
       const loadData = async () => {
@@ -116,15 +107,22 @@ const ListUser = () => {
 
    // GET ONE DATA API
    useEffect(() => {
+      setAffiliation({})
       User.getOne(id)
          .then((res) => setOneData(res.data.content))
+
+      User.getOrganizationCompany(id)
+         .then((res) => setAffiliation(res.data))
    }, [id, refresh])
+
+   console.log("aff", affiliation)
 
    // CHANGE STATUS WITH TOGGLE BUTTON
    const handleToggle = (idRow) => {
       User.changeStatus(idRow)
          .then((res) => {
-            if (res.data.message === 'Status modified') toast.success("Statut modifié !")
+            if (res.data.message === 'user active') toast.success("utilisateur activé !")
+            else toast.success("utilisateur désactivé !")
             setRefresh((current) => current + 1)
          })
          .catch((err) => {
@@ -152,7 +150,7 @@ const ListUser = () => {
    const detailsStatusChange = (id) => {
       User.changeStatus(id)
          .then((res) => {
-            if (res.data.message === 'User active') toast.success("Utilisateur activé !")
+            if (res.data.message === 'user active') toast.success("Utilisateur activé !")
             else toast.success("Utilisateur désactivé !")
             setRefresh((current) => current + 1)
          })
@@ -232,12 +230,12 @@ const ListUser = () => {
       },
       {
          name: 'Env.',
-         selector: row => row.idEnv === 1 ? "interne" : "externe",
+         selector: row => row.Env && row.Env.name === 'internal' ? "interne" : "externe",
          wrap: true,
       },
       {
          name: 'Role',
-         selector: row => row.idRole === 1 ? "user" : row.idRole === 2 ? "admin" : "super admin",
+         selector: row => row.Role.name,
          wrap: true,
       },
       {
@@ -281,7 +279,7 @@ const ListUser = () => {
          name: 'Status',
          cell: (row) => (
             <ToggleButton
-               checked={row.idStatus === 1 ? true : false}
+               checked={row.Status.name === 'actif' ? true : false}
                onChange={(id) => handleToggle(id)}
                id={row.id}
             />
@@ -289,15 +287,6 @@ const ListUser = () => {
          wrap: true,
       })
    }
-
-   // ROLE SELECT TAG DATA
-   const roleOptions = [
-      { value: '', label: '---' },
-      ...roleData.map((item) => ({
-         value: item.id,
-         label: item.name
-      }))
-   ]
 
    return (
       <div>
@@ -346,7 +335,7 @@ const ListUser = () => {
                name={role}
                value={role}
                onChange={handleRoleChange}
-               options={roleOptions}
+               options={roleOption}
             />
 
             <SearchInput
@@ -398,9 +387,9 @@ const ListUser = () => {
                               <p className="mb-2"><span className="fw-bold">Prénom :</span> {oneData.lastName}</p>
                               <p className="mb-2"><span className="fw-bold">Email :</span> {oneData.email}</p>
                               <p className="mb-2"><span className="fw-bold">Téléphone :</span> {oneData.phone}</p>
-                              <p className="mb-2"><span className="fw-bold">Environnement :</span> {oneData.idEnv === 1 ? "interne" : "externe"}</p>
-                              <p className="mb-2"><span className="fw-bold">Rôle :</span> {oneData.idRole === 1 ? "user" : oneData.idRole === 2 ? "admin" : "super admin"}</p>
-                              <p className="mb-2"><span className="fw-bold">Statut :</span> {oneData.idStatut === 1 ? "actif" : "inactif"}</p>
+                              <p className="mb-2"><span className="fw-bold">Environnement :</span> {oneData.Env && oneData.Env.name  === 'internal' ? "interne" : "externe"}</p>
+                              <p className="mb-2"><span className="fw-bold">Rôle :</span> {oneData.Role && oneData.Role.name}</p>
+                              <p className="mb-2"><span className="fw-bold">Statut :</span> {oneData.Status && oneData.Status.name}</p>
                               <p className="mb-2"><span className="fw-bold">Date de création :</span> {oneData.id && dateFormat(new Date(oneData.createdAt), 'dd-mm-yyyy HH:MM:ss')}</p>
                               <p className="mb-2"><span className="fw-bold">Date de modif :</span> {oneData.id && dateFormat(new Date(oneData.updatedAt), 'dd-mm-yyyy HH:MM:ss')}</p>
                            </div>
@@ -408,7 +397,8 @@ const ListUser = () => {
                         <div className="">
                            <h5 className="mb-3 mt-3 p-2 shadow">Affiliation</h5>
                            <div className="ps-4">
-                              <p className="mb-2"><span className="fw-bold">Organisation :</span> Aucun</p>
+                              <p className="mb-2"><span className="fw-bold">Organisation :</span> {affiliation.organization || 'Aucune'}</p>
+                              <p className="mb-2"><span className="fw-bold">Entreprise :</span> {affiliation.company || 'Aucune'}</p>
                            </div>
                         </div>
                      </div>
@@ -418,7 +408,7 @@ const ListUser = () => {
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
                <div className="d-flex">
                   <Button onClick={() => Navigate(`/users/update/${oneData.id}`)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier</Button>
-                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
+                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.Status && oneData.Status.name === 'actif' ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.Status && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}</Button>
                </div>
                <div>
                   <Button onClick={hideModal} className="Btn Error btn-sm"><RemixIcons.RiCloseLine />Fermer</Button>

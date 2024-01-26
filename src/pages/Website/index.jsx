@@ -74,6 +74,8 @@ const Website = () => {
 
     }
 
+    console.log("res",responses)
+
     return (
         <div className='Website'>
             <header>
@@ -104,7 +106,7 @@ const Website = () => {
                             send === false ?
                                 <div className="First">
 
-                                    <form onSubmit={handleSubmitNote} className="Body">
+                                    <div className="Body">
                                         <p className="Name-Survey">Enquête du jour, {data.name && data.surveys[0].name.toUpperCase()}</p>
                                         <p className='details'>Dans l'optique d'ameliorer la qualite de nos services et de toujours satisfaire, nous aimerions que vous nous notez, si possible laisser votre avis les questions ci-dessous</p>
                                         <div className="Survey-Cont">
@@ -172,7 +174,7 @@ const Website = () => {
                                                 </button>
                                             ) : null}
                                         </div>
-                                    </form>
+                                    </div>
                                     <div className="Step-Cont">
                                         <StepItem index={0} step={step} />
                                         <StepItem index={1} step={step} />

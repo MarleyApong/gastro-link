@@ -9,37 +9,54 @@ import CustomSelect from "../../../components/CustomSelect"
 import { User } from "../../../services/userService"
 import PleaseNote from "../../../components/PleaseNote"
 import RequirePassword from "../../../components/RequirePassword"
+import { EnvOption, RoleOption, StatusOption } from "../../../data/optionFilter"
+import { Company } from "../../../services/companyService"
 
 const UpdateUser = () => {
 	const Navigate = useNavigate()
+	const statusOption = StatusOption()
+	const roleOption = RoleOption()
+	const envOption = EnvOption()
+
 	const order = 'asc'
 	const filter = 'name'
-	const status = 1
+	const status = 'actif'
 	const search = ''
 	const limit = 10000
 	const page = 0
 
 	const [validator, setValidator] = useState(0)
 	const [organization, setOrganization] = useState([])
-	const [selectedValue, setSelectedValue] = useState({})
+	const [company, setCompany] = useState([])
+	const [selectedOrganizationValue, setSelectedOrganizationValue] = useState({})
+	const [selectedCompanyValue, setSelectedCompanyValue] = useState({})
 	const [user, setUser] = useState({
 		firstName: "",
 		lastName: "",
 		phone: "",
 		email: "",
 		password: "",
-		idEnv: "",
+		env: "",
 		idRole: "",
 		idStatus: "",
+		idOrganization: "",
+		idCompany: ""
 	})
 
 	// RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
-	const handleSelectedValue = useCallback((value) => {
-		setSelectedValue(value)
+	const handleOrganizationValue = useCallback((value) => {
+		setSelectedOrganizationValue(value)
 	}, [])
 
-	// PUSH SELECTED ID OF ORGANIZATION AND PASSWORD
-	user.idOrganization = selectedValue.value
+	// RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
+	const handleCompanyValue = useCallback((value) => {
+		setSelectedCompanyValue(value)
+	}, [])
+
+	// PUSH SELECTED ID OF ORGANIZATION, COMPANY AND PASSWORD
+	let idOrganization = selectedOrganizationValue.value
+	user.idOrganization = selectedOrganizationValue.value
+	user.idCompany = selectedCompanyValue.value
 	user.password = user.firstName.substring(0, 3) + user.phone.substring(0, 4) + user.firstName.substring(1, 2).toUpperCase() + '@'
 
 	// SET ALL VALUE
@@ -59,6 +76,15 @@ const UpdateUser = () => {
 			})
 	}, [order, filter, status, search, limit, page])
 
+	useEffect(() => {
+		const status = 'actif'
+		Company.getCompaniesByOrganization(idOrganization, status)
+			.then((res) => {
+				setCompany(res.data.content)
+			})
+			.catch((error) => console.error('Erreur lors de la récupération des entreprises par organisation :', error))
+	}, [idOrganization])
+
 	// ADD USER
 	const handleSubmit = (e) => {
 		e.preventDefault()
@@ -67,70 +93,66 @@ const UpdateUser = () => {
 		// 	|| user.phone === ""
 		// 	|| user.email === ""
 		// 	|| user.password === ""
-		// 	|| user.idEnv === ""
+		// 	|| user.env === ""
 		// 	|| user.idRole === ""
 		// 	|| user.idStatus === ""
 		// ) {
 		// 	toast.error("Les champs marqués par une étoile sont obligations !")
 		// }
-		// else
-		if (user.idEnv === '2' && user.idRole === '3') {
-			user.idRole = ''
-		}
-		else {
-			User.add(user)
-				.then((res) => {
-					toast.success("Utilisateur ajouté avec succès !")
-					Navigate('/users/list')
-				})
-				.catch((err) => {
-					console.log("err: ", err);
-					if (err.response) {
-						if (err.response.data.error.name === 'RegexPasswordValidationError') {
-							setValidator(2)
-							toast.error("Le mot de passe n'est pas valide !")
-						}
-						else if (err.response.data.error.name === 'AddLimitReached') {
-							toast.error("Le rôle super admin est limité à 2.")
-							toast.error("Opération non authorisée !")
-						}
-						else if (err.response.data.error.name === 'AlreadyExist') {
-							toast.error("Désolé, cet utilisateur existe déjà !")
-						}
+
+		User.add(user)
+			.then((res) => {
+				toast.success("Utilisateur ajouté avec succès !")
+				Navigate('/users/list')
+			})
+			.catch((err) => {
+				console.log("err: ", err);
+				if (err.response) {
+					if (err.response.data.error.name === 'RegexPasswordValidationError') {
+						setValidator(2)
+						toast.error("Le mot de passe n'est pas valide !")
 					}
-					
-					// if (err.response.status === 400) {
-					// 	// toast.error("Champs mal renseigné ou format inattendu !", {
-					// 	// 	style: {
-					// 	// 		textAlign: 'center'
-					// 	// 	}
-					// 	// })
-					// 	console.log("erreur:", err);
-					// }
-					// else if (err.response.status === 401) {
-					// 	toast.error("La session a expiré !")
-					// 	Account.logout()
-					// 	Navigate("/auth/login")
-					// }
-					// else if (err.response.status === 403) {
-					// 	toast.error("Accès interdit !")
-					// }
-					// else if (err.response.status === 404) {
-					// 	toast.error("Ressource non trouvée !")
-					// }
-					// else if (err.response.status === 415) {
-					// 	toast.error("Erreur, contactez l'administrateur !")
-					// }
-					// else if (err.response.status === 500) {
-					// 	toast.error("Erreur interne du serveur !")
-					// }
-					// else {
-					// 	toast.error("Erreur de données company(e)s !")
-					// 	account.logout()
-					// 	Navigate("/auth/login")
-					// }
-				})
-		}
+					else if (err.response.data.error.name === 'AddLimitReached') {
+						toast.error("Le rôle super admin est limité à 2.")
+						toast.error("Opération non authorisée !")
+					}
+					else if (err.response.data.error.name === 'AlreadyExist') {
+						toast.error("Désolé, cet utilisateur existe déjà !")
+					}
+				}
+
+				// if (err.response.status === 400) {
+				// 	// toast.error("Champs mal renseigné ou format inattendu !", {
+				// 	// 	style: {
+				// 	// 		textAlign: 'center'
+				// 	// 	}
+				// 	// })
+				// 	console.log("erreur:", err);
+				// }
+				// else if (err.response.status === 401) {
+				// 	toast.error("La session a expiré !")
+				// 	Account.logout()
+				// 	Navigate("/auth/login")
+				// }
+				// else if (err.response.status === 403) {
+				// 	toast.error("Accès interdit !")
+				// }
+				// else if (err.response.status === 404) {
+				// 	toast.error("Ressource non trouvée !")
+				// }
+				// else if (err.response.status === 415) {
+				// 	toast.error("Erreur, contactez l'administrateur !")
+				// }
+				// else if (err.response.status === 500) {
+				// 	toast.error("Erreur interne du serveur !")
+				// }
+				// else {
+				// 	toast.error("Erreur de données company(e)s !")
+				// 	account.logout()
+				// 	Navigate("/auth/login")
+				// }
+			})
+
 	}
 
 	return (
@@ -141,7 +163,7 @@ const UpdateUser = () => {
 				<div className="card-body CardBody card">
 					<h5>Entrez les informations concernant l'utilisateur.</h5>
 					<PleaseNote />
-					{validator === 2 && <RequirePassword/>}
+					{validator === 2 && <RequirePassword />}
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form">
 							<div className="col-md-6 ">
@@ -225,16 +247,16 @@ const UpdateUser = () => {
 							</div>
 
 							<div className="col-md-6 ">
-								<label htmlFor="idEnv" className="form-label">
+								<label htmlFor="env" className="form-label">
 									Environnement :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
-								<select className="form-control no-focus-outline p-2 custom-select" name="idEnv" id="idEnv" value={user.idEnv} required
+								<select className="form-control no-focus-outline p-2 custom-select" name="env" id="env" value={user.env} required
 									onChange={handleAdd}
 									autoComplete='off'>
-									<option value=""></option>
-									<option value="1">interne</option>
-									<option value="2">externe</option>
+									{envOption.map((item) => (
+										<option key={item.value} value={item.label}>{item.label}</option>
+									))}
 								</select>
 							</div>
 							<div className="col-md-6 ">
@@ -245,10 +267,9 @@ const UpdateUser = () => {
 								<select className="form-control no-focus-outline p-2 custom-select" name="idRole" id="idRole" value={user.idRole} required
 									onChange={handleAdd}
 									autoComplete='off'>
-									<option value=""></option>
-									<option value="1">user</option>
-									<option value="2">admin</option>
-									{user.idEnv === '1' && <option value="3">super admin</option>}
+									{roleOption.map((item) => (
+										<option key={item.value} value={item.value}>{item.label}</option>
+									))}
 								</select>
 							</div>
 							<div className="col-md-6 ">
@@ -259,19 +280,25 @@ const UpdateUser = () => {
 								<select className="form-control no-focus-outline p-2 custom-select" name="idStatus" id="idStatus" value={user.idStatus} required
 									onChange={handleAdd}
 									autoComplete='off'>
-									<option value=""></option>
-									<option value="1">actif</option>
-									<option value="2">inactif</option>
+									{statusOption.map((item) => (
+										<option key={item.value} value={item.value}>{item.label}</option>
+									))}
 								</select>
 							</div>
-							{user.idEnv === '2' && <div className="col-md-6 ">
+							{user.env === 'external' && <div className="col-md-6 ">
 								<label htmlFor="idOrganization" className="form-label">
 									Organisation :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
-								<CustomSelect data={organization} placeholder="Selectionnez une organisation" onSelectedValue={handleSelectedValue} />
+								<CustomSelect data={organization} placeholder="Selectionnez une organisation" onSelectedValue={handleOrganizationValue} />
 							</div>}
-
+							{user.env === 'external' && <div className="col-md-6 ">
+								<label htmlFor="" className="form-label">
+									Nom de l'entreprise :
+									<span className="text-danger taille_etoile">*</span>
+								</label>
+								<CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
+							</div>}
 							<div className="col-md-12 d-flex gap-2">
 								<button type="submit" className="Btn Send btn-sm">
 									<RemixIcons.RiSendPlaneLine />

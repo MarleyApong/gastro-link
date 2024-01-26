@@ -98,7 +98,7 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
             paginationRowsPerPageOptions={[10, 15, 20, 30]}
          />
          {loading && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                <TailSpin
                   visible={true}
                   height="20"

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
@@ -6,10 +6,14 @@ import { Organization } from "../../../services/organizationService"
 import { useNavigate } from "react-router-dom"
 import { Account } from "../../../services/accountService"
 import PleaseNote from "../../../components/PleaseNote"
+import { Status } from "../../../services/statusService"
+import { StatusOption } from "../../../data/optionFilter"
 
 const CreateOrganization = () => {
 	const Navigate = useNavigate()
+	const statusOption = StatusOption()
 	const [file, setFile] = useState('')
+	const [statusData, setStatusData] = useState([])
 
 	// ORGANIZATION OWNERSHIP
 	const [organization, setOrganization] = useState({
@@ -63,6 +67,7 @@ const CreateOrganization = () => {
 					Navigate('/organizations/')
 				})
 				.catch((err) => {
+					console.log("err: ", err);
 					if (err.response.status === 400) {
 						toast.error("Champs mal renseigné ou format inattendu !", {
 							style: {
@@ -103,7 +108,7 @@ const CreateOrganization = () => {
 
 				<div className="card-body CardBody card">
 					<h5>Entrez les informations concernant votre organisation.</h5>
-					<PleaseNote/>
+					<PleaseNote />
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form" for>
 							<div className="col-md-6">
@@ -181,9 +186,9 @@ const CreateOrganization = () => {
 								<select className="form-control no-focus-outline p-2" name="idStatus" id="idStatus" value={organization.idStatus} required
 									onChange={handleAdd}
 									autoComplete='off'>
-									<option value=""></option>
-									<option value="1">actif</option>
-									<option value="2">inactif</option>
+									{statusOption.map((item) => (
+										<option key={item.value} value={item.value}>{item.label}</option>
+									))}
 								</select>
 							</div>
 

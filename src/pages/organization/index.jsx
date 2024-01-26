@@ -13,13 +13,15 @@ import ToggleButton from "../../components/ToggleButton"
 import { Organization } from "../../services/organizationService"
 import CustomDataTable from "../../components/CustomDataTable"
 import SelectOption from "../../components/SelectOption"
-import { sortOption, statusOption } from "../../data/optionFilter"
 import SearchInput from "../../components/SearchInput"
 import Access from "../../utils/utilsAccess"
+import { sortOption, StatusOption } from "../../data/optionFilter"
+
 
 const ListOrganization = () => {
    const Navigate = useNavigate()
    const access = Access()
+   const statusOption = StatusOption()
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])
@@ -320,7 +322,7 @@ const ListOrganization = () => {
          name: 'Status',
          cell: (row) => (
             <ToggleButton
-               checked={row.idStatus === 1 ? true : false}
+               checked={row.Status.name === 'actif' ? true : false}
                onChange={(id) => handleToggle(id)}
                id={row.id}
             />
@@ -423,7 +425,7 @@ const ListOrganization = () => {
                         <div className="ville mb-3"><FaCity className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
                         <div className="ville mb-3 d-flex align-items-center">
                            <RemixIcons.RiUserSharedLine className="icon" />
-                           {oneData.idStatus === 1 ? 'actif' : 'inactif'}
+                           {oneData.Status && oneData.Status.name === 'actif' ? 'actif' : 'inactif'}
                         </div>
 
                         <span className="site">
@@ -442,7 +444,7 @@ const ListOrganization = () => {
                      <RemixIcons.RiPictureInPictureLine />
                   </Button>
                   <Button onClick={() => Navigate(`/organizations/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos"><RemixIcons.RiPenNibLine /></Button>
-                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error  me-2' : 'Btn Send  me-2'} title={oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}><RemixIcons.RiExchangeBoxLine /></Button>
+                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.Status && oneData.Status.name === 'actif' ? ' Btn Error  me-2' : 'Btn Send  me-2'} title={oneData.Status && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}><RemixIcons.RiExchangeBoxLine /></Button>
                </div>
                <div>
                   <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>

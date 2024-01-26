@@ -1,122 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react"
-import * as RemixIcons from "react-icons/ri"
+import React, { useState } from "react"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
-import { Company } from "../../../services/companyService"
-import { Organization } from "../../../services/organizationService"
-import { Survey } from "../../../services/surveyService"
-import { Account } from "../../../services/accountService"
-import HeaderMain from "../../../components/HeaderMain"
+import { StatusOption } from "../../../data/optionFilter"
 import CustomSelect from "../../../components/CustomSelect"
+import HeaderMain from "../../../components/HeaderMain"
 import PleaseNote from "../../../components/PleaseNote"
+import Access from "../../../utils/utilsAccess"
+import Internal from "./Components/Internal"
+import External from "./Components/External"
 
 const CreateSurvey = () => {
 	const Navigate = useNavigate()
-	const order = 'asc'
-	const filter = 'name'
-	const status = 1
-	const search = ''
-	const limit = 10000
-	const page = 0
+	const access = Access()
+	const statusOption = StatusOption()
 
-	const [idOrganization, setIdOrganization] = useState('')
-	const [organization, setOrganization] = useState([])
-	const [selectedValue, setSelectedValue] = useState({})
-	const [company, setCompany] = useState([])
-	const [survey, setSurvey] = useState({
-		idCompany: "",
-		idStatus: "",
-		name: "",
-	})
+	let idStatus = ''
 
-	// RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
-	const handleOrganizationValue = useCallback((value) => {
-		setSelectedValue(value)
-	}, [])
-
-	// RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
-	const handleCompanyValue = useCallback((value) => {
-		setSelectedValue(value)
-	}, [])
-
-	// PUSH SELECTED ID OF ORGANIZATION
-	survey.idCompany = selectedValue.value
-
-	// SET ALL VALUE
-	const handleAdd = (e) => {
-		const { name, value } = e.target;
-		setSurvey({
-			...survey,
-			[name]: value,
-		})
-	}
-
-	// CHOISE PICTURE
-	useEffect(() => {
-		Organization.getAll(order, filter, status, search, limit, page)
-			.then((res) => setOrganization(res.data.content.data))
-
-	}, [order, filter, status, search, limit, page])
-
-	// FETCH ALL DATA
-	useEffect(() => {
-		Company.getAll(order, filter, search, status)
-			.then((res) => setCompany(res.data.content.data))
-			.catch((err) => console.log("Erreur: ", err))
-	}, [idOrganization])
-
-	// RECOVERY OF COMPANIES WHOSE ID MATCHES WITH SELECTED ID
-	const filterCompany = company.filter((item) => item.idOrganization === idOrganization)
-
-	// ADD SURVEY
-	const handleSubmit = (e) => {
-		e.preventDefault()
-		if (
-			selectedValue === false
-			|| survey.idCompany === ""
-			|| survey.name === ""
-			|| survey.idStatus === "") {
-			toast.error("Les champs marqués par une etoile sont obligations !")
-		}
-		else {
-			Survey.add(survey)
-				.then((res) => {
-					toast.success("Enquête ajoutée avec succès !")
-					Navigate('/surveys/list')
-				})
-				.catch((err) => {
-					if (err.response.status === 400) {
-						// toast.error("Champs mal renseigné ou format inattendu !", {
-						// 	style: {
-						// 		textAlign: 'center'
-						// 	}
-						// })
-						console.log("erreur:", err);
-					}
-					else if (err.response.status === 401) {
-						toast.error("La session a expiré !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
-					else if (err.response.status === 403) {
-						toast.error("Accès interdit !")
-					}
-					else if (err.response.status === 404) {
-						toast.error("Ressource non trouvée !")
-					}
-					else if (err.response.status === 415) {
-						toast.error("Erreur, contactez l'administrateur !")
-					}
-					else if (err.response.status === 500) {
-						toast.error("Erreur interne du serveur !")
-					}
-					// else {
-					// 	toast.error("Erreur de données company(e)s !")
-					// 	account.logout()
-					// 	Navigate("/auth/login")
-					// }
-				})
-		}
+	// GET ID OF STATUS
+	const objetFounded = statusOption.filter((item, _) => item.label === 'inactif').map((status, _) => status.value)
+	if (objetFounded) {
+		idStatus = objetFounded.toString()
 	}
 
 	return (
@@ -126,62 +29,23 @@ const CreateSurvey = () => {
 
 				<div className="card-body CardBody card">
 					<h5>Entrez les informations concernant l'enquête.</h5>
-					<PleaseNote/>
-					<blockquote className="blockquote mb-0">
-						<form onSubmit={handleSubmit} className="row g-2 form">
-							<div className="col-md-6 ">
-								<label htmlFor="neighborhood" className="form-label">
-									Nom de l'enquête :
-									<span className="text-danger taille_etoile">*</span>
-								</label>
-								<input
-									type="text"
-									className="form-control no-focus-outline"
-									id="name"
-									name="name"
-									value={survey.name}
-									onChange={handleAdd}
-									autoComplete='off'
-									required
-								/>
-							</div>
-							<div className="col-md-6">
-								<label htmlFor="" className="form-label">
-									Nom de l'organisation:
-									<span className="text-danger taille_etoile">*</span>
-								</label>
-								<CustomSelect data={organization} setId={setIdOrganization} placeholder="Selectionnez une organisation" onSelectedValue={handleOrganizationValue} />
-							</div>
-							<div className="col-md-6">
-								<label htmlFor="" className="form-label">
-									Nom de l'entreprise :
-									<span className="text-danger taille_etoile">*</span>
-								</label>
-								<CustomSelect data={filterCompany} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
-							</div>
-
-							<div className="col-md-6 ">
-								<label htmlFor="idStatus" className="form-label">
-									Status :
-									<span className="text-danger taille_etoile">*</span>
-								</label>
-								<select className="form-control no-focus-outline p-2 custom-select" name="idStatus" id="idStatus" value={survey.idStatus} required
-									onChange={handleAdd}
-									autoComplete='off'>
-									<option value=""></option>
-									<option value="1">actif</option>
-									<option value="2">inactif</option>
-								</select>
-							</div>
-
-							<div className="col-md-12 d-flex gap-2">
-								<button type="submit" className="Btn Send btn-sm">
-									<RemixIcons.RiSendPlaneLine />
-									Enregistrer
-								</button>
-							</div>
-						</form>
-					</blockquote>
+					<PleaseNote />
+					{access === 12 || access === 13 && (
+						<Internal
+							Navigate={Navigate}
+							access={access}
+							idStatus={idStatus}
+							CustomSelect={CustomSelect}
+						/>
+					)}
+					{access === 21 || access === 22 || access === 23 && (
+						<External
+							Navigate={Navigate}
+							access={access}
+							idStatus={idStatus}
+							CustomSelect={CustomSelect}
+						/>
+					)}
 				</div>
 			</div>
 		</>

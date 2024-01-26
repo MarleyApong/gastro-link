@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import toast from "react-hot-toast"
 import dateFormat from 'dateformat'
-import logoPlaceholder from "../../assets/img/avatar/logo-placeholder.jpg"
 import HeaderMain from "../../components/HeaderMain"
 import ToggleButton from "../../components/ToggleButton"
 import { Survey } from "../../services/surveyService"
@@ -13,14 +12,15 @@ import { Account } from "../../services/accountService"
 import CustomDataTable from "../../components/CustomDataTable"
 import { Question } from "../../services/questionService"
 import SelectOption from "../../components/SelectOption"
-import { sortOption, statusOption } from "../../data/optionFilter"
+import { sortOption, StatusOption } from "../../data/optionFilter"
 import SearchInput from "../../components/SearchInput"
 import Access from "../../utils/utilsAccess"
 import { Average } from "../../services/average"
 
 const ListSurvey = () => {
    const Navigate = useNavigate()
-   const access = Access
+   const access = Access()
+   const statusOption = StatusOption()
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])
@@ -117,6 +117,7 @@ const ListSurvey = () => {
       const loadData = async () => {
          try {
             setLoading(true)
+
             // RETRIEVE ALL SURVEYS
             const res = await Survey.getAll(order, filter, status, search, limit, page)
             const surveys = res.data.content.data
@@ -124,12 +125,19 @@ const ListSurvey = () => {
             setTotalPages(res.data.content.totalPages)
 
             // RETRIEVE THE AVERAGE FOR EACH SURVEY
-            const averages = await Promise.all(surveys.map(survey => Average.averageSurvey(survey.id)
-               .then((res) => res.data.average)
-            ))
+            const averages = await Promise.all(
+               surveys.map((survey) =>
+                  Average.averageSurvey(survey.id)
+                     .then((res) => res.data.average)
+                     .catch(() => 0) // Si une erreur se produit (par exemple, si la moyenne n'existe pas), définir la moyenne sur 0
+               )
+            )
 
             // ADD THE AVERAGE TO EACH SURVEY OBJECT
-            const surveysWithAverage = surveys.map((survey, index) => ({ ...survey, average: averages[index] }))
+            const surveysWithAverage = surveys.map((survey, index) => ({
+               ...survey,
+               average: averages[index],
+            }))
 
             // UPDATE THE STATE WITH THE ENRICHED DATA
             setData(surveysWithAverage)
@@ -143,20 +151,23 @@ const ListSurvey = () => {
             const detailedSurveyData = detailedSurvey.data.content
 
             // CALCULATE THE AVERAGE FOR EACH QUESTION
-            const questionsWithAverage = detailedSurveyData.Questions.map(async (question) => {
-               const questionAverage = await Average.averageQuestion(question.id)
+            const questionsWithAverage = detailedSurveyData.Questions ? detailedSurveyData.Questions.map(async (question) => {
+               const questionAverage = await Average.averageQuestion(question.id).catch(() => 0)
                return { ...question, average: questionAverage.data.average }
-            })
+            }) : []
 
             // UPDATE 'onData' STATE WITH ENRICHED QUESTION DATA
-            setOneData({ ...detailedSurveyData, Questions: await Promise.all(questionsWithAverage) })
-
+            setOneData({
+               ...detailedSurveyData,
+               Questions: await Promise.all(questionsWithAverage),
+            })
          } catch (err) {
             console.log("Load: ", err)
          } finally {
             setLoading(false)
          }
       }
+
 
       loadData()
    }, [order, filter, search, status, refresh, id, limit, page])
@@ -378,21 +389,11 @@ const ListSurvey = () => {
          name: 'Status',
          cell: (row) => (
             <ToggleButton
-               checked={row.idStatus === 1 ? true : false}
+               checked={row.Status.name === 'actif' ? true : false}
                onChange={(id) => handleToggle(id)}
                id={row.id}
             />
          ),
-         wrap: true,
-      },
-      {
-         name: 'Entreprise',
-         selector: row => row.Company.name,
-         wrap: true,
-      },
-      {
-         name: 'Organisation',
-         selector: row => row.Company.Organization.name,
          wrap: true,
       },
       {
@@ -417,6 +418,32 @@ const ListSurvey = () => {
          )
       },
    ]
+
+   // ADD 'Organisaion' COLUMNS IF USER HAVE ACCESS
+   /*
+      5 -> the position at which elements will be added or removed
+      0 -> existing items to deleted
+   */
+   if (access === 11 || access === 12 || access === 13) {
+      columns.splice(5, 0, {
+         name: 'Organisation',
+         selector: row => row.Company.Organization.name,
+         wrap: true,
+      })
+   }
+
+   // ADD 'Entreprise' COLUMNS IF USER HAVE ACCESS
+   /*
+      4 -> the position at which elements will be added or removed
+      0 -> existing items to deleted
+   */
+   if (access === 11 || access === 12 || access === 13 || access === 23) {
+      columns.splice(4, 0, {
+         name: 'Entreprise',
+         selector: row => row.Company.name,
+         wrap: true,
+      })
+   }
 
    // FILTER SELECT TAG DATA
    const filterOptions = [
@@ -532,27 +559,29 @@ const ListSurvey = () => {
                                     <Button onClick={() => setStateQuestionUpdade(false)} className="Btn Error" title="Retour"><RemixIcons.RiArrowRightLine /></Button>
                                  </div>
                               </form>
-                              <ol>
-                                 {oneData.id &&
-                                    oneData.Questions.map((item, index) => (
-                                       <li key={index + 1} className="mb-2 d-flex align-items-center justify-content-between p-2 shadow list-question">
-                                          <span onClick={() => questionUpdateModal(item.id, item.name)}>
-                                             {index + 1}. {item.name}
-                                          </span>
-                                          <div className="d-flex align-items-center">
-                                             <span className={item.average > 2.5 ? "note Success me-3" : "note Error me-3"}>{item.average}</span>
+                              {oneData.id && oneData.Questions.length > 0 ? (
+                                 <ol>
+                                    {oneData.id &&
+                                       oneData.Questions.map((item, index) => (
+                                          <li key={index + 1} className="mb-2 d-flex align-items-center justify-content-between p-2 shadow list-question">
+                                             <span onClick={() => questionUpdateModal(item.id, item.name)}>
+                                                {index + 1}. {item.name}
+                                             </span>
+                                             <div className="d-flex align-items-center">
+                                                <span className={item.average > 2.5 ? "note Success me-3" : "note Error me-3"}>{item.average}</span>
 
-                                             <button className="Btn Update" onClick={() => Navigate(`/surveys/questions/${item.id}`)} title="détails" >
-                                                <RemixIcons.RiEyeLine />
-                                             </button>
-                                             <button className="Btn Error" onClick={() => deleteQuestion(item.id)} title="Supprimer" >
-                                                <RemixIcons.RiDeleteBin2Line />
-                                             </button>
-                                          </div>
-                                       </li>
-                                    ))
-                                 }
-                              </ol>
+                                                <button className="Btn Update" onClick={() => Navigate(`/surveys/questions/${item.id}`)} title="détails" >
+                                                   <RemixIcons.RiEyeLine />
+                                                </button>
+                                                <button className="Btn Error" onClick={() => deleteQuestion(item.id)} title="Supprimer" >
+                                                   <RemixIcons.RiDeleteBin2Line />
+                                                </button>
+                                             </div>
+                                          </li>
+                                       ))
+                                    }
+                                 </ol>
+                              ) : <span className="d-flex align-items-center justify-content-center">Aucune question disponible</span>}
 
                            </div>
                         </div>

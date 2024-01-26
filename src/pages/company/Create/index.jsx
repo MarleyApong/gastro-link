@@ -7,12 +7,14 @@ import { Company } from "../../../services/companyService"
 import { Organization } from "../../../services/organizationService"
 import CustomSelect from "../../../components/CustomSelect"
 import PleaseNote from "../../../components/PleaseNote"
+import { StatusOption } from "../../../data/optionFilter"
 
 const CreateCompany = () => {
 	const Navigate = useNavigate()
+	const statusOption = StatusOption()
 	const order = 'asc'
 	const filter = 'name'
-	const status = 1
+	const status = 'actif'
 	const search = ''
 	const limit = 10000
 	const page = 0
@@ -25,7 +27,7 @@ const CreateCompany = () => {
 		idStatus: "",
 		name: "",
 		description: "",
-		category: "",
+		category: "restaurant",
 		phone: "",
 		email: "",
 		city: "",
@@ -135,7 +137,7 @@ const CreateCompany = () => {
 
 				<div className="card-body CardBody card">
 					<h5>Entrez les informations concernant votre entreprise.</h5>
-					<PleaseNote/>
+					<PleaseNote />
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form" for>
 							<div className="col-md-6">
@@ -253,9 +255,9 @@ const CreateCompany = () => {
 								<select className="form-control no-focus-outline p-2 custom-select" name="idStatus" id="idStatus" value={company.idStatus} required
 									onChange={handleAdd}
 									autoComplete='off'>
-									<option value=""></option>
-									<option value="1">actif</option>
-									<option value="2">inactif</option>
+									{statusOption.map((status, index) => (
+										<option key={index} value={status.value}>{status.label}</option>
+									))}
 								</select>
 							</div>
 
