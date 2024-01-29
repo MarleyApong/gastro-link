@@ -39,7 +39,7 @@ const Internal = ({ Navigate, idStatus, access, CustomSelect }) => {
 
    // PUSH SELECTED ID OF COMPANY
    survey.idCompany = selectedCompanyValue.value
-   // survey.idStatus = idStatus
+   survey.idStatus = idStatus
 
    // SET ALL VALUE
    const handleAdd = (e) => {
@@ -57,7 +57,6 @@ const Internal = ({ Navigate, idStatus, access, CustomSelect }) => {
    }, [order, filter, status, search, limit, page])
 
    useEffect(() => {
-      const status = 'actif'
       Company.getCompaniesByOrganization(idOrganization, status)
          .then((res) => {
             setCompany(res.data.content)
@@ -71,8 +70,7 @@ const Internal = ({ Navigate, idStatus, access, CustomSelect }) => {
       if (
          selectedOrganizationValue === false
          || survey.idCompany === ""
-         || survey.name === ""
-         || survey.idStatus === "") {
+         || survey.name === "") {
          toast.error("Les champs marqués par une etoile sont obligations !")
       }
       else {

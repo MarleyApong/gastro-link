@@ -27,7 +27,8 @@
     "react-select": "^5.8.0",
     "react-spinners": "^0.13.8",
     "recharts": "^2.10.3",
-    "sass": "^1.69.5"
+    "sass": "^1.69.5",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

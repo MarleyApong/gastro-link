@@ -13,7 +13,6 @@ const CreateOrganization = () => {
 	const Navigate = useNavigate()
 	const statusOption = StatusOption()
 	const [file, setFile] = useState('')
-	const [statusData, setStatusData] = useState([])
 
 	// ORGANIZATION OWNERSHIP
 	const [organization, setOrganization] = useState({
@@ -55,10 +54,10 @@ const CreateOrganization = () => {
 		else {
 			const formData = new FormData();
 			Object.keys(organization).forEach((key) => {
-				formData.append(key, organization[key]);
-			});
+				formData.append(key, organization[key])
+			})
 			if (file) {
-				formData.append('picture', file);
+				formData.append('picture', file)
 			}
 
 			Organization.add(formData)

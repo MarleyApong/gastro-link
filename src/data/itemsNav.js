@@ -58,6 +58,23 @@ export const ItemsInternalAdmin = [
         ]
     },
     {
+        Icon: RemixIcons.RiSurveyLine,
+        Display: "Gestion",
+        Link: "/managers",
+        subNav: [
+            {
+                Icon: RemixIcons.RiAddLine,
+                Display: "produits",
+                Link: "/managers/products",
+            },
+            {
+                Icon: RemixIcons.RiListRadio,
+                Display: "Tables",
+                Link: "/managers/tables",
+            }
+        ]
+    },
+    {
         Icon: RemixIcons.RiUserHeartLine,
         Display: "Clients",
         Link: "/customers",

@@ -23,12 +23,18 @@ const Login = () => {
          setWait(false)
          try {
             const res = await Authentification.login(email, password)
+            console.log("res", res);
+            const token = res.data.token
+            const idUser = res.data.user.id
+            const role = res.data.user.Role.id
+            const env = res.data.user.Env.id
+            const idStatus = res.data.user.Status.id
             setWait(true)
-            if (res.data.status.name !== 'actif') {
+            if (res.data.user.Status.name !== 'actif') {
                toast.error("Accès non authorisé !")
             }
             else {
-               Account.saveToken(res.data.token, res.data.id, res.data.role.id, res.data.env.id, res.data.status.id)
+               Account.saveToken(token, idUser, role, env, idStatus)
                Navigate("/dashboard")
             }
 
@@ -59,6 +65,7 @@ const Login = () => {
                }
             }
             else {
+               console.log("err", err);
                toast.error("Connexion au serveur a échoué !")
             }
          }

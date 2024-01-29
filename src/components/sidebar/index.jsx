@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import * as RemixIcons from "react-icons/ri"
 import SubMenu from './SubMenu'
 import { ItemsExternalAdmin, ItemsExternalSuperAdmin, ItemsExternalUser, ItemsInternalAdmin, ItemsInternalUser } from '../../data/itemsNav'
 import avatar from '../../assets/img/avatar/Marley.jpg'
 import Access from '../../utils/utilsAccess'
+import logoPlaceholder from '../../assets/img/avatar/user.jpg'
 import { Account } from '../../services/accountService'
+import { User } from '../../services/userService'
 import './sidebar.scss'
 
 const Sidebar = ({ profil, setProfil, sidebar }) => {
     const access = Access()
     const Navigate = useNavigate()
+    const idUser = localStorage.getItem('id')
+
+    const [user, setUser] = useState([])
 
     const logout = (e) => {
         e.preventDefault()
@@ -20,15 +25,58 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
         }
     }
 
+    useEffect(() => {
+        const loadUser = async () => {
+            console.log("id", idUser);
+            const res = await User.getOrganizationCompany(idUser)
+            setUser(res.data.content)
+        }
+
+        loadUser()
+    }, [idUser])
+
+    // START PROCESSING IMAGE RENDERING =======================================================
+    const getImageToShow = (access, user, logoPlaceholder) => {
+        let imageToShow = logoPlaceholder
+
+        if (access === 23) {
+            if (user.Company.Organization.picture) {
+                imageToShow = 'http://localhost:8000' + user.Company.Organization.picture
+            }
+        }
+        else if (access === 22) {
+            if (user.Company.picture) {
+                imageToShow = 'http://localhost:8000' + user.Company.picture
+            }
+        }
+
+        return imageToShow
+    }
+
+    // SIMPLIFICATION OF THE FUNCTION FOR DISPLAY
+    const imageToShow = getImageToShow(access, user, logoPlaceholder)
+    // END PROCESSING IMAGE RENDERING =======================================================
+
+    // SUBTRING NAME IF IS LONGEST
+    const substringName = (user) => {
+        if (user.User) {
+            const name = `${user.User.firstName} ${user.User.lastName}`
+            if (name.length > 25) {
+                return name.substring(0, 24) + '.'
+            }
+            return name
+        }
+    }
+
     return (
         <aside className={sidebar ? "SidebarMin" : "Sidebar"}>
             <div className="User" onClick={() => setProfil(!profil)}>
                 <div className="Avatar">
-                    <img src={avatar} alt="" />
+                    <img src={imageToShow} alt="" />
                 </div>
                 <div className="InfoUser">
-                    <span>Marley Apong</span>
-                    <small>Manager</small>
+                    <span>{substringName(user)}</span>
+                    <small>{user.User && user.User.Role.name}</small>
                 </div>
                 {profil ? <RemixIcons.RiArrowDropDownLine className='IconText' /> : <RemixIcons.RiArrowDropRightLine className='IconText' />}
             </div>
@@ -49,10 +97,10 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
                                 }) :
                                     access === 22 ? ItemsExternalAdmin.map((item, index) => {
                                         return <SubMenu item={item} key={index} />
-                                    }) : 
-                                    access === 23 ? ItemsExternalSuperAdmin.map((item, index) => {
-                                        return <SubMenu item={item} key={index} />
-                                    }) : ""
+                                    }) :
+                                        access === 23 ? ItemsExternalSuperAdmin.map((item, index) => {
+                                            return <SubMenu item={item} key={index} />
+                                        }) : ""
                 }
 
                 <NavLink to={'/auth/login'} onClick={logout}>

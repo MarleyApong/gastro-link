@@ -88,12 +88,25 @@ const ListUser = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
-            setLoading(true)
-            let res = await User.getAll(order, filter, status, role, env, search, limit, page)
-            setdata(res.data.content.data)
+            if (access === 13) {
+               setLoading(true)
+               let res = await User.getAll(order, filter, status, role, env, search, limit, page)
+               setdata(res.data.content.data)
 
-            res = await User.getCount()
-            setAllCount(res.data.content.totalElements)
+               res = await User.getCount()
+               setAllCount(res.data.content.totalElements)
+            }
+            else if (access === 23) {
+               // GET ID OF STATUS
+               const objetFounded = envOption.filter((item, _) => item.label === 'external').map((env, _) => env.value)
+               if (objetFounded) {
+                  setEnv(objetFounded.toString())
+               }
+               setLoading(true)
+               let res = await User.getAll(order, filter, status, role, env, search, limit, page)
+               setdata(res.data.content.data)
+               setAllCount(res.data.content.totalElements)
+            }
 
          } catch (err) {
             console.log("Load: ", err)
@@ -103,7 +116,7 @@ const ListUser = () => {
       }
 
       loadData()
-   }, [order, filter, search, status, role, env, refresh])
+   }, [access, order, filter, search, status, role, env, refresh])
 
    // GET ONE DATA API
    useEffect(() => {
@@ -114,8 +127,6 @@ const ListUser = () => {
       User.getOrganizationCompany(id)
          .then((res) => setAffiliation(res.data))
    }, [id, refresh])
-
-   console.log("aff", affiliation)
 
    // CHANGE STATUS WITH TOGGLE BUTTON
    const handleToggle = (idRow) => {
@@ -199,10 +210,6 @@ const ListUser = () => {
       setLimit(newLimit)
    }
 
-   // FILTER THE DATA TO RETRIEVE ONLY THOSE WITH THE 'SUPER ADMIN' ROLE.
-   const filteredData = data.filter(row => row.idRole === 3)
-   const countFilteredData = filteredData.length
-
    // FORMATTING JSON DATA TO MAKE IT MORE READABLE
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>
 
@@ -226,11 +233,6 @@ const ListUser = () => {
       {
          name: 'Email',
          selector: row => row.email,
-         wrap: true,
-      },
-      {
-         name: 'Env.',
-         selector: row => row.Env && row.Env.name === 'internal' ? "interne" : "externe",
          wrap: true,
       },
       {
@@ -288,9 +290,17 @@ const ListUser = () => {
       })
    }
 
+   if (access === 13) {
+      columns.splice(5, 0, {
+         name: 'Env.',
+         selector: row => row.Env && row.Env.name === 'internal' ? "interne" : "externe",
+         wrap: true,
+      })
+   }
+
    return (
       <div>
-         <HeaderMain total={access === 13 ? allCount : allCount - countFilteredData} />
+         <HeaderMain total={allCount} />
 
          <div className="OptionFilter">
             <SelectOption
@@ -320,14 +330,16 @@ const ListUser = () => {
                options={statusOption}
             />
 
-            <SelectOption
-               label="Env."
-               id="env"
-               name={env}
-               value={env}
-               onChange={handleEnvChange}
-               options={envOption}
-            />
+            {access === 13 && (
+               <SelectOption
+                  label="Env."
+                  id="env"
+                  name={env}
+                  value={env}
+                  onChange={handleEnvChange}
+                  options={envOption}
+               />
+            )}
 
             <SelectOption
                label="Rôle"
@@ -350,7 +362,7 @@ const ListUser = () => {
          <CustomDataTable
             loading={loading}
             columns={columns}
-            data={access === 13 ? data : filteredData}
+            data={data}
             ExpandedComponent={ExpandedComponent}
             paginationPerPage={limit}
             paginationTotalRows={allCount}
@@ -387,7 +399,7 @@ const ListUser = () => {
                               <p className="mb-2"><span className="fw-bold">Prénom :</span> {oneData.lastName}</p>
                               <p className="mb-2"><span className="fw-bold">Email :</span> {oneData.email}</p>
                               <p className="mb-2"><span className="fw-bold">Téléphone :</span> {oneData.phone}</p>
-                              <p className="mb-2"><span className="fw-bold">Environnement :</span> {oneData.Env && oneData.Env.name  === 'internal' ? "interne" : "externe"}</p>
+                              <p className="mb-2"><span className="fw-bold">Environnement :</span> {oneData.Env && oneData.Env.name === 'internal' ? "interne" : "externe"}</p>
                               <p className="mb-2"><span className="fw-bold">Rôle :</span> {oneData.Role && oneData.Role.name}</p>
                               <p className="mb-2"><span className="fw-bold">Statut :</span> {oneData.Status && oneData.Status.name}</p>
                               <p className="mb-2"><span className="fw-bold">Date de création :</span> {oneData.id && dateFormat(new Date(oneData.createdAt), 'dd-mm-yyyy HH:MM:ss')}</p>

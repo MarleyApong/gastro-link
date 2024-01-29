@@ -21,7 +21,7 @@ const Dashboard = () => {
       setAllCount(res.data.content)
       setCompanies(res.data.content.data)
 
-      res = await Survey.getAll()
+      res = await Survey.getCount()
       setSurveys(res.data.content)
    }
 

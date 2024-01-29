@@ -2,6 +2,10 @@ import Axios from "./callerService"
 
 const route = 'surveys'
 
+const getCount = () => {
+   return Axios.get(`/${route}`)
+}
+
 const getAll = (order, filter, status, search, limit, page) => {
    return Axios.get(`/${route}?limit=${limit}&page=${page}&sort=${order}&status=${status}&filter=${filter}&k=${search}`)
 }
@@ -27,6 +31,7 @@ const deleted = (id) => {
 }
 
 export const Survey = {
+   getCount,
    getAll,
    getOne,
    add,

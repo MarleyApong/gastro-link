@@ -15,6 +15,7 @@ const getOne = (id) => {
 }
 
 const getOrganizationCompany = (id) => {
+   console.log("tata:", id);
    return Axios.get(`/${route}/organization-company/${id}`)
 }
 
