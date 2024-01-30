@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react"
 import * as RemixIcons from "react-icons/ri"
 import { AiOutlinePhone, AiOutlineFieldNumber } from 'react-icons/ai'
+import { FaCity } from 'react-icons/fa'
 import dateFormat from 'dateformat'
 import { useNavigate } from "react-router-dom"
-import { FaCity } from 'react-icons/fa'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import toast from "react-hot-toast"

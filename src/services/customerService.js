@@ -10,6 +10,10 @@ const getOne = (id) => {
    return Axios.get(`/${route}/${id}`)
 }
 
+const update = (id, data) => {
+   return Axios.patch(`/${route}/${id}`, data)
+}
+
 const deleted = (id) => {
    return Axios.delete(`/${route}/${id}`)
 }
@@ -17,5 +21,6 @@ const deleted = (id) => {
 export const Customer = {
    getAll,
    getOne,
+   update,
    deleted
 }

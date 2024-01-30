@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import toast from "react-hot-toast"
 import dateFormat from 'dateformat'
-import logoPlaceholder from "../../assets/img/avatar/user.jpg"
+import logoPlaceholder from "../../assets/img/avatar/user-placeholder.jpg"
 import HeaderMain from "../../components/HeaderMain"
 import ToggleButton from "../../components/ToggleButton"
 import { Account } from "../../services/accountService"
@@ -406,13 +406,13 @@ const ListUser = () => {
                               <p className="mb-2"><span className="fw-bold">Date de modif :</span> {oneData.id && dateFormat(new Date(oneData.updatedAt), 'dd-mm-yyyy HH:MM:ss')}</p>
                            </div>
                         </div>
-                        <div className="">
+                        <>
                            <h5 className="mb-3 mt-3 p-2 shadow">Affiliation</h5>
                            <div className="ps-4">
                               <p className="mb-2"><span className="fw-bold">Organisation :</span> {affiliation.organization || 'Aucune'}</p>
                               <p className="mb-2"><span className="fw-bold">Entreprise :</span> {affiliation.company || 'Aucune'}</p>
                            </div>
-                        </div>
+                        </>
                      </div>
                   </div>
                </div>

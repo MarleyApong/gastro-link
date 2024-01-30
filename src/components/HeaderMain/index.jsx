@@ -20,8 +20,11 @@ const HeaderMain = ({ total }) => {
         else if (urlLink.includes('organizations/new') && !urlLink.includes('update')) {
             return "ajout organisation"
         }
-        else if (urlLink.includes('surveys') && !urlLink.includes('new')) {
+        else if (urlLink.includes('surveys') && !urlLink.includes('new') && !urlLink.includes('questions')) {
             return "liste enquêtes"
+        }
+        else if (urlLink.includes('surveys') && !urlLink.includes('new') && urlLink.includes('questions')) {
+            return "liste notes"
         }
         else if (urlLink.includes('surveys/new')) {
             return "ajout enquête"
@@ -46,6 +49,15 @@ const HeaderMain = ({ total }) => {
         }
         else if (urlLink.includes('settings')) {
             return "paramètres"
+        }
+        else if (urlLink.includes('managers') && !urlLink.includes('products')) {
+            return "managers"
+        }
+        else if (urlLink.includes('managers') && urlLink.includes('products')) {
+            return "liste produits"
+        }
+        else if (urlLink.includes('managers') && urlLink.includes('tables')) {
+            return "liste Tables"
         }
     }
     return (

@@ -3,9 +3,11 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import * as RemixIcons from "react-icons/ri"
 import SubMenu from './SubMenu'
 import { ItemsExternalAdmin, ItemsExternalSuperAdmin, ItemsExternalUser, ItemsInternalAdmin, ItemsInternalUser } from '../../data/itemsNav'
-import avatar from '../../assets/img/avatar/Marley.jpg'
 import Access from '../../utils/utilsAccess'
 import logoPlaceholder from '../../assets/img/avatar/user.jpg'
+import superAdmin from '../../assets/img/avatar/super admin.jpg'
+import admin from '../../assets/img/avatar/admin.jpg'
+import server from '../../assets/img/avatar/server.jpg'
 import { Account } from '../../services/accountService'
 import { User } from '../../services/userService'
 import './sidebar.scss'
@@ -27,7 +29,6 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
 
     useEffect(() => {
         const loadUser = async () => {
-            console.log("id", idUser);
             const res = await User.getOrganizationCompany(idUser)
             setUser(res.data.content)
         }
@@ -48,6 +49,12 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
             if (user.Company.picture) {
                 imageToShow = 'http://localhost:8000' + user.Company.picture
             }
+        }
+        else if (access === 13) {
+            imageToShow = superAdmin
+        }
+        else if (access === 12) {
+            imageToShow = admin
         }
 
         return imageToShow

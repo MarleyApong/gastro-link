@@ -63,7 +63,7 @@ const ListNote = () => {
       }
 
       loadData()
-   }, [order, filter, search, refresh, id, loading])
+   }, [order, filter, search, id, loading])
 
    // SYSTEM PAGINATION
    // const handlePageChange = (newPage) => {

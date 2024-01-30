@@ -2,7 +2,7 @@ import * as RemixIcons from "react-icons/ri"
 
 export const ItemsInternalAdmin = [
     {
-        Icon: RemixIcons.RiHomeOfficeLine,
+        Icon: RemixIcons.RiDashboardLine,
         Display: "Tableau de bord",
         Link: "/dashboard"
     },
@@ -58,17 +58,17 @@ export const ItemsInternalAdmin = [
         ]
     },
     {
-        Icon: RemixIcons.RiSurveyLine,
+        Icon: RemixIcons.RiHomeOfficeLine,
         Display: "Gestion",
         Link: "/managers",
         subNav: [
             {
-                Icon: RemixIcons.RiAddLine,
+                Icon: RemixIcons.RiPantoneLine,
                 Display: "produits",
                 Link: "/managers/products",
             },
             {
-                Icon: RemixIcons.RiListRadio,
+                Icon: RemixIcons.RiKeynoteLine,
                 Display: "Tables",
                 Link: "/managers/tables",
             }
@@ -106,7 +106,7 @@ export const ItemsInternalAdmin = [
 
 export const ItemsInternalUser = [
     {
-        Icon: RemixIcons.RiHomeOfficeLine,
+        Icon: RemixIcons.RiDashboardLine,
         Display: "Tableau de bord",
         Link: "/dashboard"
     },
@@ -148,7 +148,7 @@ export const ItemsInternalUser = [
 
 export const ItemsExternalSuperAdmin = [
     {
-        Icon: RemixIcons.RiHomeOfficeLine,
+        Icon: RemixIcons.RiDashboardLine,
         Display: "Tableau de bord",
         Link: "/dashboard"
     },

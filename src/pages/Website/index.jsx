@@ -9,6 +9,7 @@ import { Company } from '../../services/companyService'
 import { Answer } from '../../services/answersService'
 import toast from 'react-hot-toast'
 import { v4 as uuid } from 'uuid'
+import { Customer } from '../../services/customerService'
 
 const Website = () => {
     const [data, setData] = useState([])
@@ -18,7 +19,7 @@ const Website = () => {
     const [send, setSend] = useState(false)
     const [stateMsg, setStateMsg] = useState(false)
     const [name, setName] = useState('')
-    const [number, setNumber] = useState('')
+    const [phone, setPhone] = useState('')
 
     const { id } = useParams()
     const currentHour = new Date().getHours()
@@ -78,11 +79,26 @@ const Website = () => {
 
     }
 
-    console.log("res", responses)
+    const idCustomer2 = responses.length > 0 ? responses[0].idCustomer : null
 
     const handleSubmitInfo = (e) => {
         e.preventDefault()
-
+        const data = {
+            name: name,
+            phone: phone
+        }
+        
+        toast.promise(
+            Customer.update(idCustomer2, data)
+                .then((res) => {
+                    setSend(false)
+                }),
+            {
+                loading: 'Envoi en cours...',
+                success: <span>Cher {name}, nous vous remercions pour votre soutien !</span>,
+                error: <span>Envoi échouée !</span>,
+            }
+        )
     }
 
     return (
@@ -115,7 +131,7 @@ const Website = () => {
                             send === false ?
                                 <div className="First">
 
-                                    <form onSubmit={(e) => e.preventDefault()}  className="Body">
+                                    <form onSubmit={(e) => e.preventDefault()} className="Body">
                                         <p className="Name-Survey">Enquête du jour, {data.name && data.surveys[0].name.toUpperCase()}</p>
                                         <p className='details'>Dans l'optique d'ameliorer la qualite de nos services et de toujours satisfaire, nous aimerions que vous nous notez, si possible laisser votre avis les questions ci-dessous</p>
                                         <div className="Survey-Cont">
@@ -203,12 +219,12 @@ const Website = () => {
                                         </div>
                                         <div className="Quest-Content">
                                             <span>Aimeriez-vous, que nous vous contactons ?</span>
-                                            <form  className='Form-Subscribe'>
-                                                <input type="text" placeholder='Votre nom' />
-                                                <input type="text" placeholder='Votre numéro de téléphone' />
+                                            <form onSubmit={(e) => e.preventDefault()} className='Form-Subscribe'>
+                                                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder='Votre nom' />
+                                                <input type="number" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder='Votre numéro de téléphone' />
                                                 <div className="Nav-Step">
-                                                    <button className='Btn Error'>Non</button>
-                                                    <button className='Btn Send'>Envoyer <RemixIcons.RiSendPlaneLine size={18} /></button>
+                                                    <button onClick={() => window.location.reload()} className='Btn Error'>Non</button>
+                                                    <button onClick={handleSubmitInfo} className='Btn Send'>Envoyer <RemixIcons.RiSendPlaneLine size={18} /></button>
                                                 </div>
                                             </form>
                                         </div>

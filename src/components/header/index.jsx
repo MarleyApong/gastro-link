@@ -17,6 +17,7 @@ const Header = ({ sidebar, setSidebar }) => {
     const newCompany = () => Navigate('/companies/new')
     const newSurveys = () => Navigate('/surveys/new')
     const newUsers = () => Navigate('/users/new')
+    const newProducts = () => Navigate('/managers/products/new')
 
     useEffect(() => {
 
@@ -49,6 +50,8 @@ const Header = ({ sidebar, setSidebar }) => {
                                                 <small onClick={newSurveys}>Nouvelle Enquête</small> :
                                                 location.pathname.includes('users') && !location.pathname.includes('new') ?
                                                     <small onClick={newUsers}>Nouveau utilisateur</small> :
+                                                location.pathname.includes('managers') && location.pathname.includes('products') ?
+                                                    <small onClick={newProducts}>Ajouter un produit</small> :
                                                     <small onClick={newSurveys}>Nouvelle Enquête</small>
                                 }
                             </button> :

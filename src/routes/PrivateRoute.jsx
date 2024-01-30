@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Dashboard, Layout, ListCompany, ListOrganization, ListSurvey, CreateCompany, CreateOrganization, CreateSurvey, UpdateCompany, UpdateOrganization, ListCustomer, ListUser, CreateUser, UpdateUser, Settings, ListNote, Products, Tables } from '../pages'
+import { Dashboard, Layout, ListCompany, ListOrganization, ListSurvey, CreateCompany, CreateOrganization, CreateSurvey, UpdateCompany, UpdateOrganization, ListCustomer, ListUser, CreateUser, UpdateUser, Settings, ListNote, Products, Tables, CreateProducts } from '../pages'
 import Profil from '../components/Profil'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
@@ -49,6 +49,7 @@ const PrivateRoute = () => {
                      <Route path='/users/list' element={<ListUser />} />
                      <Route path='/users/update/:id' element={<UpdateUser />} />
                      <Route path='/settings' element={<Settings />} />
+                     <Route path='/managers/products/new' element={<CreateProducts />} />
                      <Route path='/managers/products' element={<Products />} />
                      <Route path='/managers/tables' element={<Tables />} />
                      {/*<Route path='*' element={<Erreur404 />} /> */}
