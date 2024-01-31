@@ -255,7 +255,7 @@ const ListUser = () => {
                <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/users/update/${row.id}`)}>
                   <RemixIcons.RiPenNibLine fontSize={15} />
                </button>
-               {access === 13 && row.idRole !== 3 && <button className="Btn Error" title="Supprimer" onClick={() => deleteUser(row.id)}>
+               {access === 13 && row.Role.name !== 'super admin' && <button className="Btn Error" title="Supprimer" onClick={() => deleteUser(row.id)}>
                   <RemixIcons.RiDeleteBin2Line fontSize={15} />
                </button>}
             </div>

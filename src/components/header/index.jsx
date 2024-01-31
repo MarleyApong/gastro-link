@@ -21,7 +21,7 @@ const Header = ({ sidebar, setSidebar }) => {
 
     useEffect(() => {
 
-    },[])
+    }, [])
 
     return (
         <header>
@@ -37,8 +37,8 @@ const Header = ({ sidebar, setSidebar }) => {
             </div> */}
             <div className="Right">
                 <div className="Not-SM">
-                    {
-                        access === 12 || access === 13 ?
+                    
+                        {/* // access === 12 || access === 13 ? */}
                             <button className='Btn Success'>
                                 <RemixIcons.RiAddLine />
                                 {
@@ -50,22 +50,26 @@ const Header = ({ sidebar, setSidebar }) => {
                                                 <small onClick={newSurveys}>Nouvelle Enquête</small> :
                                                 location.pathname.includes('users') && !location.pathname.includes('new') ?
                                                     <small onClick={newUsers}>Nouveau utilisateur</small> :
-                                                location.pathname.includes('managers') && location.pathname.includes('products') ?
-                                                    <small onClick={newProducts}>Ajouter un produit</small> :
-                                                    <small onClick={newSurveys}>Nouvelle Enquête</small>
+                                                    location.pathname.includes('managers') && location.pathname.includes('products') ?
+                                                        <small onClick={newProducts}>Ajouter un produit</small> :
+                                                        <small onClick={newSurveys}>Nouvelle Enquête</small>
                                 }
-                            </button> :
+                            </button> 
+                            {/* :
                             access === 11 ?
                                 "" :
-                                access === 22 ?
+                                access === 23 ||  access === 22 ?
                                     <button className='Btn Success'>
                                         <RemixIcons.RiAddLine />
-                                        <small>Nouvelle Enquête</small>
+                                        {location.pathname.includes('managers') && location.pathname.includes('products') ?
+                                            <small onClick={newProducts}>Ajouter un produit</small> :
+                                            <small onClick={newSurveys}>Nouvelle Enquête</small>
+                                        }
                                     </button> :
                                     access === 21 ?
-                                        "" : ""
+                                        "" : "" */}
 
-                    }
+                    
 
                     <div className="NotificationIcon">
                         <RemixIcons.RiSunLine />

@@ -4,6 +4,7 @@ import { Dashboard, Layout, ListCompany, ListOrganization, ListSurvey, CreateCom
 import Profil from '../components/Profil'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
+import UpdateProduct from '../pages/Managers/Products/Update'
 // import Erreur404 from '../_util/Erreur404'
 
 const PrivateRoute = () => {
@@ -50,6 +51,7 @@ const PrivateRoute = () => {
                      <Route path='/users/update/:id' element={<UpdateUser />} />
                      <Route path='/settings' element={<Settings />} />
                      <Route path='/managers/products/new' element={<CreateProducts />} />
+                     <Route path='/managers/products/update/:id' element={<UpdateProduct />} />
                      <Route path='/managers/products' element={<Products />} />
                      <Route path='/managers/tables' element={<Tables />} />
                      {/*<Route path='*' element={<Erreur404 />} /> */}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
@@ -6,7 +6,6 @@ import { Organization } from "../../../services/organizationService"
 import { useNavigate } from "react-router-dom"
 import { Account } from "../../../services/accountService"
 import PleaseNote from "../../../components/PleaseNote"
-import { Status } from "../../../services/statusService"
 import { StatusOption } from "../../../data/optionFilter"
 
 const CreateOrganization = () => {
@@ -35,8 +34,8 @@ const CreateOrganization = () => {
 
 	// CHOISE PICTURE
 	const handleFileChange = (e) => {
-		const selectedFile = e.target.files[0];
-		setFile(selectedFile);
+		const selectedFile = e.target.files[0]
+		setFile(selectedFile)
 	}
 
 	// ADD ORGANIZATION
@@ -52,7 +51,7 @@ const CreateOrganization = () => {
 			toast.error("Les champs marqués par une etoile sont obligations !")
 		}
 		else {
-			const formData = new FormData();
+			const formData = new FormData()
 			Object.keys(organization).forEach((key) => {
 				formData.append(key, organization[key])
 			})

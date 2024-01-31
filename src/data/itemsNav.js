@@ -187,6 +187,23 @@ export const ItemsExternalSuperAdmin = [
         ]
     },
     {
+        Icon: RemixIcons.RiHomeOfficeLine,
+        Display: "Gestion",
+        Link: "/managers",
+        subNav: [
+            {
+                Icon: RemixIcons.RiPantoneLine,
+                Display: "produits",
+                Link: "/managers/products",
+            },
+            {
+                Icon: RemixIcons.RiKeynoteLine,
+                Display: "Tables",
+                Link: "/managers/tables",
+            }
+        ]
+    },
+    {
         Icon: RemixIcons.RiUserHeartLine,
         Display: "Clients",
         Link: "/customers",
@@ -243,6 +260,23 @@ export const ItemsExternalAdmin = [
         Icon: RemixIcons.RiUserHeartLine,
         Display: "Clients",
         Link: "/customer",
+    },
+    {
+        Icon: RemixIcons.RiHomeOfficeLine,
+        Display: "Gestion",
+        Link: "/managers",
+        subNav: [
+            {
+                Icon: RemixIcons.RiPantoneLine,
+                Display: "produits",
+                Link: "/managers/products",
+            },
+            {
+                Icon: RemixIcons.RiKeynoteLine,
+                Display: "Tables",
+                Link: "/managers/tables",
+            }
+        ]
     },
     {
         Icon: RemixIcons.RiSoundModuleLine,
