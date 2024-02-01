@@ -15,9 +15,10 @@ const Header = ({ sidebar, setSidebar }) => {
 
     const newOrganization = () => Navigate('/organizations/new')
     const newCompany = () => Navigate('/companies/new')
-    const newSurveys = () => Navigate('/surveys/new')
-    const newUsers = () => Navigate('/users/new')
-    const newProducts = () => Navigate('/managers/products/new')
+    const newSurvey = () => Navigate('/surveys/new')
+    const newUser = () => Navigate('/users/new')
+    const newProduct = () => Navigate('/managers/products/new')
+    const newTable = () => Navigate('/managers/tables/new')
 
     useEffect(() => {
 
@@ -47,12 +48,14 @@ const Header = ({ sidebar, setSidebar }) => {
                                         location.pathname.includes('companies') && !location.pathname.includes('new') ?
                                             <small onClick={newCompany}>Nouvelle Entreprise</small> :
                                             location.pathname.includes('surveys') && !location.pathname.includes('new') ?
-                                                <small onClick={newSurveys}>Nouvelle Enquête</small> :
+                                                <small onClick={newSurvey}>Nouvelle Enquête</small> :
                                                 location.pathname.includes('users') && !location.pathname.includes('new') ?
-                                                    <small onClick={newUsers}>Nouveau utilisateur</small> :
+                                                    <small onClick={newUser}>Nouveau utilisateur</small> :
                                                     location.pathname.includes('managers') && location.pathname.includes('products') ?
-                                                        <small onClick={newProducts}>Ajouter un produit</small> :
-                                                        <small onClick={newSurveys}>Nouvelle Enquête</small>
+                                                        <small onClick={newProduct}>Ajouter un produit</small> :
+                                                    location.pathname.includes('managers') && location.pathname.includes('tables') ?
+                                                        <small onClick={newTable}>Ajouter une table</small> :
+                                                        <small onClick={newSurvey}>Nouvelle Enquête</small>
                                 }
                             </button> 
                             {/* :

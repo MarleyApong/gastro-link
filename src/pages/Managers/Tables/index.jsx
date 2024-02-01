@@ -5,14 +5,14 @@ import Modal from 'react-bootstrap/Modal'
 import HeaderMain from '../../../components/HeaderMain'
 import SelectOption from '../../../components/SelectOption'
 import SearchInput from '../../../components/SearchInput'
-import logoPlaceholder from "../../../assets/img/avatar/product.jpg"
+import logoPlaceholder from "../../../assets/img/avatar/table.jpg"
 import { sortOption } from "../../../data/optionFilter"
 import CustomDataTable from "../../../components/CustomDataTable"
-import { Product } from "../../../services/productService"
 import dateFormat from "dateformat"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import Access from "../../../utils/utilsAccess"
+import { Table } from "../../../services/tableService"
 
 const Tables = () => {
    const Navigate = useNavigate()
@@ -23,7 +23,7 @@ const Tables = () => {
    const [oneData, setOneData] = useState([])
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
-   const [filter, setFilter] = useState('name')
+   const [filter, setFilter] = useState('tableNumber')
    const [search, setSearch] = useState('')
    const [limit, setLimit] = useState(10)
    const [page, setPage] = useState(1)
@@ -32,7 +32,6 @@ const Tables = () => {
    const [showDetailCompanyModal, setshowDetailCompanyModal] = useState(false)
    const [refresh, setRefresh] = useState(0)
    const [allCount, setAllCount] = useState(0)
-   const [getImage, setGetImage] = useState('')
 
    // RECOVERING THE ID OF THE SELECTED LINE
    const patch = (itemId) => {
@@ -43,7 +42,6 @@ const Tables = () => {
    // CLOSE THE TEMPLATE MODAL
    const hideModal = () => {
       setshowDetailCompanyModal(false)
-      setGetImage('')
       setRefresh((current) => current + 1)
    }
 
@@ -67,13 +65,13 @@ const Tables = () => {
       const loadData = async () => {
          try {
             if (access === 23 || access === 22) {
-               const res = await Product.getProductsByUser(idUser, order, filter, search, limit, page)
+               const res = await Table.getTablesByUser(idUser, order, filter, search, limit, page)
                setData(res.data.content.data)
                setAllCount(res.data.content.totalElements)
                setTotalPages(res.data.content.totalPages)
             }
             else if (access === 12 || access === 13) {
-               const res = await Product.getAll(order, filter, search, limit, page)
+               const res = await Table.getAll(order, filter, search, limit, page)
                setData(res.data.content.data)
                setAllCount(res.data.content.totalElements)
                setTotalPages(res.data.content.totalPages)
@@ -92,93 +90,17 @@ const Tables = () => {
 
    // FETCH ONE DATA
    useEffect(() => {
-      Product.getOne(id)
+      Table.getOne(id)
          .then((res) => {
             setOneData(res.data.content)
          })
    }, [id, refresh])
 
-   // START LOGO PROCESSING PART =======================================================
-   const uploadPicture = () => {
-      if (getImage) {
-         const formData = new FormData()
-         formData.append('picture', getImage)
-         Product.changePicture(id, formData)
-            .then((res) => {
-               toast.success("Image importée avec succès !")
-               setRefresh((current) => current + 1)
-               setGetImage('')
-            })
-            .catch((err) => {
-               console.error("Erreur lors de la mise à jour du statut :", err)
-               setRefresh((current) => current + 1)
-               if (err) {
-                  if (err.response.data.error.name === "MissingData") {
-                     toast.error("Erreur, données incomplètes !")
-                  }
-                  else if (err.response.data.error.name === "MissingParams") {
-                     toast.error("Erreur, Paramètres incomplètes !")
-                  }
-                  else if (err.response.data.error.name === "BadRequest") {
-                     toast.error("Erreur, mauvaise requête !")
-                  }
-                  else if (err.response.data.error.name === "LIMIT_UNEXPECTED_FILE") {
-                     toast.error("Erreur, l'image doit être < 2 Mo !")
-                  }
-                  else {
-                     toast.error("Erreur interne du serveur !")
-                  }
-               }
-            })
-
-      }
-      else {
-         toast.error("Selectionner une photo pour continuer !")
-      }
-   }
-   const imageRef = useRef(null)
-   const imageTypes = ['image/png', 'image/jpg', 'image/jpeg']
-   const isImageEmpty = getImage === '' && imageTypes.includes(getImage.type)
-   const hasValidImage = getImage && imageTypes.includes(getImage.type)
-
-   let buttonLabel = 'Choisir logo'
-   let buttonAction = () => imageRef.current.click()
-   let buttonClass = 'Btn Send me-2'
-
-   if (hasValidImage) {
-      buttonLabel = 'Modifier logo'
-      buttonClass = 'Btn Update me-2'
-      buttonAction = uploadPicture
-   }
-   else if (isImageEmpty) {
-      buttonAction = () => imageRef.current.click()
-   }
-   // END LOGO PROCESSING PART =======================================================
-
-   // START PROCESSING IMAGE RENDERING =======================================================
-   const getImageToShow = (getImage, oneData, imageTypes, logoPlaceholder) => {
-      let imageToShow = logoPlaceholder
-
-      if (getImage === '' && oneData.picture) {
-         imageToShow = 'http://localhost:8000' + oneData.picture
-      } else if (getImage === '' && oneData.picture === '') {
-         imageToShow = logoPlaceholder
-      } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
-         imageToShow = URL.createObjectURL(getImage)
-      }
-
-      return imageToShow
-   }
-
-   // SIMPLIFICATION OF THE FUNCTION FOR DISPLAY
-   const imageToShow = getImageToShow(getImage, oneData, imageTypes, logoPlaceholder)
-   // END PROCESSING IMAGE RENDERING =======================================================
-
-   // DELETED PRODUCT
-   const deleteProduct = (id) => {
+   // DELETED TABLE
+   const deleteTable = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
-         Product.deleted(id)
+         Table.deleted(id)
             .then((res) => {
                toast.success("Produit supprimé avec succès !")
                setRefresh((current) => current + 1)
@@ -189,9 +111,7 @@ const Tables = () => {
 
    // FILTER SELECT TAG DATA
    const filterOptions = [
-      { value: 'name', label: 'nom' },
-      { value: 'price', label: 'prix' },
-      { value: 'category', label: 'catérorie' },
+      { value: 'tableNumber', label: 'Nom de la table' },
       { value: 'createdAt', label: 'date de créat.' },
    ]
 
@@ -215,18 +135,8 @@ const Tables = () => {
          maxWidth: '50px'
       },
       {
-         name: 'Produit',
-         selector: row => row.name,
-         wrap: true,
-      },
-      {
-         name: 'Prix',
-         selector: row => row.price,
-         wrap: true,
-      },
-      {
-         name: 'Catégorie',
-         selector: row => row.category,
+         name: 'Table',
+         selector: row => row.tableNumber,
          wrap: true,
       },
       {
@@ -241,10 +151,10 @@ const Tables = () => {
                <button className="Btn Update" title="Détails" onClick={() => patch(row.id)}>
                   <RemixIcons.RiEyeLine fontSize={15} />
                </button>
-               <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/managers/products/update/${row.id}`)}>
+               <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/managers/tables/update/${row.id}`)}>
                   <RemixIcons.RiPenNibLine fontSize={15} />
                </button>
-               {access === 13 && <button className="Btn Error" title="Supprimer" onClick={() => deleteProduct(row.id)}>
+               {access === 13 && <button className="Btn Error" title="Supprimer" onClick={() => deleteTable(row.id)}>
                   <RemixIcons.RiDeleteBin2Line fontSize={15} />
                </button>}
             </div>
@@ -253,7 +163,7 @@ const Tables = () => {
    ]
 
    if (access === 13 || access === 23) {
-      columns.splice(4, 0, {
+      columns.splice(2, 0, {
          name: 'Entreprise',
          selector: row => row.id && row.Company.name,
          wrap: true,
@@ -261,7 +171,7 @@ const Tables = () => {
    }
 
    if (access === 13) {
-      columns.splice(5, 0, {
+      columns.splice(3, 0, {
          name: 'Organisation',
          selector: row => row.id && row.Company.Organization.name,
          wrap: true,
@@ -321,23 +231,18 @@ const Tables = () => {
             className="modal-react-bootstrap">
             <Modal.Header closeButton className="header-react-bootstrap">
                <Modal.Title id="contained-modal-title-vcenter" className="title-react-bootstrap">
-                  Detail du produit : {oneData.name}
+                  Detail de la table : {oneData.name}
                </Modal.Title>
             </Modal.Header>
             <Modal.Body className="body-react-bootstrap">
                <div className="container">
                   <div className="row ">
-                     <div onClick={() => imageRef.current.click()} title="cliquez pour choisir une autre image" className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" crossorigin="anonymous" src={imageToShow} alt="" width="100%" height="400px" />
-                        <input type="file" id="Profil" hidden ref={imageRef} accept=".jpg, .jpeg, .png" onChange={(e) => setGetImage(e.target.files[0])} />
+                     <div className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
+                        <img className="object-fit-cover" crossorigin="anonymous" src={logoPlaceholder} alt="" width="100%" height="400px" />
                      </div>
                      {oneData.id && (
                         <div className="col-md-6 infoDetail ml-4 ">
-                           <div className="fw-bold fs-2 shadow p-2 mb-4">{oneData.name.toUpperCase()}</div>
-                           <div className="mb-3">
-                              <p className="fw-bold me-1">Catégorie : {oneData.category ? oneData.category : '---'}</p>
-                              <p>Prix : {oneData.price}</p>
-                           </div>
+                           <div className="fw-bold fs-2 shadow p-2 mb-4">{oneData.tableNumber.toUpperCase()}</div>
                            <div className="mb-3">Ajouté le : {dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss')}</div>
                            <div className="mb-3">Modifié le : {dateFormat(oneData.updatedAt, 'dd-mm-yyyy HH:MM:ss')}</div>
                            <>
@@ -354,11 +259,7 @@ const Tables = () => {
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
                <div className="d-flex">
-                  <Button onClick={buttonAction} className={buttonClass} title={buttonLabel}>
-                     <RemixIcons.RiPictureInPictureLine />
-                     {buttonLabel}
-                  </Button>
-                  <Button onClick={() => Navigate(`/managers/products/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos"><RemixIcons.RiPenNibLine />Modifier le prod.</Button>
+                  <Button onClick={() => Navigate(`/managers/tables/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos"><RemixIcons.RiPenNibLine />Modifier le prod.</Button>
                </div>
                <div>
                   <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>

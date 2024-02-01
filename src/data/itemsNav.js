@@ -259,7 +259,7 @@ export const ItemsExternalAdmin = [
     {
         Icon: RemixIcons.RiUserHeartLine,
         Display: "Clients",
-        Link: "/customer",
+        Link: "/customers",
     },
     {
         Icon: RemixIcons.RiHomeOfficeLine,

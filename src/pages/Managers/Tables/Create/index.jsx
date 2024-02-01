@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import CustomSelect from "../../../../components/CustomSelect"
 import HeaderMain from "../../../../components/HeaderMain"
@@ -9,7 +8,7 @@ import Internal from "./Components/Internal"
 import External from "./Components/External"
 import { StatusOption } from "../../../../data/optionFilter"
 
-const CreateProduct = () => {
+const CreateTable = () => {
 	const Navigate = useNavigate()
 	const access = Access()
 	const statusOption = StatusOption()
@@ -53,4 +52,4 @@ const CreateProduct = () => {
 	)
 }
 
-export default CreateProduct
+export default CreateTable

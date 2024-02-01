@@ -4,74 +4,84 @@ import HeaderMain from "../../../../components/HeaderMain"
 import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import { Account } from "../../../../services/accountService"
-import { Product } from "../../../../services/productService"
+import { Table } from "../../../../services/tableService"
+import Access from "../../../../utils/utilsAccess"
 
-const UpdateProduct = () => {
+const UpdateTable = () => {
 	const Navigate = useNavigate()
 	const { id } = useParams()
+	const access = Access()
+   const idUser = localStorage.getItem('id')
 
-	// PRODUCT OWNERSHIP
-	const [product, setProduct] = useState({
-		name: "",
-		category: "",
-		price: ""
+	const order = 'asc'
+   const filter = 'name'
+   const status = 'actif'
+   const search = ''
+   const limit = 20
+   const page = 0
+
+	const [company, setCompany] = useState([])
+	// TABLE OWNERSHIP
+	const [table, setTable] = useState({
+		tableNumber: "",
+		idCompany: ''
 	})
 
-	// PRODUCT OWNERSHIP COPY
+	// TABLE OWNERSHIP COPY
 	const [lastData, setLastData] = useState({
-		name: "",
-		category: "",
-		price: ""
+		tableNumber: ""
 	})
 
 	// SET ALL VALUE
 	const handleUpdate = (e) => {
 		const { name, value } = e.target;
-		setProduct({
-			...product,
+		setTable({
+			...table,
 			[name]: value,
 		})
 	}
 
+	table.idCompany = company[0].id
+
 	// GET ONE DATA API
 	useEffect(() => {
-		Product.getOne(id)
+		Table.getOne(id)
 			.then((res) => {
-				setProduct({
-					name: res.data.content.name,
-					category: res.data.content.category,
-					price: res.data.content.price,
+				setTable({
+					tableNumber: res.data.content.tableNumber
 				})
 				setLastData({
-					name: res.data.content.name,
-					category: res.data.content.category,
-					price: res.data.content.price,
+					tableNumber: res.data.content.tableNumber
 				})
 			})
 	}, [id])
 
-	// UPDATE PRODUCT
+	useEffect(() => {
+      Company.getCompanyByUser(idUser, order, filter, search, status, limit, page)
+         .then((res) => {
+            setCompany(res.data.content.data)
+         })
+         .catch((error) => console.error('Erreur lors de la récupération des entreprises par organisation :', error))
+   }, [idUser, status])
+
+	// UPDATE TABLE
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (
-			product.name === "" ||
-			product.category === "" ||
-			product.price === "") {
-			toast.error("Les champs marqués par une etoile sont obligations !")
+			table.tableNumber === "") {
+			toast.error("Champ obligation !")
 		}
 		else if (
-			product.name === lastData.name &&
-			product.category === lastData.category &&
-			product.price === lastData.price
+			table.tableNumber === lastData.tableNumber 
 		) {
 			toast.error("Aucune valeur n'a été modifiée.")
 			toast.error("Echec de l'opération  !")
 		}
 		else {
-			Product.update(id, product)
+			Table.update(id, table)
 				.then((res) => {
-					toast.success("Produit modifié avec succès !")
-					Navigate('/managers/products')
+					toast.success("Table modifiée avec succès !")
+					Navigate('/managers/tables')
 				})
 				.catch((err) => {
 					console.log("Erreur: ", err);
@@ -114,56 +124,24 @@ const UpdateProduct = () => {
 				<HeaderMain />
 
 				<div className="card-body CardBody card">
-					<h5>Modifiez les informations concernant le produit.</h5>
+					<h5>Modifiez les informations concernant la table.</h5>
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form" for>
 							<div className="col-md-6">
-								<label htmlFor="name" className="form-label">
-									Nom du produit :
+								<label htmlFor="tableNumber" className="form-label">
+									Nom / numéro de la table :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
 									type="text"
 									className="form-control no-focus-outline"
-									id="name"
-									name="name"
-									value={product.name}
+									id="tableNumber"
+									name="tableNumber"
+									value={table.tableNumber}
 									onChange={handleUpdate}
 									autoComplete='off'
 									required
 
-								/>
-							</div>
-							<div className="col-md-12">
-								<label htmlFor="category" className="form-label">
-									Catégorie :
-									<span className="text-danger taille_etoile">*</span>
-								</label>
-								<input
-									type="text"
-									className="form-control no-focus-outline"
-									id="category"
-									name="category"
-									value={product.category}
-									onChange={handleUpdate}
-									autoComplete='off'
-									required
-								/>
-							</div>
-							<div className="col-md-6">
-								<label htmlFor="price" className="form-label">
-									Price :
-									<span className="text-danger taille_etoile">*</span>
-								</label>
-								<input
-									type="number"
-									className="form-control no-focus-outline"
-									id="price"
-									name="price"
-									value={product.price}
-									onChange={handleUpdate}
-									autoComplete='off'
-									required
 								/>
 							</div>
 
@@ -172,7 +150,7 @@ const UpdateProduct = () => {
 									<RemixIcons.RiEditCircleLine />
 									Modifier
 								</button>
-								<button className="Btn Error btn-sm" onClick={() => Navigate('/managers/products')}>
+								<button className="Btn Error btn-sm" onClick={() => Navigate('/managers/tables')}>
 									<RemixIcons.RiCloseLine />
 									Annuler / Retour
 								</button>
@@ -185,4 +163,4 @@ const UpdateProduct = () => {
 	)
 }
 
-export default UpdateProduct
+export default UpdateTable
