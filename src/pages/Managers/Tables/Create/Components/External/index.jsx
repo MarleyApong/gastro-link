@@ -3,6 +3,7 @@ import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import { Company } from "../../../../../../services/companyService"
 import { Table } from "../../../../../../services/tableService"
+import useHandleError from "../../../../../../hooks/useHandleError"
 
 const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
    const order = 'asc'
@@ -46,7 +47,9 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
          .then((res) => {
             setCompany(res.data.content.data)
          })
-         .catch((error) => console.error('Erreur lors de la récupération des entreprises par organisation :', error))
+         .catch((err) => {
+            useHandleError(err, Navigate)
+         })
    }, [idUser, idStatus])
 
    // ADD TABLE
@@ -63,26 +66,7 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
                Navigate('/managers/tables')
             })
             .catch((err) => {
-               if (err.response.status === 400) {
-                  console.log("erreur:", err);
-               }
-               else if (err.response.status === 401) {
-                  toast.error("La session a expiré !")
-                  Account.logout()
-                  Navigate("/auth/login")
-               }
-               else if (err.response.status === 403) {
-                  toast.error("Accès interdit !")
-               }
-               else if (err.response.status === 404) {
-                  toast.error("Ressource non trouvée !")
-               }
-               else if (err.response.status === 415) {
-                  toast.error("Erreur, contactez l'administrateur !")
-               }
-               else if (err.response.status === 500) {
-                  toast.error("Erreur interne du serveur !")
-               }
+               useHandleError(err, Navigate)
             })
       }
    }

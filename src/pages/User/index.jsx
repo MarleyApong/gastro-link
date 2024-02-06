@@ -8,14 +8,13 @@ import dateFormat from 'dateformat'
 import logoPlaceholder from "../../assets/img/avatar/user-placeholder.jpg"
 import HeaderMain from "../../components/HeaderMain"
 import ToggleButton from "../../components/ToggleButton"
-import { Account } from "../../services/accountService"
 import CustomDataTable from "../../components/CustomDataTable"
 import { User } from "../../services/userService"
-import { Role } from "../../services/roleService"
 import SelectOption from "../../components/SelectOption"
 import { EnvOption, sortOption, StatusOption, RoleOption } from "../../data/optionFilter"
 import SearchInput from "../../components/SearchInput"
 import Access from "../../utils/utilsAccess"
+import useHandleError from "../../hooks/useHandleError"
 
 const ListUser = () => {
    const Navigate = useNavigate()
@@ -107,10 +106,11 @@ const ListUser = () => {
                setdata(res.data.content.data)
                setAllCount(res.data.content.totalElements)
             }
-
-         } catch (err) {
-            console.log("Load: ", err)
-         } finally {
+         }
+         catch (err) {
+            useHandleError(err, Navigate)
+         }
+         finally {
             setLoading(false)
          }
       }
@@ -120,84 +120,57 @@ const ListUser = () => {
 
    // GET ONE DATA API
    useEffect(() => {
-      setAffiliation({})
-      User.getOne(id)
-         .then((res) => setOneData(res.data.content))
+      const loadOneData = async () => {
+         try {
+            setAffiliation({})
+            let res = await User.getOne(id)
+            setOneData(res.data.content)
 
-      User.getOrganizationCompany(id)
-         .then((res) => setAffiliation(res.data))
+            res = await User.getOrganizationCompany(id)
+            setAffiliation(res.data)
+         }
+         catch (err) {
+            useHandleError(err, Navigate)
+         }
+      }
+
+      loadOneData()
    }, [id, refresh])
 
    // CHANGE STATUS WITH TOGGLE BUTTON
    const handleToggle = (idRow) => {
-      User.changeStatus(idRow)
-         .then((res) => {
-            if (res.data.message === 'user active') toast.success("utilisateur activé !")
-            else toast.success("utilisateur désactivé !")
-            setRefresh((current) => current + 1)
-         })
-         .catch((err) => {
-            console.error("Erreur lors de la mise à jour du statut :", err)
-            setRefresh((current) => current + 1)
-            if (err) {
-               if (err.response.data.error.name === "MissingData") {
-                  toast.error("Erreur, données incomplètes !")
-               }
-               else if (err.response.data.error.name === "MissingParams") {
-                  toast.error("Erreur, Paramètres incomplètes !")
-               }
-               else if (err.response.data.error.name === "BadRequest") {
-                  toast.error("Erreur, mauvaise requête !")
-               }
-               else {
-                  toast.error("Erreur interne du serveur !")
-               }
-            }
-            // setOneData({ ...oneData, idStatus: oneData.idStatus })
-         })
+      User.changeStatus(idRow).then((res) => {
+         if (res.data.message === 'user active') toast.success("utilisateur activé !")
+         else toast.success("utilisateur désactivé !")
+         setRefresh((current) => current + 1)
+      }).catch((err) => {
+         setRefresh((current) => current + 1)
+         useHandleError(err, Navigate)
+      })
    }
 
    // CHANGE STATUS WITH SIMPLE BUTTON
    const detailsStatusChange = (id) => {
-      User.changeStatus(id)
-         .then((res) => {
-            if (res.data.message === 'user active') toast.success("Utilisateur activé !")
-            else toast.success("Utilisateur désactivé !")
-            setRefresh((current) => current + 1)
-         })
-         .catch((err) => {
-            console.error("Erreur lors de la mise à jour du statut :", err)
-            setRefresh((current) => current + 1)
-            if (err) {
-               if (err.response.data.error.name === "MissingData") {
-                  toast.error("Erreur, données incomplètes !")
-               }
-               else if (err.response.data.error.name === "MissingParams") {
-                  toast.error("Erreur, Paramètres incomplètes !")
-               }
-               else if (err.response.data.error.name === "BadRequest") {
-                  toast.error("Erreur, mauvaise requête !")
-               }
-               else if (err.response.status === 400) {
-                  toast.error("Erreur lors de la mise à jour du statut !")
-               }
-               else {
-                  toast.error("Erreur interne du serveur !")
-               }
-            }
-         })
+      User.changeStatus(id).then((res) => {
+         if (res.data.message === 'user active') toast.success("Utilisateur activé !")
+         else toast.success("Utilisateur désactivé !")
+         setRefresh((current) => current + 1)
+      }).catch((err) => {
+         setRefresh((current) => current + 1)
+         useHandleError(err, Navigate)
+      })
    }
 
    // DELETED USER
    const deleteUser = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
-         User.deleted(id)
-            .then((res) => {
-               toast.success("Utilisateur supprimé avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => console.log("error: ", err))
+         User.deleted(id).then((res) => {
+            toast.success("Utilisateur supprimé avec succès !")
+            setRefresh((current) => current + 1)
+         }).catch((err) => {
+            useHandleError(err, Navigate)
+         })
       }
    }
 
@@ -299,7 +272,7 @@ const ListUser = () => {
    }
 
    return (
-      <div>
+      <>
          <HeaderMain total={allCount} />
 
          <div className="OptionFilter">
@@ -427,7 +400,7 @@ const ListUser = () => {
                </div>
             </Modal.Footer>
          </Modal >
-      </div>
+      </>
    )
 }
 

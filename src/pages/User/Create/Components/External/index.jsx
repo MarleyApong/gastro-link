@@ -5,11 +5,11 @@ import { User } from "../../../../../services/userService"
 import RequirePassword from "../../../../../components/RequirePassword"
 import { EnvOption, RoleOption, StatusOption } from "../../../../../data/optionFilter"
 import { Company } from "../../../../../services/companyService"
+import useHandleError from "../../../../../hooks/useHandleError"
 
-const External = ({Navigate, CustomSelect}) => {
+const External = ({ Navigate, CustomSelect }) => {
    const statusOption = StatusOption()
    const roleOption = RoleOption()
-   const envOption = EnvOption()
    const idUser = localStorage.getItem('id')
 
    const [validator, setValidator] = useState(0)
@@ -34,7 +34,7 @@ const External = ({Navigate, CustomSelect}) => {
       setSelectedCompanyValue(value)
    }, [])
 
-   const role = roleOption.filter((item,_) => item.label !== 'super admin')
+   const role = roleOption.filter((item, _) => item.label !== 'super admin')
 
    // PUSH SELECTED ID OF ORGANIZATION, COMPANY AND PASSWORD
    user.idOrganization = idOrganization
@@ -53,8 +53,13 @@ const External = ({Navigate, CustomSelect}) => {
    // GET ALL DATA API
    useEffect(() => {
       const loadOrganization = async () => {
-         const res = await User.getOrganizationCompany(idUser)
-         setIdOrganization(res.data.content.Company.Organization.id)
+         try {
+            const res = await User.getOrganizationCompany(idUser)
+            setIdOrganization(res.data.content.Company.Organization.id)
+         }
+         catch (err) {
+            useHandleError(err, Navigate)
+         }
       }
 
       loadOrganization()
@@ -62,40 +67,28 @@ const External = ({Navigate, CustomSelect}) => {
 
    useEffect(() => {
       const loadCompany = async () => {
-         const status = 'actif'
-         const res = await Company.getCompaniesByOrganization(idOrganization, status)
-         setCompany(res.data.content)
+         try {
+            const status = 'actif'
+            const res = await Company.getCompaniesByOrganization(idOrganization, status)
+            setCompany(res.data.content)
+         }
+         catch (err) {
+            useHandleError(err, Navigate)
+         }
       }
-
       loadCompany()
    }, [idOrganization])
 
-   console.log("user", user);
 
    // ADD USER
    const handleSubmit = (e) => {
       e.preventDefault()
-      User.add(user)
-         .then((res) => {
-            toast.success("Utilisateur ajouté avec succès !")
-            Navigate('/users/list')
-         })
-         .catch((err) => {
-            console.log("err: ", err);
-            if (err.response) {
-               if (err.response.data.error.name === 'RegexPasswordValidationError') {
-                  setValidator(2)
-                  toast.error("Le mot de passe n'est pas valide !")
-               }
-               else if (err.response.data.error.name === 'AddLimitReached') {
-                  toast.error("Le rôle super admin est limité à 2.")
-                  toast.error("Opération non authorisée !")
-               }
-               else if (err.response.data.error.name === 'AlreadyExist') {
-                  toast.error("Désolé, cet utilisateur existe déjà !")
-               }
-            }
-         })
+      User.add(user).then((res) => {
+         toast.success("Utilisateur ajouté avec succès !")
+         Navigate('/users/list')
+      }).catch((err) => {
+         useHandleError(err, Navigate, setValidator)
+      })
    }
 
 

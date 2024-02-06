@@ -14,6 +14,10 @@ const getOne = (id) => {
    return Axios.get(`/${route}/${id}`)
 }
 
+const getSurveysByUser = (id, order, filter, status, search, limit, page) => {
+   return Axios.get(`/${route}/users/${id}?limit=${limit}&page=${page}&sort=${order}&status=${status}&filter=${filter}&k=${search}`)
+}
+
 const add = (data) => {
    return Axios.put(`/${route}`, data)
 }
@@ -34,6 +38,7 @@ export const Survey = {
    getCount,
    getAll,
    getOne,
+   getSurveysByUser,
    add,
    update,
    changeStatus,

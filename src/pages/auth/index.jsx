@@ -23,7 +23,6 @@ const Login = () => {
          setWait(false)
          try {
             const res = await Authentification.login(email, password)
-            console.log("res", res);
             const token = res.data.token
             const idUser = res.data.user.id
             const role = res.data.user.Role.id
@@ -39,7 +38,6 @@ const Login = () => {
             }
 
          } catch (err) {
-            console.log(err);
             setWait(true)
             if (err.response) {
                if (err.response.data.error.name === 'NotFound') {
@@ -51,21 +49,22 @@ const Login = () => {
                else if (err.response.data.error.name === 'MissingData') {
                   toast.error("Veuillez remplir tous les champs !")
                }
+               else if (err.response.data.error.name === 'BadRequest') {
+                  toast.error("Mauvaise requête !")
+               }
+               else if (err.response.data.error.name === 'NotFound') {
+                  toast.error("Demande non trouvée !")
+               }
                else if (err.response.data.error.name === 'AccessForbidden') {
-                  toast.error("Contactez votre administrateur.")
+                  toast.error("Contactez votre superviseur.")
                   toast.error("Accès réfusé !")
                }
                else {
-                  toast.error("Oups ! Quelque chose a mal tournée.", {
-                     style: {
-                        textAlign: 'center',
-                        width: 'auto'
-                     }
-                  })
+                  toast.error("Quelque chose a mal tournée.")
+                  toast.error("Oups !")
                }
             }
             else {
-               console.log("err", err);
                toast.error("Connexion au serveur a échoué !")
             }
          }

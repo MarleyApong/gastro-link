@@ -7,6 +7,7 @@ import { User } from "../../../services/userService"
 import { Account } from "../../../services/accountService"
 import { Role } from "../../../services/roleService"
 import { StatusOption } from "../../../data/optionFilter"
+import useHandleError from "../../../hooks/useHandleError"
 
 const UpdateUser = () => {
 	const Navigate = useNavigate()
@@ -47,30 +48,35 @@ const UpdateUser = () => {
 
 	// GET ONE DATA API
 	useEffect(() => {
-		User.getOne(id)
-			.then((res) => {
-				setUser({
-					firstName: res.data.content.firstName,
-					lastName: res.data.content.lastName,
-					email: res.data.content.email,
-					phone: res.data.content.phone,
-					role: res.data.content.role,
-					status: res.data.content.status
-				})
-				setLastData({
-					firstName: res.data.content.firstName,
-					lastName: res.data.content.lastName,
-					email: res.data.content.email,
-					phone: res.data.content.phone,
-					role: res.data.content.role,
-					status: res.data.content.status
-				})
+		User.getOne(id).then((res) => {
+			setUser({
+				firstName: res.data.content.firstName,
+				lastName: res.data.content.lastName,
+				email: res.data.content.email,
+				phone: res.data.content.phone,
+				role: res.data.content.role,
+				status: res.data.content.status
 			})
+			setLastData({
+				firstName: res.data.content.firstName,
+				lastName: res.data.content.lastName,
+				email: res.data.content.email,
+				phone: res.data.content.phone,
+				role: res.data.content.role,
+				status: res.data.content.status
+			})
+		}).catch((err) => {
+			useHandleError(err, Navigate)
+		})
 	}, [id])
 
 	// GET ALL ROLE DATA API
 	useEffect(() => {
-		Role.getAll().then((res) => setRoleData(res.data.content))
+		Role.getAll().then((res) =>
+			setRoleData(res.data.content)
+		).catch((err) => {
+			useHandleError(err, Navigate)
+		})
 	}, [])
 
 	// UPDATE USER
@@ -91,43 +97,12 @@ const UpdateUser = () => {
 			toast.error("Echec de l'opération !")
 		}
 		else {
-			User.update(id, user)
-				.then((res) => {
-					toast.success("Utilisateur modifié avec succès !")
-					Navigate('/users/')
-				})
-				.catch((err) => {
-					console.log("Erreur: ", err);
-					if (err.response.status === 400) {
-						toast.error("Champs mal renseigné ou format inattendu !", {
-							style: {
-								textAlign: 'center'
-							}
-						})
-					}
-					else if (err.response.status === 401) {
-						toast.error("La session a expiré !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
-					else if (err.response.status === 403) {
-						toast.error("Accès interdit !")
-					}
-					else if (err.response.status === 404) {
-						toast.error("Ressource non trouvée !")
-					}
-					else if (err.response.status === 415) {
-						toast.error("Erreur, contactez l'administrateur !")
-					}
-					else if (err.response.status === 500) {
-						toast.error("Erreur interne du serveur !")
-					}
-					else {
-						toast.error("Erreur de données l'utilisateur !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
-				})
+			User.update(id, user).then((res) => {
+				toast.success("Utilisateur modifié avec succès !")
+				Navigate('/users')
+			}).catch((err) => {
+				useHandleError(err, Navigate)
+			})
 		}
 	}
 

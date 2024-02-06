@@ -18,6 +18,7 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
     const idUser = localStorage.getItem('id')
 
     const [user, setUser] = useState([])
+    const [imageToShow, setImageToShow] = useState('')
 
     const logout = (e) => {
         e.preventDefault()
@@ -35,33 +36,35 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
 
         loadUser()
     }, [idUser])
-
+    
     // START PROCESSING IMAGE RENDERING =======================================================
-    const getImageToShow = (access, user, logoPlaceholder) => {
-        let imageToShow = logoPlaceholder
+    useEffect(() => {
+        const getImageToShow = (access, user, logoPlaceholder) => {
+            let imageToShow = logoPlaceholder
 
-        if (access === 23) {
-            if (user.Company.Organization.picture) {
-                imageToShow = 'http://localhost:8000' + user.Company.Organization.picture
+            if (access === 23) {
+                if (user.Company && user.Company.Organization && user.Company.Organization.picture) {
+                    imageToShow = 'http://localhost:8000' + user.Company.Organization.picture
+                }
             }
-        }
-        else if (access === 22) {
-            if (user.Company.picture) {
-                imageToShow = 'http://localhost:8000' + user.Company.picture
+            else if (access === 22) {
+                if (user.Company && user.Company.picture) {
+                    imageToShow = 'http://localhost:8000' + user.Company.picture
+                }
             }
-        }
-        else if (access === 13) {
-            imageToShow = superAdmin
-        }
-        else if (access === 12) {
-            imageToShow = admin
+            else if (access === 13) {
+                imageToShow = superAdmin
+            }
+            else if (access === 12) {
+                imageToShow = admin
+            }
+
+            return imageToShow
         }
 
-        return imageToShow
-    }
-
-    // SIMPLIFICATION OF THE FUNCTION FOR DISPLAY
-    const imageToShow = getImageToShow(access, user, logoPlaceholder)
+        // SIMPLIFICATION OF THE FUNCTION FOR DISPLAY
+        setImageToShow(getImageToShow(access, user, logoPlaceholder))
+    }, [access, user, logoPlaceholder])
     // END PROCESSING IMAGE RENDERING =======================================================
 
     // SUBTRING NAME IF IS LONGEST

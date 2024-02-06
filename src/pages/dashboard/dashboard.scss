@@ -75,8 +75,15 @@
                 width: 50%;
 
                 h2,
+                h5,
                 h3 {
                     color: #28a745;
+                }
+
+                .company {
+                    border: 1px solid;
+                    margin-top: 10px;
+                    padding: 5px;
                 }
 
                 .ReturnContent {
@@ -94,8 +101,8 @@
                     align-items: center;
                     border: 1px solid #28a745;
                     width: 120px;
-                    height: 120px;
-                    border-radius: 50%;
+                    height: 90px;
+                    // border-radius: 10%;
                 }
             }
 
@@ -106,6 +113,7 @@
             .Right {
 
                 h2,
+                h5,
                 h3 {
                     color: var(--user-color);
                 }

@@ -5,6 +5,7 @@ import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import { Account } from "../../../../services/accountService"
 import { Product } from "../../../../services/productService"
+import useHandleError from "../../../../hooks/useHandleError"
 
 const UpdateProduct = () => {
 	const Navigate = useNavigate()
@@ -35,19 +36,20 @@ const UpdateProduct = () => {
 
 	// GET ONE DATA API
 	useEffect(() => {
-		Product.getOne(id)
-			.then((res) => {
-				setProduct({
-					name: res.data.content.name,
-					category: res.data.content.category,
-					price: res.data.content.price,
-				})
-				setLastData({
-					name: res.data.content.name,
-					category: res.data.content.category,
-					price: res.data.content.price,
-				})
+		Product.getOne(id).then((res) => {
+			setProduct({
+				name: res.data.content.name,
+				category: res.data.content.category,
+				price: res.data.content.price,
 			})
+			setLastData({
+				name: res.data.content.name,
+				category: res.data.content.category,
+				price: res.data.content.price,
+			})
+		}).catch((err) => {
+			useHandleError(err, Navigate)
+		})
 	}, [id])
 
 	// UPDATE PRODUCT
@@ -74,36 +76,7 @@ const UpdateProduct = () => {
 					Navigate('/managers/products')
 				})
 				.catch((err) => {
-					console.log("Erreur: ", err);
-					if (err.response.status === 400) {
-						toast.error("Champs mal renseigné ou format inattendu !", {
-							style: {
-								textAlign: 'center'
-							}
-						})
-					}
-					else if (err.response.status === 401) {
-						toast.error("La session a expiré !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
-					else if (err.response.status === 403) {
-						toast.error("Accès interdit !")
-					}
-					else if (err.response.status === 404) {
-						toast.error("Ressource non trouvée !")
-					}
-					else if (err.response.status === 415) {
-						toast.error("Erreur, contactez l'administrateur !")
-					}
-					else if (err.response.status === 500) {
-						toast.error("Erreur interne du serveur !")
-					}
-					else {
-						toast.error("Erreur de données produits !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
+					useHandleError(err, Navigate)
 				})
 		}
 	}

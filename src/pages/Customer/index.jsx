@@ -13,6 +13,8 @@ import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import Access from "../../utils/utilsAccess"
 import { Customer } from "../../services/customerService"
+import { Account } from "../../services/accountService"
+import useHandleError from "../../hooks/useHandleError"
 
 const ListCustomer = () => {
    const Navigate = useNavigate()
@@ -78,7 +80,7 @@ const ListCustomer = () => {
             }
          }
          catch (err) {
-            console.log("Load: ", err)
+            useHandleError(err, Navigate)
          }
          finally {
             setLoading(false)
@@ -90,24 +92,12 @@ const ListCustomer = () => {
 
    // FETCH ONE DATA
    useEffect(() => {
-      Customer.getOne(id)
-         .then((res) => {
-            setOneData(res.data.content)
-         })
+      Customer.getOne(id).then((res) => {
+         setOneData(res.data.content)
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }, [id, refresh])
-
-   // DELETED CUSTOMER
-   const deleteCustomer = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Customer.deleted(id)
-            .then((res) => {
-               toast.success("Produit supprimé avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => console.log("error: ", err))
-      }
-   }
 
    // FILTER SELECT TAG DATA
    const filterOptions = [

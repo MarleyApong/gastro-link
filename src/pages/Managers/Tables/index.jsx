@@ -13,6 +13,8 @@ import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import Access from "../../../utils/utilsAccess"
 import { Table } from "../../../services/tableService"
+import useHandleError from "../../../hooks/useHandleError"
+import Qrcode from 'qrcode'
 
 const Tables = () => {
    const Navigate = useNavigate()
@@ -32,6 +34,7 @@ const Tables = () => {
    const [showDetailCompanyModal, setshowDetailCompanyModal] = useState(false)
    const [refresh, setRefresh] = useState(0)
    const [allCount, setAllCount] = useState(0)
+   const [qr, setQr] = useState('')
 
    // RECOVERING THE ID OF THE SELECTED LINE
    const patch = (itemId) => {
@@ -60,6 +63,22 @@ const Tables = () => {
       setSearch(e.target.value)
    }
 
+   const generateQRCode = (webpage) => {
+      Qrcode.toDataURL(webpage, {
+         width: 800,
+         margin: 2,
+         color: {
+            // colors
+         },
+      }, (err, url) => {
+         if (err) {
+            toast.error("Impossible de générer le QR code !")
+         } else {
+            setQr(url)
+         }
+      })
+   }
+
    // FETCH ALL DATA
    useEffect(() => {
       const loadData = async () => {
@@ -78,7 +97,7 @@ const Tables = () => {
             }
          }
          catch (err) {
-            console.log("Load: ", err)
+            useHandleError(err, Navigate)
          }
          finally {
             setLoading(false)
@@ -90,22 +109,25 @@ const Tables = () => {
 
    // FETCH ONE DATA
    useEffect(() => {
-      Table.getOne(id)
-         .then((res) => {
-            setOneData(res.data.content)
-         })
+      Table.getOne(id).then((res) => {
+         setOneData(res.data.content)
+         const webPage = "http://localhost:5173/page/" + res.data.content.webPage
+         generateQRCode(webPage)
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }, [id, refresh])
 
    // DELETED TABLE
    const deleteTable = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
-         Table.deleted(id)
-            .then((res) => {
-               toast.success("Produit supprimé avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => console.log("error: ", err))
+         Table.deleted(id).then((res) => {
+            toast.success("Produit supprimé avec succès !")
+            setRefresh((current) => current + 1)
+         }).catch((err) => {
+            useHandleError(err, Navigate)
+         })
       }
    }
 
@@ -180,7 +202,7 @@ const Tables = () => {
 
    return (
       <>
-         <HeaderMain total={0} />
+         <HeaderMain total={allCount} />
 
          <div className="OptionFilter">
             <SelectOption
@@ -245,6 +267,12 @@ const Tables = () => {
                            <div className="fw-bold fs-2 shadow p-2 mb-4">{oneData.tableNumber.toUpperCase()}</div>
                            <div className="mb-3">Ajouté le : {dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss')}</div>
                            <div className="mb-3">Modifié le : {dateFormat(oneData.updatedAt, 'dd-mm-yyyy HH:MM:ss')}</div>
+                           {qr && (
+                              <div className="qr-code d-flex flex-column" style={{ width: '100px' }}>
+                                 < img src={qr} />
+                                 <a className="Btn" style={{textDecoration: "none"}} href={qr} download={"Table: " + oneData.tableNumber + '.png'}>Télécharger</a>
+                              </div>
+                           )}
                            <>
                               <h5 className="mb-3 mt-3 p-2 shadow">Affiliation</h5>
                               <div className="ps-4">

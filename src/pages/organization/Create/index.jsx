@@ -4,9 +4,9 @@ import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
 import { Organization } from "../../../services/organizationService"
 import { useNavigate } from "react-router-dom"
-import { Account } from "../../../services/accountService"
 import PleaseNote from "../../../components/PleaseNote"
 import { StatusOption } from "../../../data/optionFilter"
+import useHandleError from "../../../hooks/useHandleError"
 
 const CreateOrganization = () => {
 	const Navigate = useNavigate()
@@ -59,43 +59,12 @@ const CreateOrganization = () => {
 				formData.append('picture', file)
 			}
 
-			Organization.add(formData)
-				.then((res) => {
-					toast.success("organization ajoutée avec succès !")
-					Navigate('/organizations/')
-				})
-				.catch((err) => {
-					console.log("err: ", err);
-					if (err.response.status === 400) {
-						toast.error("Champs mal renseigné ou format inattendu !", {
-							style: {
-								textAlign: 'center'
-							}
-						})
-					}
-					else if (err.response.status === 401) {
-						toast.error("La session a expiré !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
-					else if (err.response.status === 403) {
-						toast.error("Accès interdit !")
-					}
-					else if (err.response.status === 404) {
-						toast.error("Ressource non trouvée !")
-					}
-					else if (err.response.status === 415) {
-						toast.error("Erreur, contactez l'administrateur !")
-					}
-					else if (err.response.status === 500) {
-						toast.error("Erreur interne du serveur !")
-					}
-					else {
-						toast.error("Erreur de données organization(e)s !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
-				})
+			Organization.add(formData).then((res) => {
+				toast.success("organization ajoutée avec succès !")
+				Navigate('/organizations/')
+			}).catch((err) => {
+				useHandleError(err, Navigate)
+			})
 		}
 	}
 

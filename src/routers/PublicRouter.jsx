@@ -1,13 +1,13 @@
 import { Route, Routes } from 'react-router-dom'
 import { Website } from '../pages'
 
-const PublicRoute = () => {
+const PublicRouter = () => {
    return (
       <Routes>
-         <Route path=':id' element={<Website />} />
+         <Route path=':organization/:company/home' element={<Website />} />
          {/* <Route path='*' element={<Login />} /> */}
       </Routes>
    )
 }
 
-export default PublicRoute
+export default PublicRouter

@@ -8,10 +8,16 @@ import { Organization } from "../../../services/organizationService"
 import CustomSelect from "../../../components/CustomSelect"
 import PleaseNote from "../../../components/PleaseNote"
 import { StatusOption } from "../../../data/optionFilter"
+import Access from "../../../utils/utilsAccess"
+import { Account } from "../../../services/accountService"
+import useHandleError from "../../../hooks/useHandleError"
 
 const CreateCompany = () => {
 	const Navigate = useNavigate()
 	const statusOption = StatusOption()
+	const access = Access()
+	const idUser = localStorage.getItem('id')
+
 	const order = 'asc'
 	const filter = 'name'
 	const status = 'actif'
@@ -20,6 +26,7 @@ const CreateCompany = () => {
 	const page = 0
 
 	const [file, setFile] = useState('')
+	const [idOrganization, setIdOrganization] = useState('')
 	const [organization, setOrganization] = useState([])
 	const [selectedValue, setSelectedValue] = useState({})
 	const [company, setCompany] = useState({
@@ -40,7 +47,12 @@ const CreateCompany = () => {
 	}, [])
 
 	// PUSH SELECTED ID OF ORGANIZATION 
-	company.idOrganization = selectedValue.value
+	if (access === 13 || access === 12 || access === 12) {
+		company.idOrganization = selectedValue.value
+	}
+	else if (access === 23) {
+		company.idOrganization = idOrganization
+	}
 
 	// SET ALL VALUE
 	const handleAdd = (e) => {
@@ -59,11 +71,24 @@ const CreateCompany = () => {
 
 	// FETCH ALL DATA
 	useEffect(() => {
-		Organization.getAll(order, filter, status, search, limit, page)
-			.then((res) => {
-				setOrganization(res.data.content.data)
-			})
-	}, [order, filter, status, search, limit, page])
+		const loadData = async () => {
+			try {
+				let res = ''
+				if (access === 23) {
+					res = await Organization.getOrganizationByUser(idUser)
+					setIdOrganization(res.data.content.id)
+				}
+				else if (access === 13 || access === 12 || access === 12) {
+					res = await Organization.getAll(order, filter, status, search, limit, page)
+					setOrganization(res.data.content.data)
+				}
+			} catch (err) {
+				useHandleError(err, Navigate)
+			}
+		}
+
+		loadData()
+	}, [access, order, filter, status, search, limit, page])
 
 	// ADD COMPANY
 	const handleSubmit = (e) => {
@@ -89,43 +114,13 @@ const CreateCompany = () => {
 				formData.append('picture', file);
 			}
 
-
 			Company.add(formData)
 				.then((res) => {
 					toast.success("Entreprise ajoutée avec succès !")
 					Navigate('/companies/')
 				})
 				.catch((err) => {
-					if (err.response.status === 400) {
-						// toast.error("Champs mal renseigné ou format inattendu !", {
-						// 	style: {
-						// 		textAlign: 'center'
-						// 	}
-						// })
-						console.log("erreur:", err);
-					}
-					else if (err.response.status === 401) {
-						toast.error("La session a expiré !")
-						account_service.logoutAdmin()
-						Navigate("/auth/login")
-					}
-					else if (err.response.status === 403) {
-						toast.error("Accès interdit !")
-					}
-					else if (err.response.status === 404) {
-						toast.error("Ressource non trouvée !")
-					}
-					else if (err.response.status === 415) {
-						toast.error("Erreur, contactez l'administrateur !")
-					}
-					else if (err.response.status === 500) {
-						toast.error("Erreur interne du serveur !")
-					}
-					// else {
-					// 	toast.error("Erreur de données company(e)s !")
-					// 	account_service.logout()
-					// 	Navigate("/auth/login")
-					// }
+					useHandleError(err, Navigate)
 				})
 		}
 	}
@@ -140,13 +135,15 @@ const CreateCompany = () => {
 					<PleaseNote />
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form" for>
-							<div className="col-md-6">
-								<label htmlFor="" className="form-label">
-									Nom de l'organisation:
-									<span className="text-danger taille_etoile">*</span>
-								</label>
-								<CustomSelect data={organization} placeholder="Selectionnez une organisation" onSelectedValue={handleSelectedValue} />
-							</div>
+							{(access === 13 || access === 12 || access === 11) && (
+								<div className="col-md-6">
+									<label htmlFor="" className="form-label">
+										Nom de l'organisation:
+										<span className="text-danger taille_etoile">*</span>
+									</label>
+									<CustomSelect data={organization} placeholder="Selectionnez une organisation" onSelectedValue={handleSelectedValue} />
+								</div>
+							)}
 							<div className="col-md-6">
 								<label htmlFor="name" className="form-label">
 									Nom de l'entreprise :

@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import Login from '../pages/Auth'
 
-const AuthRoute = () => {
+const AuthRouter = () => {
    return (
       <Routes>
          <Route path='login' element={<Login />} />
@@ -10,4 +10,4 @@ const AuthRoute = () => {
    )
 }
 
-export default AuthRoute
+export default AuthRouter

@@ -13,6 +13,7 @@ import dateFormat from "dateformat"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import Access from "../../../utils/utilsAccess"
+import useHandleError from "../../../hooks/useHandleError"
 
 const Products = () => {
    const Navigate = useNavigate()
@@ -80,7 +81,7 @@ const Products = () => {
             }
          }
          catch (err) {
-            console.log("Load: ", err)
+            useHandleError(err, Navigate)
          }
          finally {
             setLoading(false)
@@ -92,10 +93,11 @@ const Products = () => {
 
    // FETCH ONE DATA
    useEffect(() => {
-      Product.getOne(id)
-         .then((res) => {
-            setOneData(res.data.content)
-         })
+      Product.getOne(id).then((res) => {
+         setOneData(res.data.content)
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }, [id, refresh])
 
    // START LOGO PROCESSING PART =======================================================
@@ -110,25 +112,8 @@ const Products = () => {
                setGetImage('')
             })
             .catch((err) => {
-               console.error("Erreur lors de la mise à jour du statut :", err)
                setRefresh((current) => current + 1)
-               if (err) {
-                  if (err.response.data.error.name === "MissingData") {
-                     toast.error("Erreur, données incomplètes !")
-                  }
-                  else if (err.response.data.error.name === "MissingParams") {
-                     toast.error("Erreur, Paramètres incomplètes !")
-                  }
-                  else if (err.response.data.error.name === "BadRequest") {
-                     toast.error("Erreur, mauvaise requête !")
-                  }
-                  else if (err.response.data.error.name === "LIMIT_UNEXPECTED_FILE") {
-                     toast.error("Erreur, l'image doit être < 2 Mo !")
-                  }
-                  else {
-                     toast.error("Erreur interne du serveur !")
-                  }
-               }
+               useHandleError(err, Navigate)
             })
 
       }
@@ -183,7 +168,9 @@ const Products = () => {
                toast.success("Produit supprimé avec succès !")
                setRefresh((current) => current + 1)
             })
-            .catch((err) => console.log("error: ", err))
+            .catch((err) => {
+               useHandleError(err, Navigate)
+            })
       }
    }
 

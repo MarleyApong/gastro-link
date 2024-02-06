@@ -4,6 +4,7 @@ import toast from "react-hot-toast"
 import { User } from "../../../../../services/userService"
 import { Survey } from "../../../../../services/surveyService"
 import { Company } from "../../../../../services/companyService"
+import useHandleError from "../../../../../hooks/useHandleError"
 
 const External = ({ Navigate, idStatus, access, CustomSelect }) => {
    const idUser = localStorage.getItem('id')
@@ -16,7 +17,7 @@ const External = ({ Navigate, idStatus, access, CustomSelect }) => {
       idStatus: "",
       name: "",
    })
-   
+
    const handleAdd = (e) => {
       const { name, value } = e.target
       setSurvey({
@@ -45,8 +46,9 @@ const External = ({ Navigate, idStatus, access, CustomSelect }) => {
                // PUSH SELECTED ID OF COMPANY
                survey.idCompany = selectedCompanyValue.value
             }
-         } catch (err) {
-
+         }
+         catch (err) {
+            useHandleError(err, Navigate)
          }
       }
 
@@ -59,8 +61,9 @@ const External = ({ Navigate, idStatus, access, CustomSelect }) => {
          try {
             const res = await Company.getCompaniesByOrganization(idOrganization, status)
             setCompany(res.data.content)
-         } catch (err) {
-            console.error('Erreur lors de la récupération des entreprises par organisation :', err)
+         }
+         catch (err) {
+            useHandleError(err, Navigate)
          }
       }
 
@@ -77,36 +80,12 @@ const External = ({ Navigate, idStatus, access, CustomSelect }) => {
          toast.error("Veuillez remplir le ou les champs,")
       }
       else {
-         Survey.add(survey)
-            .then((res) => {
-               toast.success("Enquête ajoutée avec succès !")
-               survey.name = ''
-               Navigate('/surveys/list')
-            })
-            .catch((err) => {
-               if (err.response) {
-                  if (err.response.status === 400) {
-                     console.log("erreur:", err)
-                  }
-                  else if (err.response.status === 401) {
-                     toast.error("La session a expiré !")
-                     Account.logout()
-                     Navigate("/auth/login")
-                  }
-                  else if (err.response.status === 403) {
-                     toast.error("Accès interdit !")
-                  }
-                  else if (err.response.status === 404) {
-                     toast.error("Ressource non trouvée !")
-                  }
-                  else if (err.response.status === 415) {
-                     toast.error("Erreur, contactez l'administrateur !")
-                  }
-                  else if (err.response.status === 500) {
-                     toast.error("Erreur interne du serveur !")
-                  }
-               }
-            })
+         Survey.add(survey).then((res) => {
+            toast.success("Enquête ajoutée avec succès !")
+            Navigate('/surveys/list')
+         }).catch((err) => {
+            useHandleError(err, Navigate)
+         })
       }
    }
 

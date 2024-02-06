@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import * as RemixIcons from "react-icons/ri"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { cuveExternal, cuveInternal } from '../../../data/cuve'
-import Pagination from '../../Pagination'
 import { Company } from '../../../services/companyService'
 import { Average } from '../../../services/average'
 import { useNavigate } from 'react-router-dom'
+import { Survey } from '../../../services/surveyService'
+import dateFormat from 'dateformat'
 
 export const SecondGroupInternal = ({ chart }) => {
    const Navigate = useNavigate()
 
    const [companies, setCompanies] = useState([])
    const [averageMinMax, setAverageMinMax] = useState({})
-   const [surveys, setSurveys] = useState([])
 
    const order = 'desc'
    const filter = 'createdAt'
@@ -92,7 +91,7 @@ export const SecondGroupInternal = ({ chart }) => {
          <div className="TBoxx">
             <div className="TBoxx-head">
                <h5>Détails des 5 dernières entreprises</h5>
-               <span className='Btn Send' onClick={() => Navigate('/companies')}><RemixIcons.RiEyeLine size={15}/> Plus détails</span>
+               <span className='Btn Send' onClick={() => Navigate('/companies')}><RemixIcons.RiEyeLine size={15} /> Plus détails</span>
             </div>
             <div className="Details">
                <table>
@@ -117,7 +116,7 @@ export const SecondGroupInternal = ({ chart }) => {
                                  <td>{company.phone}</td>
                                  <td>{company.city}</td>
                                  <td>
-                                    <span className={company.idStatus === 1 ? 'Success p-1 rounded-3 text-white' : 'Error p-1 rounded-3 text-white'}>{company.idStatus === 1 ? 'actif' : 'inactif'}</span>
+                                    <span className={company.Status.name === 'actif' ? 'Success p-1 rounded-3 text-white' : 'Error p-1 rounded-3 text-white'}>{company.Status.name === 'actif' ? 'actif' : 'inactif'}</span>
                                  </td>
                               </tr>
                            )
@@ -130,7 +129,30 @@ export const SecondGroupInternal = ({ chart }) => {
       </>
    )
 }
-export const SecondGroupExternal = () => {
+export const SecondGroupExternal = ({ idUser, chart }) => {
+   const Navigate = useNavigate()
+   const [survey, setSurvey] = useState([])
+   const [surveyAverage, setSurveyAverage] = useState({})
+
+   const order = 'desc'
+   const filter = 'createdAt'
+   const status = ''
+   const search = ''
+   const limit = 5
+   const page = 0
+
+   useEffect(() => {
+      const loadSurvey = async () => {
+         let res = await Survey.getSurveysByUser(idUser, order, filter, status, search, limit, page)
+         setSurvey(res.data.content)
+
+         res = await Average.averageMinMaxSurvey(idUser)
+         setSurveyAverage(res.data)
+      }
+
+      loadSurvey()
+   }, [idUser, order, filter, status, search, limit, page])
+
    return (
       <>
          <div className="TBoxx">
@@ -139,20 +161,19 @@ export const SecondGroupExternal = () => {
                <LineChart
                   width={500}
                   height={300}
-                  data={cuveExternal}
+                  data={chart}
                   margin={{
                      top: 5,
                      right: 30,
                      left: 20,
                      bottom: 5,
-                  }}
-               >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
+                  }}>
+                  <CartesianGrid strokeDasharray="3" />
+                  <XAxis dataKey="0" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="Courbe" stroke="#8884d8" activeDot={{ r: 8 }} />
+                  <Line type="monotone" dataKey="1" stroke="#8884d8" activeDot={{ r: 8 }} />
                </LineChart>
             </ResponsiveContainer>
          </div>
@@ -160,84 +181,57 @@ export const SecondGroupExternal = () => {
             <div className="Left">
                <h5>Enquête avec plus de note </h5>
                <div className="ReturnContent">
-                  <h3>Nourriture</h3>
+                  <h3>Enquête: {surveyAverage.maxSurvey && surveyAverage.maxSurvey.name}</h3>
                   <div className='Return'>
-                     <h2>30</h2>
+                     <h2>{surveyAverage.maxSurvey && surveyAverage.maxSurvey.average}</h2>
                   </div>
+                  <h5 className='company'>Entreprise: {surveyAverage.maxSurvey && surveyAverage.maxSurvey.company}</h5>
                </div>
             </div>
             <div className="Right">
                <h5>Enquête avec moins de note </h5>
                <div className="ReturnContent">
-                  <h3>Service</h3>
+                  <h3>Enquête: {surveyAverage.minSurvey && surveyAverage.minSurvey.name}</h3>
                   <div className='Return'>
-                     <h2>5</h2>
+                     <h2>{surveyAverage.minSurvey && surveyAverage.minSurvey.average}</h2>
                   </div>
+                  <h5 className='company'>Entreprise: {surveyAverage.minSurvey && surveyAverage.minSurvey.company}</h5>
                </div>
             </div>
          </div>
          <div className="TBoxx">
-            <h5>Liste des enquêtes</h5>
+            <div className="TBoxx-head">
+               <h5>Détails des 5 dernières enquêtes</h5>
+               <span className='Btn Send' onClick={() => Navigate('/surveys')}><RemixIcons.RiEyeLine size={15} /> Plus détails</span>
+            </div>
             <div className="Details">
                <table>
                   <thead>
                      <tr>
                         <td>No.</td>
                         <td>Nom</td>
+                        <td>Entreprise</td>
                         <td>date</td>
-                        <td>Question</td>
-                        <td>Reponse</td>
                         <td>Statut</td>
                      </tr>
                   </thead>
                   <tbody>
-                     <tr>
-                        <td>1</td>
-                        <td>Nourriture</td>
-                        <td>2023-09-10</td>
-                        <td>4</td>
-                        <td>20</td>
-                        <td>Encours</td>
-                     </tr>
-                     <tr>
-                        <td>2</td>
-                        <td>Service</td>
-                        <td>2023-09-10</td>
-                        <td>4</td>
-                        <td>20</td>
-                        <td>Encours</td>
-                     </tr>
-                     <tr>
-                        <td>3</td>
-                        <td>Boisson</td>
-                        <td>2023-09-10</td>
-                        <td>4</td>
-                        <td>20</td>
-                        <td>Encours</td>
-                     </tr>
-                     <tr>
-                        <td>4</td>
-                        <td>Animation</td>
-                        <td>2023-09-10</td>
-                        <td>4</td>
-                        <td>20</td>
-                        <td>Encours</td>
-                     </tr>
-                     <tr>
-                        <td>5</td>
-                        <td>Confort</td>
-                        <td>2023-09-10</td>
-                        <td>4</td>
-                        <td>20</td>
-                        <td>Encours</td>
-                     </tr>
+                     {
+                        survey.map((item, index) => (
+                           <tr>
+                              <td>{index + 1}</td>
+                              <td>{item.name}</td>
+                              <td>{item.Company.name}</td>
+                              <td>{dateFormat(new Date(item.createdAt), 'dd-mm-yyyy HH:MM:ss')}</td>
+                              <td>
+                                 <span className={item.Status.name === 'actif' ? 'Success p-1 rounded-3 text-white' : 'Error p-1 rounded-3 text-white'}>{item.Status.name === 'actif' ? 'actif' : 'inactif'}</span>
+                              </td>
+                           </tr>
+                        ))
+                     }
                   </tbody>
                </table>
             </div>
-
-            <Pagination
-               pageable=""
-            />
          </div>
       </>
    )

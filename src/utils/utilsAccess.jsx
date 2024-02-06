@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Account } from '../services/accountService'
 import { useNavigate } from 'react-router-dom'
+import { Account } from '../services/accountService'
 import { User } from '../services/userService'
 import { Status } from '../services/statusService'
+import toast from 'react-hot-toast'
 
 const Access = () => {
    const Navigate = useNavigate()
@@ -13,9 +14,6 @@ const Access = () => {
    const [token, setToken] = useState(localStorage.getItem('lkiy-'))
    const [id, setId] = useState(localStorage.getItem('id'))
    const [data, setData] = useState(0)
-   const [user, setUser] = useState({})
-   const [statusData, setStatusData] = useState([])
-   const [idStatusActif, setIdStatusActif] = useState(null)
 
    useEffect(() => {
       const timer = window.setInterval(() => {
@@ -40,6 +38,26 @@ const Access = () => {
    }, [role, env, status, token, id])
 
    useEffect(() => {
+      const handleLocalStorageChange = () => {
+         toast.error("Les données de connexion ont été corrompues.")
+         toast.error("Déconnexion !")
+         Navigate('/auth/login')
+
+         localStorage.removeItem('lkiy-')
+         localStorage.removeItem('id')
+         localStorage.removeItem('status')
+         localStorage.removeItem('env')
+         localStorage.removeItem('lero')
+      }
+
+      window.addEventListener('storage', handleLocalStorageChange)
+
+      return () => {
+         window.removeEventListener('storage', handleLocalStorageChange)
+      }
+   }, [Navigate])
+
+   useEffect(() => {
       const loadUser = async () => {
          try {
             const userData = await User.getOne(id)
@@ -48,20 +66,27 @@ const Access = () => {
             const statusData = await Status.getAll()
             const status = statusData.data.content
             filterStatusData(user, status)
-         } catch (error) {
-            console.error("Erreur lors du chargement des données :", error)
+         } catch (err) {
+            if (err.response.data.message === 'missing token') {
+               Navigate('/auth/login')
+               toast.error("Token manquant !")
+            }
+            else if (err.response.data.message === 'bad token') {
+               Navigate('/auth/login')
+               toast.error("Votre session a expiré !")
+            }
          }
       }
 
       const filterStatusData = async (user, statusData) => {
          try {
-            const objetActif = statusData.find((objet) => objet.name === "actif")
+            const objetActif = statusData.find((objet) => objet.name === 'actif')
             const idStatusActif = objetActif ? objetActif.id : null
 
             if (status !== idStatusActif || !token || !id) {
                setData(0)
                setTimeout(() => {
-                  Account.logout()
+                  Account.logout(300)
                }, 1000)
             } else {
                let newData = 0
@@ -78,7 +103,7 @@ const Access = () => {
                            newData = 13
                            break
                         default:
-                           handleLogout(0)
+                           Account.logout()
                            return
                      }
                      break
@@ -94,24 +119,23 @@ const Access = () => {
                            newData = 23
                            break
                         default:
-                           handleLogout(300)
+                           Account.logout()
                            return
                      }
                      break
                   default:
-                     handleLogout(300)
+                     Account.logout()
                      return
                }
                setData(newData)
             }
-         } catch (error) {
-            console.error("Erreur lors du filtrage des données de statut :", error)
+         } catch (err) {
+            // Gestion de l'erreur
          }
       }
 
       loadUser()
-   }, [])
-
+   }, [Navigate, id, status, token])
 
    return data
 }

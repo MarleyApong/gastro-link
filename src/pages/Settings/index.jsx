@@ -4,9 +4,9 @@ import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import HeaderMain from "../../components/HeaderMain"
 import { User } from "../../services/userService"
-import { Account } from "../../services/accountService"
 import PleaseNote from "../../components/PleaseNote"
 import RequirePassword from "../../components/RequirePassword"
+import useHandleError from "../../hooks/useHandleError"
 const Settings = () => {
 	const Navigate = useNavigate()
 
@@ -44,22 +44,21 @@ const Settings = () => {
 
 	// GET ONE DATA API
 	useEffect(() => {
-		User.getOne(id)
-			.then((res) => {
-				setUser({
-					firstName: res.data.content.firstName,
-					lastName: res.data.content.lastName,
-					phone: res.data.content.phone,
-				})
-
-				setLastData({
-					firstName: res.data.content.firstName,
-					lastName: res.data.content.lastName,
-					phone: res.data.content.phone
-				})
-
-				// setLastPassword(res.data.content.password)
+		User.getOne(id).then((res) => {
+			setUser({
+				firstName: res.data.content.firstName,
+				lastName: res.data.content.lastName,
+				phone: res.data.content.phone,
 			})
+
+			setLastData({
+				firstName: res.data.content.firstName,
+				lastName: res.data.content.lastName,
+				phone: res.data.content.phone
+			})
+		}).catch((err) => {
+			useHandleError(err, Navigate)
+		})
 	}, [id, refresh])
 
 	// UPDATE INFO USER
@@ -79,43 +78,12 @@ const Settings = () => {
 			toast.error("Modifiez une valeur pour continuer !")
 		}
 		else {
-			User.update(id, user)
-				.then((res) => {
-					toast.success("Informations modifiées !")
-					setRefresh((current) => current + 1)
-				})
-				.catch((err) => {
-					console.log("Erreur: ", err);
-					if (err.response.status === 400) {
-						toast.error("Champs mal renseigné ou format inattendu !", {
-							style: {
-								textAlign: 'center'
-							}
-						})
-					}
-					else if (err.response.status === 401) {
-						toast.error("La session a expiré !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
-					else if (err.response.status === 403) {
-						toast.error("Accès interdit !")
-					}
-					else if (err.response.status === 404) {
-						toast.error("Ressource non trouvée !")
-					}
-					else if (err.response.status === 415) {
-						toast.error("Erreur, contactez l'administrateur !")
-					}
-					else if (err.response.status === 500) {
-						toast.error("Erreur interne du serveur !")
-					}
-					else {
-						toast.error("Erreur de données l'utilisateur !")
-						Account.logout()
-						Navigate("/auth/login")
-					}
-				})
+			User.update(id, user).then((res) => {
+				toast.success("Informations modifiées !")
+				setRefresh((current) => current + 1)
+			}).catch((err) => {
+				useHandleError(err, Navigate, setValidator)
+			})
 		}
 	}
 
@@ -129,10 +97,10 @@ const Settings = () => {
 			toast.error("Entrez le nouveau mot de passe !")
 		}
 		else if (newPassword !== confirmPassword) {
-			toast.error("Confirmez le nouveau mot de passe!")
+			toast.error("Les mot de passe sont différentes !")
 		}
 		else if (confirmPassword === "") {
-			toast.error("Les mot de passe sont différents !")
+			toast.error("Confirmez le nouveau mot de passe !")
 		}
 		else {
 			const data = {
@@ -141,41 +109,16 @@ const Settings = () => {
 				confirmPassword: confirmPassword
 			}
 
-			User.changePassword(id, data)
-				.then((res) => {
-					console.log("res: ", res);
-					toast.success("Mot de passe modifié avec succès !")
-					setRefresh((current) => current + 1)
-					setValidator(0)
-				})
-				.catch((err) => {
-					console.log("Erreur: ", err);
-					if (err.response) {
-						if (err.response.data.error.name === "MissingData") {
-							toast.error("Erreur, données incomplètes !")
-						}
-						else if (err.response.data.error.name === "MissingParams") {
-							toast.error("Erreur, Paramètres incomplètes !")
-						}
-						else if (err.response.data.error.name === "BadRequest") {
-							toast.error("Erreur, mot de passe non modifié !")
-						}
-						else if (err.response.data.error.name === "ProcessCompareFailed") {
-							setValidator(1)
-							toast.error("Erreur, mot de passe incorret !")
-						}
-						else if (err.response.data.error.name === "NotFound") {
-							toast.error("Erreur, utilisateur non trouvé !")
-						}
-						if (err.response.data.error.name === 'RegexPasswordValidationError') {
-							setValidator(2)
-							toast.error("Le nouveau mot de passe n'est pas valide !")
-						}
-					}
-					else {
-
-					}
-				})
+			User.changePassword(id, data).then((res) => {
+				toast.success("Mot de passe modifié avec succès !")
+				setRefresh((current) => current + 1)
+				setValidator(0)
+				setNewPassword('')
+				setLastPassword('')
+				setConfigPassword('')
+			}).catch((err) => {
+				useHandleError(err, Navigate, setValidator)
+			})
 		}
 	}
 
@@ -249,14 +192,14 @@ const Settings = () => {
 
 						<form onSubmit={handleUP} className="row g-2 form">
 							<h5 className="mt-4">Modifiez votre mot de passe</h5>
-							{validator === 2 && <RequirePassword/>}
+							{validator === 2 && <RequirePassword />}
 							<div className="col-md-6">
 								<label htmlFor="phone" className="form-label">
 									Ancien mot de passe :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
-									type="text"
+									type="password"
 									className={validator === 1 ? "form-control no-focus-outline border border-danger" : validator === 2 ? "form-control no-focus-outline border border-success" : "form-control no-focus-outline"}
 									id="phone"
 									name="phone"
@@ -272,7 +215,7 @@ const Settings = () => {
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
-									type="text"
+									type="password"
 									className={validator === 2 ? "form-control no-focus-outline border border-danger" : "form-control no-focus-outline"}
 									id="newPassword"
 									name="newPassword"
@@ -288,7 +231,7 @@ const Settings = () => {
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
-									type="text"
+									type="password"
 									className={validator === 2 ? "form-control no-focus-outline border border-danger" : "form-control no-focus-outline"}
 									id="confirmPassword"
 									name="confirmPassword"

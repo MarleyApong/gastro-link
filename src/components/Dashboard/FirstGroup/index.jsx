@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import * as RemixIcons from "react-icons/ri"
+import { Survey } from '../../../services/surveyService'
+import { Customer } from '../../../services/customerService'
+import { Company } from '../../../services/companyService'
 
 export const FirstGroupInternal = ({companies, surveys}) => {
    
@@ -45,14 +48,41 @@ export const FirstGroupInternal = ({companies, surveys}) => {
    )
 }
 
-export const FirstGroupExternal = () => {
+export const FirstGroupExternal = ({idUser}) => {
+   const [count, setCount] = useState({})
+   const [countCustomer, setCountCustomer] = useState(0)
+   const [companiesBlocked, setCompaniesBlocked] = useState(0)
+
+   const order = 'desc'
+   const filter = 'createdAt'
+   const status = ''
+   const search = ''
+   const limit = 5
+   const page = 0
+
+   useEffect(() => {
+      const loadData = async () => {
+         let res = await Survey.getSurveysByUser(idUser)  
+         setCount(res.data) 
+
+         res = await Customer.getCustomersByUser(idUser, order, filter, status, search, limit, page)
+         setCountCustomer(res.data.content.totalCutomerByUser)
+
+         const statusState = 'inactif'
+         res = await Company.getCompanyByUser(idUser, order, filter, search, statusState, limit, page)
+         setCompaniesBlocked(res.data.content.totalElements)
+      }
+      
+      loadData()
+   }, [idUser, order, filter, status, search, limit, page])
+
    return (
       <>
          <div className="TBox">
             <div className="Element">
                <span>Total enquête</span>
                <div className="Length">
-                  30
+                  {count.totalElements}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiSurveyLine /></div>
@@ -61,7 +91,7 @@ export const FirstGroupExternal = () => {
             <div className="Element">
                <span>Enquête en cours</span>
                <div className="Length">
-                  20
+               {count.inProgress}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiAlarmWarningLine /></div>
@@ -70,7 +100,7 @@ export const FirstGroupExternal = () => {
             <div className="Element">
                <span>Client abonné</span>
                <div className="Length">
-                  10
+                  {countCustomer}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiBuildingLine /></div>
@@ -79,7 +109,7 @@ export const FirstGroupExternal = () => {
             <div className="Element">
                <span>Entreprise bloquée</span>
                <div className="Length">
-                  15
+                  {companiesBlocked}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiCloseCircleLine /></div>

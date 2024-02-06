@@ -16,6 +16,7 @@ import { sortOption, StatusOption } from "../../data/optionFilter"
 import SearchInput from "../../components/SearchInput"
 import Access from "../../utils/utilsAccess"
 import { Average } from "../../services/average"
+import useHandleError from "../../hooks/useHandleError"
 
 const ListSurvey = () => {
    const Navigate = useNavigate()
@@ -52,8 +53,8 @@ const ListSurvey = () => {
 
    // RECOVERING THE ID OF THE SELECTED LINE
    const patch = (itemId) => {
-      setshowDetailCompanyModal(true)
       setId(itemId)
+      setshowDetailCompanyModal(true)
    }
 
    // CLOSE THE TEMPLATE MODAL
@@ -129,7 +130,7 @@ const ListSurvey = () => {
                surveys.map((survey) =>
                   Average.averageSurvey(survey.id)
                      .then((res) => res.data.average)
-                     .catch(() => 0) // Si une erreur se produit (par exemple, si la moyenne n'existe pas), définir la moyenne sur 0
+                     .catch(() => 0)
                )
             )
 
@@ -143,7 +144,7 @@ const ListSurvey = () => {
             setData(surveysWithAverage)
 
             // RETRIEVE THE TOTAL NUMBER OF SURVEYS
-            const totalSurveys = await Survey.getAll()
+            const totalSurveys = await Survey.getAll(order, filter, status, search, limit, page)
             setAllCount(totalSurveys.data.content.totalElements)
 
             // RETRIEVE DETAILED DATA FOR THE SELECTED SURVEY (id)
@@ -161,8 +162,9 @@ const ListSurvey = () => {
                ...detailedSurveyData,
                Questions: await Promise.all(questionsWithAverage),
             })
-         } catch (err) {
-            console.log("Load: ", err)
+         } 
+         catch (err) {
+            useHandleError(err, Navigate)
          } finally {
             setLoading(false)
          }
@@ -170,76 +172,55 @@ const ListSurvey = () => {
 
 
       loadData()
-   }, [order, filter, search, status, refresh, id, limit, page])
+   }, [id, refresh, order, filter, search, status, limit, page])
 
    // GET ONE DATA API
    useEffect(() => {
-      Survey.getOne(id).then((res) => setOneData(res.data.content))
-      const idCompany = oneData.Company ? oneData.Company.id : null
+      const load = async () => {
+         try {
+            let res = await Survey.getOne(id)
+            setOneData(res.data.content)
+            const idCompany = res.data.content.Company ? res.data.content.Company.id : null
 
-      Average.averageQuestion().then((res) => setAverageQuestion(res.data.average))
-      Average.averageSurvey(id).then((res) => setAverageSurvey(res.data.average))
-      Average.averageCompany(idCompany).then((res) => setAverageCompany(res.data.average))
-   }, [id, refresh])
+            res = await Average.averageQuestion()
+            setAverageQuestion(res.data.average)
+
+            res = await Average.averageSurvey(id)
+            setAverageSurvey(res.data.average)
+
+            res = await Average.averageCompany(idCompany)
+            setAverageCompany(res.data.average)
+         }
+         catch (err) {
+            useHandleError(err, Navigate)
+         }
+      }
+
+      load()
+   }, [id])
 
    // CHANGE STATUS WITH TOGGLE BUTTON
    const handleToggle = (idRow) => {
-      Survey.changeStatus(idRow)
-         .then((res) => {
-            if (res.data.message === 'Survey active') toast.success("Enquête activée !")
-            else toast.success("Enquête désactivée !")
-            setRefresh((current) => current + 1)
-         })
-         .catch((err) => {
-            console.error("Erreur lors de la mise à jour du statut :", err)
-            setRefresh((current) => current + 1)
-            if (err) {
-               if (err.response.data.error.name === "MissingData") {
-                  toast.error("Erreur, données incomplètes !")
-               }
-               else if (err.response.data.error.name === "MissingParams") {
-                  toast.error("Erreur, Paramètres incomplètes !")
-               }
-               else if (err.response.data.error.name === "BadRequest") {
-                  toast.error("Erreur, mauvaise requête !")
-               }
-               else {
-                  toast.error("Erreur interne du serveur !")
-               }
-            }
-            // setOneData({ ...oneData, idStatus: oneData.idStatus })
-         })
+      Survey.changeStatus(idRow).then((res) => {
+         if (res.data.message === 'survey active') toast.success("Enquête activée !")
+         else toast.success("Enquête désactivée !")
+         setRefresh((current) => current + 1)
+      }).catch((err) => {
+         setRefresh((current) => current + 1)
+         useHandleError(err, Navigate)
+      })
    }
 
    // CHANGE STATUS WITH SIMPLE BUTTON
    const detailsStatusChange = (id) => {
-      Survey.changeStatus(id)
-         .then((res) => {
-            if (res.data.message === 'Survey active') toast.success("Enquête activée !")
-            else toast.success("Enquête désactivée !")
-            setRefresh((current) => current + 1)
-         })
-         .catch((err) => {
-            console.error("Erreur lors de la mise à jour du statut :", err)
-            setRefresh((current) => current + 1)
-            if (err) {
-               if (err.response.data.error.name === "MissingData") {
-                  toast.error("Erreur, données incomplètes !")
-               }
-               else if (err.response.data.error.name === "MissingParams") {
-                  toast.error("Erreur, Paramètres incomplètes !")
-               }
-               else if (err.response.data.error.name === "BadRequest") {
-                  toast.error("Erreur, mauvaise requête !")
-               }
-               else if (err.response.status === 400) {
-                  toast.error("Erreur lors de la mise à jour du statut !")
-               }
-               else {
-                  toast.error("Erreur interne du serveur !")
-               }
-            }
-         })
+      Survey.changeStatus(id).then((res) => {
+         if (res.data.message === 'survey active') toast.success("Enquête activée !")
+         else toast.success("Enquête désactivée !")
+         setRefresh((current) => current + 1)
+      }).catch((err) => {
+         setRefresh((current) => current + 1)
+         useHandleError(err, Navigate)
+      })
    }
 
    // ADD QUESTION
@@ -254,44 +235,14 @@ const ListSurvey = () => {
          toast.error("Entrez la question pour continuer !")
       }
       else {
-         Question.add(data)
-            .then((res) => {
-               toast.success("Question ajoutée avec succès !")
-               setQuestion('')
-               setStateQuestion(false)
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => {
-               if (err.response.status === 400) {
-                  toast.error("Champs mal renseigné ou format inattendu !", {
-                     style: {
-                        textAlign: 'center'
-                     }
-                  })
-               }
-               else if (err.response.status === 401) {
-                  toast.error("La session a expiré !")
-                  Account.logout()
-                  Navigate("/auth/login")
-               }
-               else if (err.response.status === 403) {
-                  toast.error("Accès interdit !")
-               }
-               else if (err.response.status === 404) {
-                  toast.error("Ressource non trouvée !")
-               }
-               else if (err.response.status === 415) {
-                  toast.error("Erreur, contactez l'administrateur !")
-               }
-               else if (err.response.status === 500) {
-                  toast.error("Erreur interne du serveur !")
-               }
-               else {
-                  toast.error("Erreur de données organization(e)s !")
-                  Account.logout()
-                  Navigate("/auth/login")
-               }
-            })
+         Question.add(data).then((res) => {
+            toast.success("Question ajoutée avec succès !")
+            setQuestion('')
+            setStateQuestion(false)
+            setRefresh((current) => current + 1)
+         }).catch((err) => {
+            useHandleError(err, Navigate)
+         })
       }
    }
 
@@ -302,14 +253,14 @@ const ListSurvey = () => {
       if (questionUpdade === "") {
          toast.error("La question ne peut être vide !")
       }
-      Question.update(idUpdateQuestion, data)
-         .then((res) => {
-            toast.success("La question a été bien modifiée !")
-            setStateQuestionUpdade(false)
-            setRefresh((current) => current + 1)
-            setQuestionUpdade('')
-         })
-         .catch((err) => console.log("error: ", err))
+      Question.update(idUpdateQuestion, data).then((res) => {
+         toast.success("La question a été bien modifiée !")
+         setStateQuestionUpdade(false)
+         setRefresh((current) => current + 1)
+         setQuestionUpdade('')
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }
 
    // UPDATE SURVEY
@@ -320,26 +271,26 @@ const ListSurvey = () => {
       if (surveyUpdade === "") {
          toast.error("L'enquête ne peut être vide !")
       }
-      Survey.update(idSurveyUpdate, data)
-         .then((res) => {
-            toast.success("L'enquête a été bien modifiée !")
-            setStateSurvey(false)
-            setRefresh((current) => current + 1)
-            setSurveyUpdade('')
-         })
-         .catch((err) => console.log("error: ", err))
+      Survey.update(idSurveyUpdate, data).then((res) => {
+         toast.success("L'enquête a été bien modifiée !")
+         setStateSurvey(false)
+         setRefresh((current) => current + 1)
+         setSurveyUpdade('')
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }
 
    // DELETE QUESTION
    const deleteQuestion = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
-         Question.deleted(id)
-            .then((res) => {
-               toast.success("Question supprimée avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => console.log("error: ", err))
+         Question.deleted(id).then((res) => {
+            toast.success("Question supprimée avec succès !")
+            setRefresh((current) => current + 1)
+         }).catch((err) => {
+            useHandleError(err, Navigate)
+         })
       }
    }
 
@@ -347,12 +298,12 @@ const ListSurvey = () => {
    const deleteSurvey = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
-         Survey.deleted(id)
-            .then((res) => {
-               toast.success("Enquête supprimée avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => console.log("error: ", err))
+         Survey.deleted(id).then((res) => {
+            toast.success("Enquête supprimée avec succès !")
+            setRefresh((current) => current + 1)
+         }).catch((err) => {
+            useHandleError(err, Navigate)
+         })
       }
    }
 
@@ -452,7 +403,7 @@ const ListSurvey = () => {
    ]
 
    return (
-      <div>
+      <>
          <HeaderMain total={allCount} />
 
          <div className="OptionFilter">
@@ -585,12 +536,12 @@ const ListSurvey = () => {
 
                            </div>
                         </div>
-                        <span className="site">
+                        {/* <span className="site">
                            <RemixIcons.RiGlobalLine className="icon" />
                            <a href={`http://localhost:5173/page/${oneData.id && oneData.Company.webpage}`} target="_blank" rel="noopener noreferrer">
                               page web
                            </a>
-                        </span>
+                        </span> */}
                      </div>
                   </div>
                </div>
@@ -599,7 +550,7 @@ const ListSurvey = () => {
                <div className="d-flex">
                   <Button onClick={() => surveyUpdateModal(oneData.id, oneData.name)} className="Btn Send me-2" title="Modifier l'enquête"><RemixIcons.RiPenNibLine /></Button>
                   {access === 12 || access === 13 &&
-                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.idStatus === 1 ? ' Btn Error me-2' : 'Btn Send me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.idStatus === 1 ? 'Désactiver ?' : 'Activer ?'}</Button>
+                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.id && oneData.Status.name === 'actif' ? ' Btn Error me-2' : 'Btn Send me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.id && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}</Button>
                   }
                   <Button onClick={() => addQuestion(oneData.Questions.length)} className={oneData.id && oneData.Questions.length >= 5 ? 'Btn Error me-2' : 'Btn Success me-2'} title="Nouvelle question"><RemixIcons.RiAddLine /></Button>
                </div>
@@ -608,7 +559,7 @@ const ListSurvey = () => {
                </div>
             </Modal.Footer>
          </Modal >
-      </div>
+      </>
    )
 }
 

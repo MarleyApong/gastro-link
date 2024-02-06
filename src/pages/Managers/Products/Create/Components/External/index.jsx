@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
-import { Organization } from "../../../../../../services/organizationService"
 import { Company } from "../../../../../../services/companyService"
 import { Product } from "../../../../../../services/productService"
+import useHandleError from "../../../../../../hooks/useHandleError"
 
 const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
    const order = 'asc'
@@ -56,7 +56,9 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
          .then((res) => {
             setCompany(res.data.content.data)
          })
-         .catch((error) => console.error('Erreur lors de la récupération des entreprises par organisation :', error))
+         .catch((err) => {
+            useHandleError(err, Navigate)
+         })
    }, [idUser, idStatus])
 
    // ADD PRODUCT
@@ -83,26 +85,7 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
                Navigate('/managers/products')
             })
             .catch((err) => {
-               if (err.response.status === 400) {
-                  console.log("erreur:", err);
-               }
-               else if (err.response.status === 401) {
-                  toast.error("La session a expiré !")
-                  Account.logout()
-                  Navigate("/auth/login")
-               }
-               else if (err.response.status === 403) {
-                  toast.error("Accès interdit !")
-               }
-               else if (err.response.status === 404) {
-                  toast.error("Ressource non trouvée !")
-               }
-               else if (err.response.status === 415) {
-                  toast.error("Erreur, contactez l'administrateur !")
-               }
-               else if (err.response.status === 500) {
-                  toast.error("Erreur interne du serveur !")
-               }
+               useHandleError(err, Navigate)
             })
       }
    }

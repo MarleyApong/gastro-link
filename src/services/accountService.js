@@ -17,6 +17,8 @@ const logout = (code) => {
         toast.error("Déconnexion ! Les données de connexion ont été corrompues.")
     }
 
+    window.location.replace('/auth/login')
+
     localStorage.removeItem('lkiy-')
     localStorage.removeItem('id')
     localStorage.removeItem('status')

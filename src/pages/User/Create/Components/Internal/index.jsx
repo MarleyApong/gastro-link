@@ -1,111 +1,96 @@
 import React, { useCallback, useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
-import { Account } from "../../../../../services/accountService"
 import { User } from "../../../../../services/userService"
 import RequirePassword from "../../../../../components/RequirePassword"
 import { EnvOption, RoleOption, StatusOption } from "../../../../../data/optionFilter"
 import { Company } from "../../../../../services/companyService"
 import { Organization } from "../../../../../services/organizationService"
+import useHandleError from "../../../../../hooks/useHandleError"
 
-const Internal = ({Navigate, CustomSelect, access}) => {
+const Internal = ({ Navigate, CustomSelect, access }) => {
    const statusOption = StatusOption()
-	const roleOption = RoleOption()
-	const envOption = EnvOption()
+   const roleOption = RoleOption()
+   const envOption = EnvOption()
 
-	const order = 'asc'
-	const filter = 'name'
-	const status = 'actif'
-	const search = ''
-	const limit = 10000
-	const page = 0
+   const order = 'asc'
+   const filter = 'name'
+   const status = 'actif'
+   const search = ''
+   const limit = 10000
+   const page = 0
 
-	const [validator, setValidator] = useState(0)
-	const [organization, setOrganization] = useState([])
-	const [company, setCompany] = useState([])
-	const [selectedOrganizationValue, setSelectedOrganizationValue] = useState({})
-	const [selectedCompanyValue, setSelectedCompanyValue] = useState({})
-	const [user, setUser] = useState({
-		firstName: "",
-		lastName: "",
-		phone: "",
-		email: "",
-		password: "",
-		env: "",
-		idRole: "",
-		idStatus: "",
-		idOrganization: "",
-		idCompany: ""
-	})
+   const [validator, setValidator] = useState(0)
+   const [organization, setOrganization] = useState([])
+   const [company, setCompany] = useState([])
+   const [selectedOrganizationValue, setSelectedOrganizationValue] = useState({})
+   const [selectedCompanyValue, setSelectedCompanyValue] = useState({})
+   const [user, setUser] = useState({
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
+      password: "",
+      env: "",
+      idRole: "",
+      idStatus: "",
+      idOrganization: "",
+      idCompany: ""
+   })
 
-	// RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
-	const handleOrganizationValue = useCallback((value) => {
-		setSelectedOrganizationValue(value)
-	}, [])
+   // RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
+   const handleOrganizationValue = useCallback((value) => {
+      setSelectedOrganizationValue(value)
+   }, [])
 
-	// RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
-	const handleCompanyValue = useCallback((value) => {
-		setSelectedCompanyValue(value)
-	}, [])
+   // RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
+   const handleCompanyValue = useCallback((value) => {
+      setSelectedCompanyValue(value)
+   }, [])
 
-	// PUSH SELECTED ID OF ORGANIZATION, COMPANY AND PASSWORD
-	let idOrganization = selectedOrganizationValue.value
-	user.idOrganization = selectedOrganizationValue.value
-	user.idCompany = selectedCompanyValue.value
-	user.password = user.firstName.substring(0, 3) + user.phone.substring(0, 4) + user.firstName.substring(1, 2).toUpperCase() + '@'
+   // PUSH SELECTED ID OF ORGANIZATION, COMPANY AND PASSWORD
+   let idOrganization = selectedOrganizationValue.value
+   user.idOrganization = selectedOrganizationValue.value
+   user.idCompany = selectedCompanyValue.value
+   user.password = user.firstName.substring(0, 3) + user.phone.substring(0, 4) + user.firstName.substring(1, 2).toUpperCase() + '@'
 
-	// SET ALL VALUE
-	const handleAdd = (e) => {
-		const { name, value } = e.target;
-		setUser({
-			...user,
-			[name]: value,
-		})
-	}
+   // SET ALL VALUE
+   const handleAdd = (e) => {
+      const { name, value } = e.target;
+      setUser({
+         ...user,
+         [name]: value,
+      })
+   }
 
-	// GET ALL DATA API
-	useEffect(() => {
-		Organization.getAll(order, filter, status, search, limit, page)
-			.then((res) => {
-				setOrganization(res.data.content.data)
-			})
-	}, [order, filter, status, search, limit, page])
+   // GET ALL DATA API
+   useEffect(() => {
+      Organization.getAll(order, filter, status, search, limit, page).then((res) => {
+         setOrganization(res.data.content.data)
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
+   }, [order, filter, status, search, limit, page])
 
-	useEffect(() => {
-		const status = 'actif'
-		Company.getCompaniesByOrganization(idOrganization, status)
-			.then((res) => {
-				setCompany(res.data.content)
-			})
-			.catch((error) => console.error('Erreur lors de la récupération des entreprises par organisation :', error))
-	}, [idOrganization])
+   useEffect(() => {
+      const status = 'actif'
+      Company.getCompaniesByOrganization(idOrganization, status).then((res) => {
+         setCompany(res.data.content)
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
+   }, [idOrganization])
 
-	// ADD USER
-	const handleSubmit = (e) => {
-		e.preventDefault()
-		User.add(user)
-			.then((res) => {
-				toast.success("Utilisateur ajouté avec succès !")
-				Navigate('/users/list')
-			})
-			.catch((err) => {
-				console.log("err: ", err);
-				if (err.response) {
-					if (err.response.data.error.name === 'RegexPasswordValidationError') {
-						setValidator(2)
-						toast.error("Le mot de passe n'est pas valide !")
-					}
-					else if (err.response.data.error.name === 'AddLimitReached') {
-						toast.error("Le rôle super admin est limité à 2.")
-						toast.error("Opération non authorisée !")
-					}
-					else if (err.response.data.error.name === 'AlreadyExist') {
-						toast.error("Désolé, cet utilisateur existe déjà !")
-					}
-				}
-			})
-	}
-
+   // ADD USER
+   const handleSubmit = (e) => {
+      e.preventDefault()
+      User.add(user).then((res) => {
+         toast.success("Utilisateur ajouté avec succès !")
+         Navigate('/users/list')
+      }).catch((err) => {
+         useHandleError(err, Navigate, setValidator)
+      })
+   }
 
    return (
       <>

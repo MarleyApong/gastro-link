@@ -16,7 +16,7 @@ import SelectOption from "../../components/SelectOption"
 import SearchInput from "../../components/SearchInput"
 import Access from "../../utils/utilsAccess"
 import { sortOption, StatusOption } from "../../data/optionFilter"
-
+import useHandleError from "../../hooks/useHandleError"
 
 const ListOrganization = () => {
    const Navigate = useNavigate()
@@ -80,10 +80,10 @@ const ListOrganization = () => {
             setData(res.data.content.data)
             setAllCount(res.data.content.totalElements)
             setTotalPages(res.data.content.totalPages)
-         } 
+         }
          catch (err) {
-            console.log("Load: ", err)
-         } 
+            useHandleError(err, Navigate)
+         }
          finally {
             setLoading(false)
          }
@@ -94,10 +94,11 @@ const ListOrganization = () => {
 
    // FETCH ONE DATA
    useEffect(() => {
-      Organization.getOne(id)
-         .then((res) => {
-            setOneData(res.data.content)
-         })
+      Organization.getOne(id).then((res) => {
+         setOneData(res.data.content)
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }, [id, refresh])
 
    // START LOGO PROCESSING PART =======================================================
@@ -105,34 +106,14 @@ const ListOrganization = () => {
       if (getImage) {
          const formData = new FormData()
          formData.append('picture', getImage)
-         Organization.changeProfil(id, formData)
-            .then((res) => {
-               toast.success("Logo importé avec succès !")
-               setRefresh((current) => current + 1)
-               setGetImage('')
-            })
-            .catch((err) => {
-               console.error("Erreur lors de la mise à jour du statut :", err)
-               setRefresh((current) => current + 1)
-               if (err) {
-                  if (err.response.data.error.name === "MissingData") {
-                     toast.error("Erreur, données incomplètes !")
-                  }
-                  else if (err.response.data.error.name === "MissingParams") {
-                     toast.error("Erreur, Paramètres incomplètes !")
-                  }
-                  else if (err.response.data.error.name === "BadRequest") {
-                     toast.error("Erreur, mauvaise requête !")
-                  }
-                  else if (err.response.data.error.name === "LIMIT_UNEXPECTED_FILE") {
-                     toast.error("Erreur, l'image doit être < 2 Mo !")
-                  }
-                  else {
-                     toast.error("Erreur interne du serveur !")
-                  }
-               }
-            })
-
+         Organization.changeProfil(id, formData).then((res) => {
+            toast.success("Logo importé avec succès !")
+            setRefresh((current) => current + 1)
+            setGetImage('')
+         }).catch((err) => {
+            setRefresh((current) => current + 1)
+            useHandleError(err, Navigate)
+         })
       }
       else {
          toast.error("Selectionner une photo pour continuer !")
@@ -178,75 +159,38 @@ const ListOrganization = () => {
 
    // CHANGE STATUS WITH TOGGLE BUTTON
    const handleToggle = (idRow) => {
-      Organization.changeStatus(idRow)
-         .then((res) => {
-            console.log(res.data);
-            if (res.data.message === 'organization active') toast.success("Organisation activée !")
-            else toast.success("Organisation désactivée !")
-            setRefresh((current) => current + 1)
-         })
-         .catch((err) => {
-            console.error("Erreur lors de la mise à jour du statut :", err)
-            setRefresh((current) => current + 1)
-            if (err) {
-               if (err.response.data.error.name === "MissingData") {
-                  toast.error("Erreur, données incomplètes !")
-               }
-               else if (err.response.data.error.name === "MissingParams") {
-                  toast.error("Erreur, Paramètres incomplètes !")
-               }
-               else if (err.response.data.error.name === "BadRequest") {
-                  toast.error("Erreur, mauvaise requête !")
-               }
-               else {
-                  toast.error("Erreur interne du serveur !")
-               }
-            }
-            // setOneData({ ...oneData, idStatus: oneData.idStatus })
-         })
+      Organization.changeStatus(idRow).then((res) => {
+         if (res.data.message === 'organization active') toast.success("Organisation activée !")
+         else toast.success("Organisation désactivée !")
+         setRefresh((current) => current + 1)
+      }).catch((err) => {
+         setRefresh((current) => current + 1)
+         useHandleError(err, Navigate)
+      })
    }
 
    // CHANGE STATUS WITH SIMPLE BUTTON
    const detailsStatusChange = (id) => {
-      Organization.changeStatus(id)
-         .then((res) => {
-            if (res.data.message === 'organization active') toast.success("Organisation activée !")
-            else toast.success("Organisation désactivée !")
-            setRefresh((current) => current + 1)
-         })
-         .catch((err) => {
-            console.error("Erreur lors de la mise à jour du statut :", err)
-            setRefresh((current) => current + 1)
-            if (err) {
-               if (err.response.data.error.name === "MissingData") {
-                  toast.error("Erreur, données incomplètes !")
-               }
-               else if (err.response.data.error.name === "MissingParams") {
-                  toast.error("Erreur, Paramètres incomplètes !")
-               }
-               else if (err.response.data.error.name === "BadRequest") {
-                  toast.error("Erreur, mauvaise requête !")
-               }
-               else if (err.response.status === 400) {
-                  toast.error("Erreur lors de la mise à jour du statut !")
-               }
-               else {
-                  toast.error("Erreur interne du serveur !")
-               }
-            }
-         })
+      Organization.changeStatus(id).then((res) => {
+         if (res.data.message === 'organization active') toast.success("Organisation activée !")
+         else toast.success("Organisation désactivée !")
+         setRefresh((current) => current + 1)
+      }).catch((err) => {
+         setRefresh((current) => current + 1)
+         useHandleError(err, Navigate)
+      })
    }
 
    // DELETED ORGANIZATION
    const deleteOrganization = (id) => {
       const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
       if (confirm) {
-         Organization.deleted(id)
-            .then((res) => {
-               toast.success("Organization supprimée avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => console.log("error: ", err))
+         Organization.deleted(id).then((res) => {
+            toast.success("Organization supprimée avec succès !")
+            setRefresh((current) => current + 1)
+         }).catch((err) => {
+            useHandleError(err, Navigate)
+         })
       }
    }
 
@@ -341,7 +285,7 @@ const ListOrganization = () => {
    ]
 
    return (
-      <div>
+      <>
          <HeaderMain total={allCount.totalElements} />
 
          <div className="OptionFilter">
@@ -451,7 +395,7 @@ const ListOrganization = () => {
                </div>
             </Modal.Footer>
          </Modal >
-      </div>
+      </>
    )
 }
 

@@ -10,6 +10,10 @@ const getOne = (id) => {
    return Axios.get(`/${route}/${id}`)
 }
 
+const getAnswersByOrganization = (id) => {
+   return Axios.get(`/${route}/organizations/${id}`)
+}
+
 const add = (data) => {
    return Axios.put(`/${route}`, data)
 }
@@ -17,5 +21,6 @@ const add = (data) => {
 export const Answer = {
    getAll,
    getOne,
+   getAnswersByOrganization,
    add
 }

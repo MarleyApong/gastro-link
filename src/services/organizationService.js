@@ -14,12 +14,15 @@ const getOne = (id) => {
    return Axios.get(`/${route}/${id}`)
 }
 
+const getOrganizationByUser = (id) => {
+   return Axios.get(`/${route}/users/${id}`)
+}
+
 const add = (data) => {
    return Axios.put(`/${route}`, data)
 }
 
 const update = (id, data) => {
-   console.log("id: ", id);
    return Axios.patch(`/${route}/${id}`, data)
 }
 
@@ -39,6 +42,7 @@ export const Organization = {
    getCount,
    getAll,
    getOne,
+   getOrganizationByUser,
    add,
    update,
    changeProfil,

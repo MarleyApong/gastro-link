@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react"
 import * as RemixIcons from "react-icons/ri"
-import { AiOutlinePhone, AiOutlineMail, AiOutlineFieldNumber } from 'react-icons/ai'
+import { AiOutlinePhone, AiOutlineMail } from 'react-icons/ai'
 import dateFormat from 'dateformat'
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { FaCity } from 'react-icons/fa'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
@@ -16,6 +16,8 @@ import SearchInput from "../../components/SearchInput"
 import SelectOption from "../../components/SelectOption"
 import { sortOption, StatusOption } from "../../data/optionFilter"
 import Access from "../../utils/utilsAccess"
+import { Account } from "../../services/accountService"
+import useHandleError from "../../hooks/useHandleError"
 
 const ListCompany = () => {
    const Navigate = useNavigate()
@@ -24,7 +26,6 @@ const ListCompany = () => {
    const idUser = localStorage.getItem('id')
 
    const [data, setData] = useState([])
-   const [companiesExternal, setCompaniesExternal] = useState([])
    const [oneData, setOneData] = useState([])
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
@@ -91,7 +92,7 @@ const ListCompany = () => {
             }
          }
          catch (err) {
-            console.log("Load: ", err)
+            useHandleError(err, Navigate)
          }
          finally {
             setLoading(false)
@@ -99,13 +100,16 @@ const ListCompany = () => {
       }
 
       loadData()
-   }, [access,order, filter, search, status, refresh, limit, page])
+   }, [access, order, filter, search, status, refresh, limit, page])
 
    // FECTH ONE DATA
    useEffect(() => {
-      Company.getOne(id)
-         .then((res) => setOneData(res.data.content))
-
+      Company.getOne(id).then((res) =>
+         setOneData(res.data.content)
+      )
+      .catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }, [id, refresh])
 
    // START LOGO PROCESSING PART =======================================================
@@ -120,25 +124,8 @@ const ListCompany = () => {
                setGetImage('')
             })
             .catch((err) => {
-               console.error("Erreur lors de la mise à jour du statut :", err)
                setRefresh((current) => current + 1)
-               if (err) {
-                  if (err.response.data.error.name === "MissingData") {
-                     toast.error("Erreur, données incomplètes !")
-                  }
-                  else if (err.response.data.error.name === "MissingParams") {
-                     toast.error("Erreur, Paramètres incomplètes !")
-                  }
-                  else if (err.response.data.error.name === "BadRequest") {
-                     toast.error("Erreur, mauvaise requête !")
-                  }
-                  else if (err.response.data.error.name === "LIMIT_UNEXPECTED_FILE") {
-                     toast.error("Erreur, l'image doit être < 2 Mo !")
-                  }
-                  else {
-                     toast.error("Erreur interne du serveur !")
-                  }
-               }
+               useHandleError(err, Navigate)
             })
 
       }
@@ -191,26 +178,8 @@ const ListCompany = () => {
             setRefresh((current) => current + 1)
          })
          .catch((err) => {
-            console.error("Erreur lors de la mise à jour du statut :", err)
             setRefresh((current) => current + 1)
-            if (err) {
-               if (err.response.data.error.name === "MissingData") {
-                  toast.error("Erreur, données incomplètes !")
-               }
-               else if (err.response.data.error.name === "MissingParams") {
-                  toast.error("Erreur, Paramètres incomplètes !")
-               }
-               else if (err.response.data.error.name === "BadRequest") {
-                  toast.error("Erreur, mauvaise requête !")
-               }
-               else if (err.response.status === 400) {
-                  toast.error("Erreur lors de la mise à jour du statut !")
-               }
-               else {
-                  toast.error("Erreur interne du serveur !")
-               }
-            }
-            // setOneData({ ...oneData, idStatus: oneData.idStatus })
+            useHandleError(err, Navigate)
          })
    }
 
@@ -222,25 +191,8 @@ const ListCompany = () => {
             setRefresh((current) => current + 1)
          })
          .catch((err) => {
-            console.error("Erreur lors de la mise à jour du statut :", err)
             setRefresh((current) => current + 1)
-            if (err) {
-               if (err.response.data.error.name === "MissingData") {
-                  toast.error("Erreur, données incomplètes !")
-               }
-               else if (err.response.data.error.name === "MissingParams") {
-                  toast.error("Erreur, Paramètres incomplètes !")
-               }
-               else if (err.response.data.error.name === "BadRequest") {
-                  toast.error("Erreur, mauvaise requête !")
-               }
-               else if (err.response.status === 400) {
-                  toast.error("Erreur lors de la mise à jour du statut !")
-               }
-               else {
-                  toast.error("Erreur interne du serveur !")
-               }
-            }
+            useHandleError(err, Navigate)
          })
    }
 
@@ -253,7 +205,9 @@ const ListCompany = () => {
                toast.success("Entreprise supprimée avec succès !")
                setRefresh((current) => current + 1)
             })
-            .catch((err) => console.log("error: ", err))
+            .catch((err) => {
+               useHandleError(err, Navigate)
+            })
       }
    }
 
@@ -266,7 +220,6 @@ const ListCompany = () => {
       setLimit(newLimit)
    }
 
-
    // FORMATTING JSON DATA TO MAKE IT MORE READABLE
    const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>
 
@@ -274,7 +227,7 @@ const ListCompany = () => {
    const columns = [
       {
          name: "#",
-         cell: (row, index) => index + 1,
+         cell: (_, index) => index + 1,
          maxWidth: '50px'
       },
       {
@@ -327,7 +280,7 @@ const ListCompany = () => {
       0 -> existing items to deleted
    */
    if (access === 11 || access === 12 || access === 13) {
-      columns.splice(4, 0, {
+      columns.splice(5, 0, {
          name: 'Status',
          cell: (row) => (
             <ToggleButton
@@ -336,6 +289,14 @@ const ListCompany = () => {
                id={row.id}
             />
          ),
+         wrap: true,
+      })
+   }
+
+   if (access === 11 || access === 12 || access === 13) {
+      columns.splice(2, 0, {
+         name: 'Organisation',
+         selector: row => row.Organization.name,
          wrap: true,
       })
    }
@@ -352,7 +313,7 @@ const ListCompany = () => {
    ]
 
    return (
-      <div>
+      <>
          <HeaderMain total={allCount.totalElements} />
 
          <div className="OptionFilter">
@@ -438,12 +399,12 @@ const ListCompany = () => {
                         <div className="email mb-3"><AiOutlineMail className="icon" />{oneData.email ? oneData.email : '---'}</div>
                         <div className="telephone mb-3"><AiOutlinePhone className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
                         <div className="ville mb-3"><FaCity className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
-                        <span className="site">
+                        {/* <span className="site">
                            <RemixIcons.RiGlobalLine className="icon" />
                            <a href={`http://localhost:5173/page/${oneData.webpage}`} target="_blank" rel="noopener noreferrer">
                               page web
                            </a>
-                        </span>
+                        </span> */}
                      </div>
                   </div>
                </div>
@@ -463,7 +424,7 @@ const ListCompany = () => {
                </div>
             </Modal.Footer>
          </Modal >
-      </div>
+      </>
    )
 }
 

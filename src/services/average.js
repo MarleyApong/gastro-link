@@ -16,9 +16,14 @@ const averageMinMax = () => {
    return Axios.get(`/${route}/companies/min-max`)
 }
 
+const averageMinMaxSurvey = (id) => {
+   return Axios.get(`/${route}/surveys/min-max/users/${id}`)
+}
+
 export const Average = {
    averageQuestion,
    averageSurvey,
    averageCompany,
-   averageMinMax
+   averageMinMax,
+   averageMinMaxSurvey
 }

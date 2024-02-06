@@ -4,6 +4,7 @@ import toast from "react-hot-toast"
 import { Organization } from "../../../../../services/organizationService"
 import { Survey } from "../../../../../services/surveyService"
 import { Company } from "../../../../../services/companyService"
+import useHandleError from "../../../../../hooks/useHandleError"
 
 const Internal = ({ Navigate, idStatus, access, CustomSelect }) => {
    const order = 'asc'
@@ -51,17 +52,19 @@ const Internal = ({ Navigate, idStatus, access, CustomSelect }) => {
    }
 
    useEffect(() => {
-      Organization.getAll(order, filter, status, search, limit, page)
-         .then((res) => setOrganization(res.data.content.data))
-         .catch((error) => console.error('Erreur lors de la récupération des organisations :', error))
+      Organization.getAll(order, filter, status, search, limit, page).then((res) =>
+         setOrganization(res.data.content.data)
+      ).catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }, [order, filter, status, search, limit, page])
 
    useEffect(() => {
-      Company.getCompaniesByOrganization(idOrganization, status)
-         .then((res) => {
-            setCompany(res.data.content)
-         })
-         .catch((error) => console.error('Erreur lors de la récupération des entreprises par organisation :', error))
+      Company.getCompaniesByOrganization(idOrganization, status).then((res) => {
+         setCompany(res.data.content)
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }, [idOrganization])
 
    // ADD SURVEY
@@ -74,38 +77,12 @@ const Internal = ({ Navigate, idStatus, access, CustomSelect }) => {
          toast.error("Les champs marqués par une etoile sont obligations !")
       }
       else {
-         Survey.add(survey)
-            .then((res) => {
-               toast.success("Enquête ajoutée avec succès !")
-               Navigate('/surveys/list')
-            })
-            .catch((err) => {
-               if (err.response.status === 400) {
-                  // toast.error("Champs mal renseigné ou format inattendu !", {
-                  // 	style: {
-                  // 		textAlign: 'center'
-                  // 	}
-                  // })
-                  console.log("erreur:", err);
-               }
-               else if (err.response.status === 401) {
-                  toast.error("La session a expiré !")
-                  Account.logout()
-                  Navigate("/auth/login")
-               }
-               else if (err.response.status === 403) {
-                  toast.error("Accès interdit !")
-               }
-               else if (err.response.status === 404) {
-                  toast.error("Ressource non trouvée !")
-               }
-               else if (err.response.status === 415) {
-                  toast.error("Erreur, contactez l'administrateur !")
-               }
-               else if (err.response.status === 500) {
-                  toast.error("Erreur interne du serveur !")
-               }
-            })
+         Survey.add(survey).then((res) => {
+            toast.success("Enquête ajoutée avec succès !")
+            Navigate('/surveys/list')
+         }).catch((err) => {
+            useHandleError(err, Navigate)
+         })
       }
    }
 

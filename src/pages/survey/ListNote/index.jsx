@@ -13,6 +13,7 @@ import SearchInput from "../../../components/SearchInput"
 import Access from "../../../utils/utilsAccess"
 import { Average } from "../../../services/average"
 import { QuestionAnswer } from "../../../services/questionAnswerService"
+import useHandleError from "../../../hooks/useHandleError"
 
 const ListNote = () => {
    const Navigate = useNavigate()
@@ -56,7 +57,7 @@ const ListNote = () => {
             const res = await QuestionAnswer.getByQuestion(id)
             setData(res.data.content.data)
          } catch (err) {
-            console.log("Load: ", err)
+            useHandleError(err, Navigate)
          }  finally {
             setLoading(false)
          }
@@ -105,7 +106,7 @@ const ListNote = () => {
       { value: 'createdAt', label: 'date de créat.' },
    ]
    return (
-      <div>
+      <>
          <HeaderMain total={allCount} />
 
          <div className="OptionFilter">
@@ -142,7 +143,7 @@ const ListNote = () => {
             data={data}
             ExpandedComponent={ExpandedComponent}
          />
-      </div>
+      </>
    )
 }
 
