@@ -1,5 +1,5 @@
 :root {
-  --color-primary: #fde7e7;
+  --color-primary: #f1f1f1;
   --aside-color: #fefefe;
   --aside-text-color: #Ed1f24;
   --active-color: #Ed1f24;
@@ -18,6 +18,7 @@
   --color-err-hv: #Ed1f24;
 
   --website-color: #Ed1f24;
+  --order-color: #c01d20;
 }
 
 * {
@@ -36,6 +37,7 @@ body{
 .Details::-webkit-scrollbar,
 .Survey-Cont::-webkit-scrollbar,
 .CustomerData::-webkit-scrollbar,
+.container-carts-show::-webkit-scrollbar,
 body::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -48,6 +50,7 @@ body::-webkit-scrollbar {
 .Details::-webkit-scrollbar-track,
 .Survey-Cont::-webkit-scrollbar-track,
 .CustomerData::-webkit-scrollbar-track,
+.container-carts-show::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track {
   border-radius: 10px;
   background: var(--color-2);
@@ -58,6 +61,7 @@ body::-webkit-scrollbar-track {
 .details::-webkit-scrollbar-thumb,
 .Survey-Cont::-webkit-scrollbar-thumb,
 .CustomerData::-webkit-scrollbar-thumb,
+.container-carts-show::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
   border: 3px solid var(--user-color);
   border-radius: 10px;

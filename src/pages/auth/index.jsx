@@ -75,8 +75,8 @@ const Login = () => {
       <div className="Login">
          <div className="Container">
             <div className="Left">
-               {/* <h1>Bienvenue sur customer space</h1>
-               <p>Connectez-vous pour continuer</p> */}
+               <h4>Bienvenue sur customer space</h4>
+               <span>Connectez-vous pour continuer</span>
                <span>Copyright &#xa9;customer-space 2024 | <a target='_blank' href="https://www.allhcorp.com" rel="noreferrer">made by allhcorp</a> </span>
             </div>
             <div className="Right">

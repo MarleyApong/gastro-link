@@ -372,12 +372,12 @@ const ListOrganization = () => {
                            {oneData.Status && oneData.Status.name === 'actif' ? 'actif' : 'inactif'}
                         </div>
 
-                        <span className="site">
+                        {/* <span className="site">
                            <RemixIcons.RiGlobalLine className="icon" />
                            <a href="https://www.allhcorp.com" className="text-danger" target="_blank" rel="noopener noreferrer">
                               www.allhcorp.com
                            </a>
-                        </span>
+                        </span> */}
                      </div>
                   </div>
                </div>

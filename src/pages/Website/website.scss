@@ -1,356 +1,151 @@
-.Website {
+.website {
     display: flex;
-    width: 100%;
     height: 100vh;
-    // background: var(--color-primary);
-    background: #595858;
 
-    header {
-        .log {
-            img {
-                width: 40px;
-                margin-right: 10px;
+    .middle-sm {
+        display: none;
+    }
+
+    .middle {
+        position: absolute;
+        width: 400px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--color-1);
+        text-align: center;
+
+        .action {
+            margin-top: 20px;
+
+            button {
+                padding: 8px;
+                background: none;
+                border: 1px solid;
+                color: var(--color-1);
+                font-weight: 500;
+                transition: 1s all;
+
+                &:first-child {
+                    margin-right: 15px;
+
+                    &:hover {
+                        background-color: var(--color-1);
+                        color: var(--color-3);
+                    }
+                }
+
+                &:last-child {
+                    background-color: var(--color-3);
+                    color: var(--color-1);
+                    border-style: dashed;
+
+                    &:hover {
+                        background-color: var(--website-color);
+                    }
+                }
             }
-
-            font-weight: 600;
-        }
-
-        .hi {
-            color: var(--color-3);
         }
     }
 
-    main {
-        width: 100%;
-        margin: 2rem;
-        margin-top: 5rem;
-        overflow: hidden;
+    .left {
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        width: 50%;
+        background-image: linear-gradient(#07070798, rgba(22, 1, 1, 0.945)), url('../../assets/img/order.jpg');
+        background-position: center left -260px;
+        background-size: cover;
+        z-index: -1;
 
-        .Head {
-            color: var(--color-1);
-            font-weight: 600;
-            text-shadow: 1px 1px 3px black;
+        button {
+            display: none;
         }
+    }
 
-        .cont {
-            display: flex;
-            gap: 1rem;
-            width: 100%;
+    .right {
+        display: flex;
+        align-items: center;
+        width: 50%;
+        background-image: linear-gradient(#07070794, rgba(255, 0, 0, 0.24)), url('../../assets/img/note.jpg');
+        background-size: cover;
+        z-index: -1;
 
-
-            .Description {
-                width: 30%;
-                padding: 5px;
-                box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color), -2px 2px 3px var(--shadow-color), 2px -2px 3px var(--shadow-color);
-                background: var(--color-1);
-
-                .Desc {
-                    padding: 10px;
-
-                    h3 {
-                        text-align: center;
-                        text-transform: capitalize;
-                    }
-
-                    p {
-                        padding: 10px;
-                        text-align: left;
-
-                        &::first-letter {
-                            text-transform: uppercase;
-                        }
-                    }
-                }
-
-                .Img-Des {
-                    width: 100%;
-                    height: 300px;
-                    overflow: hidden;
-                }
-            }
-
-            .Survey {
-                position: relative;
-                display: flex;
-                width: 70%;
-                padding: 5px;
-                box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color), -2px 2px 3px var(--shadow-color), 2px -2px 3px var(--shadow-color);
-                background: var(--color-1);
-                overflow: hidden;
-
-                .First {
-                    width: 100%;
-                    padding: 0 30px;
-
-                    .Body {
-                        .Name-Survey {
-                            margin-top: 1rem;
-                            text-transform: capitalize;
-                            color: var(--website-color);
-                            // text-shadow: 1px 1px 20px var(--website-color);
-                            text-align: center;
-                            padding: 5px;
-                            min-width: 320px;
-                            font-size: 20px;
-                            font-weight: 600;
-                        }
-
-                        .details {
-                            font-size: 15px;
-                            text-align: center;
-                        }
-
-                        .Survey-Cont {
-
-                            .Quest-Content {
-                                display: flex;
-                                flex-direction: column;
-                                gap: 5px;
-
-                                .Star {
-                                    color: var(--website-color);
-            
-                                    .active {
-                                        color: var(--website-color);
-                                    }
-
-                                    .msg {
-                                        color: var(--color-1);
-                                        background-color: var(--website-color);
-                                        padding: 1px 5px;
-                                        border-radius: 3px;
-                                        margin-left: 20px;
-                                    }
-                                }
-
-                                .Question {
-                                    text-transform: capitalize;
-                                    display: flex;
-                                    align-items: center;
-                                    gap: 5px;
-                                    font-size: 14px;
-                                    color: var(--website-color);
-                                    // text-shadow: 1px 1px 20px black;
-                                    font-weight: 500;
-
-                                    .Question-num {
-                                        width: 15px;
-                                        height: 15px;
-                                        font-size: 10px;
-                                        background-color: var(--color-3);
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                        color: var(--color-1);
-                                        border-radius: 50%;
-                                    }
-                                }
-
-                                textarea {
-                                    outline: none;
-                                    border: none;
-                                    // background: #f8f7f7;
-                                    border: 1px solid #d7cfcf;
-                                    box-shadow: 10px 10px 20px #d7cfcf;
-                                    padding: 10px;
-                                    max-width: 70%;
-                                    max-height: 200px;
-                                    margin-bottom: 20px;
-                                    resize: none;
-                                }
-                            }
-
-                        }
-
-                        .Nav-Step {
-                            // position: absolute;
-                            bottom: 10px;
-                            display: flex;
-                            gap: .4rem;
-                        }
-
-                    }
-                }
-
-                .Second {
-                    background: linear-gradient(70deg,rgba(230, 226, 226, 0.524),rgba(227, 86, 86, 0.638)), url('../../assets/img/template-survey.jpg');
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-size: cover;
-                    width: 100%;
-                    padding: 0;
-                    animation: service_ok 1s ease;
-
-                    .part {
-                        max-width: 400px;
-                        margin-left: 1rem;
-                        .Survey-Success {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            margin-bottom: 50px;
-                            text-align: center;
-
-                            .Circle-check {
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                width: 100px;
-                                height: 100px;
-                                border-radius: 50%;
-                                background: green;
-                                color: var(--color-1);
-
-                                .Icon-Check {
-                                    font-size: 30px;
-                                }
-                            }
-                        }
-
-                        .Form-Subscribe {
-                            display: flex;
-                            flex-direction: column;
-                            gap: 15px;
-                            margin-top: 20px;
-
-                            input {
-                                border: none;
-                                outline: none;
-                                border: 2px solid var(--website-color);
-                                border-style: dashed;
-                                // background: none;
-                                padding: 15px;
-                            }
-
-                            .Nav-Step {
-                                display: flex;
-                                // justify-content: center;
-                                align-items: center;
-                                gap: 10px;
-                                margin-top: 20px;
-
-                            }
-                        }
-                    }
-                }
-
-                @keyframes service_ok {
-                    0% {
-                        transform: translateX(100%);
-                    }
-
-                    100% {
-                        transform: translateX(0);
-                    }
-                }
-
-            }
-
-
+        button {
+            display: none;
         }
+    }
+}
 
-        .Step-Cont {
+@media screen and (max-width: 575px) {
+    .website {
+        flex-direction: column;
+
+        .middle {
+            display: none;
             position: absolute;
-            bottom: 100px;
-            right: 10px;
+            width: 400px;
+            left: 50%;
+            top: 45%;
+            transform: translate(-50%, -50%);
+            color: var(--color-1);
+            text-align: center;
+
+            .action {
+                display: none;
+            }
+        }
+
+        button {
+            position: absolute;
+            padding: 8px;
+            background: none;
+            border: 1px solid;
+            color: var(--color-1);
+            font-weight: 500;
+        }
+
+        .left {
+            position: relative;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            height: 50%;
+            background-position: center left 0px;
+            z-index: 1;
 
-            .Step,
-            .Step-Active {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                background: var(--color-1);
-                box-shadow: 3px 3px 5px #dbd9d9, -3px -3px 5px #f5f5f5, -3px 3px 5px #f5f5f5, 3px -3px 5px #f5f5f5;
-            }
-
-            .Step-Active {
-                background: var(--website-color);
+            .middle-sm {
+                top: 50%;
+                padding: 0 10px;
+                display: block;
                 color: var(--color-1);
             }
 
+            button {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                bottom: 10px;
+                // margin-top: 40px;
+                border-style: dashed;
+            }
         }
-    }
-}
 
-@media screen and (max-width: 1024px) {
-    .Website {
-        height: 100%;
-        flex-direction: column-reverse;
-        gap: 30px;
-        padding: 30px 50px;
-
-        .Description {
+        .right {
+            position: relative;
+            display: flex;
+            justify-content: center;
             width: 100%;
-            box-shadow: 1px 1px 10px #f5f5f5, -1px -1px 10px #f5f5f5;
+            height: 50%;
 
-            .Desc {
-                p {
-                    text-align: left;
-                }
-            }
-
-        }
-
-        .Cont {
-            width: 100%;
-            height: 100%;
-            box-shadow: 1px 1px 10px #f5f5f5, 1px -1px 10px #f5f5f5;
-            overflow: hidden;
-
-            .Survey {
-                position: relative;
-                padding: 10px;
-                width: 100%;
-                height: 100%;
-                box-shadow: 1px 1px 10px #f5f5f5, 1px -1px 10px #f5f5f5;
-                overflow: hidden;
-            }
-
-            .Second {
-                animation: service_ok 1s ease;
-
-                .Back-Image {
-                    display: none;
-                }
+            button {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                top: 10px;
             }
         }
     }
-}
-
-@media screen and (max-width: 452px) {
-    .Website {
-        height: 100%;
-        flex-direction: column-reverse;
-        gap: 30px;
-        padding: 20px;
-
-        p {
-            font-size: 14px;
-        }
-
-        .Cont {
-            span {
-                font-size: 14px;
-            }
-
-            .Step-Cont {
-
-                .Step,
-                .Step-Active {
-                    width: 22px !important;
-                    height: 22px !important;
-                    font-size: 8px;
-                }
-
-            }
-        }
-    }
-
 }
