@@ -38,27 +38,27 @@ const Header = ({ sidebar, setSidebar }) => {
             </div> */}
             <div className="Right">
                 <div className="Not-SM">
-                    
-                        {/* // access === 12 || access === 13 ? */}
-                            <button className='Btn Success'>
-                                <RemixIcons.RiAddLine />
-                                {
-                                    location.pathname.includes('organizations') && !location.pathname.includes('new') ?
-                                        <small onClick={newOrganization}>Nouvelle Organizat.</small> :
-                                        location.pathname.includes('companies') && !location.pathname.includes('new') ?
-                                            <small onClick={newCompany}>Nouvelle Entreprise</small> :
-                                            location.pathname.includes('surveys') && !location.pathname.includes('new') ?
-                                                <small onClick={newSurvey}>Nouvelle Enquête</small> :
-                                                location.pathname.includes('users') && !location.pathname.includes('new') ?
-                                                    <small onClick={newUser}>Nouveau utilisateur</small> :
-                                                    location.pathname.includes('managers') && location.pathname.includes('products') ?
-                                                        <small onClick={newProduct}>Ajouter un produit</small> :
+
+                    {access != 20 && (
+                        <button className='Btn Success'>
+                            <RemixIcons.RiAddLine />
+                            {
+                                location.pathname.includes('organizations') && !location.pathname.includes('new') ?
+                                    <small onClick={newOrganization}>Nouvelle Organizat.</small> :
+                                    location.pathname.includes('companies') && !location.pathname.includes('new') ?
+                                        <small onClick={newCompany}>Nouvelle Entreprise</small> :
+                                        location.pathname.includes('surveys') && !location.pathname.includes('new') ?
+                                            <small onClick={newSurvey}>Nouvelle Enquête</small> :
+                                            location.pathname.includes('users') && !location.pathname.includes('new') ?
+                                                <small onClick={newUser}>Nouveau utilisateur</small> :
+                                                location.pathname.includes('managers') && location.pathname.includes('products') ?
+                                                    <small onClick={newProduct}>Ajouter un produit</small> :
                                                     location.pathname.includes('managers') && location.pathname.includes('tables') ?
                                                         <small onClick={newTable}>Ajouter une table</small> :
                                                         <small onClick={newSurvey}>Nouvelle Enquête</small>
-                                }
-                            </button> 
-                            {/* :
+                            }
+                        </button>)}
+                    {/* :
                             access === 11 ?
                                 "" :
                                 access === 23 ||  access === 22 ?
@@ -72,7 +72,7 @@ const Header = ({ sidebar, setSidebar }) => {
                                     access === 21 ?
                                         "" : "" */}
 
-                    
+
 
                     <div className="NotificationIcon">
                         <RemixIcons.RiSunLine />

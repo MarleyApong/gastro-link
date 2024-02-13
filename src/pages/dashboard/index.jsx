@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { IconContext } from 'react-icons/lib'
 import { User } from '../../services/userService'
-import { FirstGroupInternal, FirstGroupExternal } from '../../components/Dashboard/FirstGroup'
-import { SecondGroupExternal, SecondGroupInternal } from '../../components/Dashboard//SecondGroup'
+import { FirstGroupInternal, FirstGroupExternal, FirstGroupExternalServer } from '../../components/Dashboard/FirstGroup'
+import { SecondGroupExternal, SecondGroupExternalServer, SecondGroupInternal } from '../../components/Dashboard//SecondGroup'
 import { Company } from '../../services/companyService'
 import { Survey } from '../../services/surveyService'
 import Access from '../../utils/utilsAccess'
@@ -110,6 +110,10 @@ const Dashboard = () => {
                      access === 21 || access === 22 || access === 23 ?
                         <FirstGroupExternal
                            idUser={idUser}
+                        /> : 
+                     access === 20 ?
+                        <FirstGroupExternalServer
+                           idUser={idUser}
                         /> : ""
                }
             </div>
@@ -123,6 +127,11 @@ const Dashboard = () => {
                      /> :
                      access === 21 || access === 22 || access === 23 ?
                         <SecondGroupExternal
+                           idUser={idUser}
+                           chart={chartAnswers}
+                        /> :
+                     access === 20 ?
+                        <SecondGroupExternalServer
                            idUser={idUser}
                            chart={chartAnswers}
                         /> : ""

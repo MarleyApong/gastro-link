@@ -1,16 +1,16 @@
 import Axios from "./callerService"
 
-const route = 'products'
+const route = 'orders'
 
 const getAll = (order, filter, search, limit, page) => {
    return Axios.get(`/${route}?limit=${limit}&page=${page}&sort=${order}&filter=${filter}&k=${search}`)
 }
 
-const getProductsByUser = (idUser, order, filter, search, limit, page) => {
+const getOrder = (idUser, order, filter, search, limit, page) => {
    return Axios.get(`/${route}/users/${idUser}?limit=${limit}&page=${page}&sort=${order}&filter=${filter}&k=${search}`)
 }
 
-const getProductByCompany = (Company, order, filter, search, limit, page) => {
+const getOrderByCompany = (Company, order, filter, search, limit, page) => {
    return Axios.get(`/${route}/companies/${Company}?limit=${limit}&page=${page}&sort=${order}&filter=${filter}&k=${search}`)
 }
 
@@ -38,10 +38,10 @@ const deleted = (id) => {
    return Axios.delete(`/${route}/${id}`)
 }
 
-export const Product = {
+export const Orders = {
    getAll,
-   getProductsByUser,
-   getProductByCompany,
+   getOrder,
+   getOrderByCompany,
    getOne,
    add,
    update,

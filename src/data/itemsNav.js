@@ -324,3 +324,26 @@ export const ItemsExternalUser = [
         Link: "/settings",
     }
 ]
+
+export const ItemsExternalServer = [
+    {
+        Icon: RemixIcons.RiHomeOfficeLine,
+        Display: "Tableau de bord",
+        Link: "/dashboard"
+    },
+    {
+        Icon: RemixIcons.RiAlarmWarningLine,
+        Display: "Commande",
+        Link: "/orders",
+    },
+    {
+        Icon: RemixIcons.RiArticleLine,
+        Display: "Menu",
+        Link: "/menu",
+    },
+    {
+        Icon: RemixIcons.RiSoundModuleLine,
+        Display: "Paramètres",
+        Link: "/settings",
+    }
+]

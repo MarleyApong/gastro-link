@@ -3,6 +3,7 @@ import './order.scss'
 import * as RemixIcons from "react-icons/ri"
 import Pagination from '../../../components/Pagination'
 import { Product } from '../../../services/productService'
+import { Orders } from '../../../services/orderService'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const Order = () => {
@@ -77,21 +78,30 @@ const Order = () => {
 
    // SAVED ORDER
    const orderSummary = {
-      orders:  cart.map(item => ({
+      orders: cart.map(item => ({
          idProduct: item.id,
-         nom: item.name,
-         pu: item.price,
-         quantite: item.quantity,
+         name: item.name,
+         price: item.price,
+         quantity: item.quantity,
          total: item.price * item.quantity
       })),
-      idTable: idTable
+      idTable: idTable,
+      webPageCompany: company
    }
 
-   const handleSubmitOrder = () => {
-      
+   const handleSubmitOrder = async (e) => {
+      e.preventDefault()
+      try {
+         const res = await Orders.add(orderSummary)
+         // toast
+         console.log("Commande enregistree")
+      }
+      catch (err) {
+         console.log("erreur", err)
+      }
    }
 
-   console.log("orderSummary", orderSummary)
+   console.log("company", company)
 
    return (
       <div className='order'>
@@ -133,7 +143,7 @@ const Order = () => {
                <div className='close' onClick={() => setShowCart(false)}><RemixIcons.RiCloseLine /></div>
             </div>
 
-            <div className='content'>
+            <form onSubmit={handleSubmitOrder} className='content'>
                <div className="sm-cart">
                   {cart.map((item, index) => (
                      <div className="cart" key={index}>
@@ -161,12 +171,11 @@ const Order = () => {
 
                <div className='submit-order'>
                   <button onClick={() => setShowCart(false)}><RemixIcons.RiArrowLeftLine size={16} /></button>
-                  <button><RemixIcons.RiTimerLine size={16} onClick={handleSubmitOrder}/>Commander</button>
+                  <button><RemixIcons.RiTimerLine size={16} />Commander</button>
                </div>
-            </div>
-
+            </form>
          </div>
-      </div>
+      </div >
    )
 }
 

@@ -12,13 +12,10 @@ const saveToken = (token, id, role, env, status) => {
 let logoutAlreadyTriggered = false
 
 const logout = (code) => {
-    if (code === 300 && !logoutAlreadyTriggered) {
-        logoutAlreadyTriggered = true
-        toast.error("Déconnexion ! Les données de connexion ont été corrompues.")
-    }
-
-    window.location.replace('/auth/login')
-
+    // if (code === 300 && !logoutAlreadyTriggered) {
+    //     logoutAlreadyTriggered = true
+    //     toast.error("Déconnexion ! Les données de connexion ont été corrompues.")
+    // }
     localStorage.removeItem('lkiy-')
     localStorage.removeItem('id')
     localStorage.removeItem('status')

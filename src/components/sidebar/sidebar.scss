@@ -16,19 +16,19 @@
         gap: 10px;
         height: 80px;
         width: 229px;
-        // border-radius: 5px;
         background: var(--user-color);
         box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
         padding: 0 10px;
         cursor: pointer;
         transition: 1s all;
         overflow: hidden;
-
+        
         .Avatar {
             display: flex;
             width: 60px;
             height: 60px;
             border-radius: 50%;
+            background: var(--color-1);
             transition: 1s all;
             overflow: hidden;
 
@@ -49,8 +49,8 @@
     }
 
     .IconText {
-        font-size: 15px;
-        color: var(--aside-text-color);
+        font-size: 20px;
+        color: var(--color-1);
         transition: .3s;
     }
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import * as RemixIcons from "react-icons/ri"
 import SubMenu from './SubMenu'
-import { ItemsExternalAdmin, ItemsExternalSuperAdmin, ItemsExternalUser, ItemsInternalAdmin, ItemsInternalUser } from '../../data/itemsNav'
+import { ItemsExternalAdmin, ItemsExternalServer, ItemsExternalSuperAdmin, ItemsExternalUser, ItemsInternalAdmin, ItemsInternalUser } from '../../data/itemsNav'
 import Access from '../../utils/utilsAccess'
 import logoPlaceholder from '../../assets/img/avatar/user.jpg'
 import superAdmin from '../../assets/img/avatar/super admin.jpg'
@@ -50,6 +50,11 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
             else if (access === 22) {
                 if (user.Company && user.Company.picture) {
                     imageToShow = 'http://localhost:8000' + user.Company.picture
+                }
+            }
+            else if (access === 20) {
+                if (user.Company && user.Company.picture) {
+                    imageToShow = server
                 }
             }
             else if (access === 13) {
@@ -102,6 +107,9 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
                             access === 13 ? ItemsInternalAdmin.map((item, index) => {
                                 return <SubMenu item={item} key={index} />
                             }) :
+                                access === 20 ? ItemsExternalServer.map((item, index) => {
+                                    return <SubMenu item={item} key={index} />
+                                }) :
                                 access === 21 ? ItemsExternalUser.map((item, index) => {
                                     return <SubMenu item={item} key={index} />
                                 }) :
