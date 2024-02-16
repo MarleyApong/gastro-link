@@ -5,6 +5,7 @@ import Pagination from '../../../components/Pagination'
 import { Product } from '../../../services/productService'
 import { Orders } from '../../../services/orderService'
 import { useNavigate, useParams } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const Order = () => {
    const Navigate = useNavigate()
@@ -92,16 +93,24 @@ const Order = () => {
    const handleSubmitOrder = async (e) => {
       e.preventDefault()
       try {
-         const res = await Orders.add(orderSummary)
-         // toast
-         console.log("Commande enregistree")
-      }
-      catch (err) {
-         console.log("erreur", err)
+         const res = await toast.promise(
+            Orders.add(orderSummary),
+            {
+               loading: 'Envoi de la commande...',
+               success: <b>Votre commande a été ajoutée !</b>,
+               error: <b>Erreur, votre commande n'a pas été envoyée.</b>,
+            }
+         )
+
+         // RESET CART AND PRODUCT
+         const resetProducts = products.map(product => ({ ...product, quantity: 0 }));
+         setCart([])
+         setProducts(resetProducts)
+         toast.success("Nous avons recu votre commande.")
+      } catch (err) {
+         console.log("Error:", err);
       }
    }
-
-   console.log("company", company)
 
    return (
       <div className='order'>
@@ -143,7 +152,7 @@ const Order = () => {
                <div className='close' onClick={() => setShowCart(false)}><RemixIcons.RiCloseLine /></div>
             </div>
 
-            <form onSubmit={handleSubmitOrder} className='content'>
+            <div className='content'>
                <div className="sm-cart">
                   {cart.map((item, index) => (
                      <div className="cart" key={index}>
@@ -171,9 +180,9 @@ const Order = () => {
 
                <div className='submit-order'>
                   <button onClick={() => setShowCart(false)}><RemixIcons.RiArrowLeftLine size={16} /></button>
-                  <button><RemixIcons.RiTimerLine size={16} />Commander</button>
+                  <button onClick={handleSubmitOrder}><RemixIcons.RiTimerLine size={16} />Commander</button>
                </div>
-            </form>
+            </div>
          </div>
       </div >
    )

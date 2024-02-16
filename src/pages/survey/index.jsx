@@ -472,15 +472,15 @@ const ListSurvey = () => {
             <Modal.Body className="body-react-bootstrap">
                <div className="container">
                   <div className="row ">
-                     <div className="col-md-12 infoDetail ml-4">
+                     <div className="col-md-12 ml-4">
                         <div className="mb-2 fw-bold p-2 shadow d-flex justify-content-between align-items-center">
                            <div className="d-flex align-items-center">
                               <span className="me-2 fs-6">Enquête: {oneData.name ? oneData.name : '---'}:</span>
-                              <span className={averageSurvey > 2.5 ? "note Success" : "note Error"}>{averageSurvey}</span>
+                              <span className={averageSurvey > 2.5 ? "Btn Success" : "Btn Error"}>{averageSurvey}</span>
                            </div>
                            <div className="d-flex align-items-center">
                               <span className="me-2 fs-6">Entreprise : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</span>
-                              <span className={averageCompany > 2.5 ? "note Success" : "note Error"}>{averageCompany}</span>
+                              <span className={averageCompany > 2.5 ? "Btn Success" : "Btn Error"}>{averageCompany}</span>
                            </div>
                         </div>
                         <div className="card-question">
@@ -519,7 +519,7 @@ const ListSurvey = () => {
                                                 {index + 1}. {item.name}
                                              </span>
                                              <div className="d-flex align-items-center">
-                                                <span className={item.average > 2.5 ? "note Success me-3" : "note Error me-3"}>{item.average}</span>
+                                                <span className={item.average > 2.5 ? "Btn Success me-3" : "Btn Error me-3"}>{item.average}</span>
 
                                                 <button className="Btn Update" onClick={() => Navigate(`/surveys/questions/${item.id}`)} title="détails" >
                                                    <RemixIcons.RiEyeLine />
@@ -536,12 +536,6 @@ const ListSurvey = () => {
 
                            </div>
                         </div>
-                        {/* <span className="site">
-                           <RemixIcons.RiGlobalLine className="icon" />
-                           <a href={`http://localhost:5173/page/${oneData.id && oneData.Company.webpage}`} target="_blank" rel="noopener noreferrer">
-                              page web
-                           </a>
-                        </span> */}
                      </div>
                   </div>
                </div>

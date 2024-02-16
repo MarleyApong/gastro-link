@@ -8,7 +8,8 @@ import SearchInput from '../../components/SearchInput'
 import logoPlaceholder from "../../assets/img/avatar/product.jpg"
 import { sortOption } from "../../data/optionFilter"
 import CustomDataTable from "../../components/CustomDataTable"
-import { Product } from "../../services/productService"
+import { Users } from "../../services/userService"
+import { Companies } from "../../services/companyService"
 import dateFormat from "dateformat"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
@@ -22,6 +23,7 @@ const Order = () => {
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])
+   const [company, setCompany] = useState('')
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('name')
@@ -62,6 +64,23 @@ const Order = () => {
    const handleSearchChange = (e) => {
       setSearch(e.target.value)
    }
+
+   // GET COMPANY BY USER
+   useEffect(() => {
+      const loadCompany = async () => {
+         try {
+            const res = await Users.getOrganizationCompany(idUser)
+            setCompany(res.data.Company.id)
+         }
+         catch (err) {
+
+         }
+      }
+
+      loadCompany()
+   }, [])
+
+   alert(company)
 
    // FETCH ALL DATA
    useEffect(() => {

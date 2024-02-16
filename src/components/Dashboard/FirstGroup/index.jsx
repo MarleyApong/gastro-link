@@ -118,7 +118,7 @@ export const FirstGroupExternal = ({idUser}) => {
    )
 }
 
-export const FirstGroupExternalServer = ({idUser}) => {
+export const FirstGroupExternalServer = ({idUser, orderState}) => {
    const [count, setCount] = useState({})
    const [countCustomer, setCountCustomer] = useState(0)
    const [companiesBlocked, setCompaniesBlocked] = useState(0)
@@ -152,7 +152,7 @@ export const FirstGroupExternalServer = ({idUser}) => {
             <div className="Element">
                <span>Commande en cours</span>
                <div className="Length">
-                  {count.totalElements}
+                  {orderState.totalElements}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiAlarmWarningLine /></div>
@@ -161,7 +161,7 @@ export const FirstGroupExternalServer = ({idUser}) => {
             <div className="Element">
                <span>Commande traitée aujourd'hui</span>
                <div className="Length">
-               {count.inProgress}
+               {orderState.processed}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiCheckLine /></div>

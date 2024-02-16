@@ -5,7 +5,9 @@ import { Company } from '../../../services/companyService'
 import { Average } from '../../../services/average'
 import { useNavigate } from 'react-router-dom'
 import { Survey } from '../../../services/surveyService'
+import { User } from '../../../services/userService'
 import dateFormat from 'dateformat'
+import { Orders } from '../../../services/orderService'
 
 export const SecondGroupInternal = ({ chart }) => {
    const Navigate = useNavigate()
@@ -52,11 +54,11 @@ export const SecondGroupInternal = ({ chart }) => {
                      bottom: 5,
                   }}>
                   <CartesianGrid strokeDasharray="3" />
-                  <XAxis dataKey="0" />
+                  <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="1" stroke="#8884d8" activeDot={{ r: 8 }} />
+                  <Line type="monotone" dataKey="total" stroke="#8884d8" activeDot={{ r: 8 }} />
                </LineChart>
             </ResponsiveContainer>
          </div>
@@ -129,6 +131,7 @@ export const SecondGroupInternal = ({ chart }) => {
       </>
    )
 }
+
 export const SecondGroupExternal = ({ idUser, chart }) => {
    const Navigate = useNavigate()
    const [survey, setSurvey] = useState([])
@@ -169,11 +172,11 @@ export const SecondGroupExternal = ({ idUser, chart }) => {
                      bottom: 5,
                   }}>
                   <CartesianGrid strokeDasharray="3" />
-                  <XAxis dataKey="0" />
+                  <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="1" stroke="#8884d8" activeDot={{ r: 8 }} />
+                  <Line type="monotone" dataKey="total" stroke="#8884d8" activeDot={{ r: 8 }} />
                </LineChart>
             </ResponsiveContainer>
          </div>
@@ -237,14 +240,14 @@ export const SecondGroupExternal = ({ idUser, chart }) => {
    )
 }
 
-export const SecondGroupExternalServer = ({ idUser, chart }) => {
+export const SecondGroupExternalServer = ({ idUser, chart, orderInProgressData }) => {
    const Navigate = useNavigate()
    const [survey, setSurvey] = useState([])
    const [surveyAverage, setSurveyAverage] = useState({})
 
    const order = 'desc'
    const filter = 'createdAt'
-   const status = ''
+   let status = ''
    const search = ''
    const limit = 5
    const page = 0
@@ -260,6 +263,7 @@ export const SecondGroupExternalServer = ({ idUser, chart }) => {
 
       loadSurvey()
    }, [idUser, order, filter, status, search, limit, page])
+
 
    return (
       <>
@@ -277,11 +281,11 @@ export const SecondGroupExternalServer = ({ idUser, chart }) => {
                      bottom: 5,
                   }}>
                   <CartesianGrid strokeDasharray="3" />
-                  <XAxis dataKey="0" />
+                  <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="1" stroke="#8884d8" activeDot={{ r: 8 }} />
+                  <Line type="monotone" dataKey="total" stroke="#8884d8" activeDot={{ r: 8 }} />
                </LineChart>
             </ResponsiveContainer>
          </div>
@@ -324,18 +328,17 @@ export const SecondGroupExternalServer = ({ idUser, chart }) => {
                      </tr>
                   </thead>
                   <tbody>
-                     {
-                        survey.map((item, index) => (
-                           <tr>
-                              <td>{index + 1}</td>
-                              <td>{item.name}</td>
-                              <td>{item.Company.name}</td>
-                              <td>{dateFormat(new Date(item.createdAt), 'dd-mm-yyyy HH:MM:ss')}</td>
-                              <td>
-                                 <span className={item.Status.name === 'actif' ? 'Success p-1 rounded-3 text-white' : 'Error p-1 rounded-3 text-white'}><RemixIcons.RiEyeLine size={15}/></span>
-                              </td>
-                           </tr>
-                        ))
+                     {orderInProgressData.map((item, index) => (
+                        <tr>
+                           <td>{item.name}</td>
+                           <td>{item.Table.tableNumber}</td>
+                           <td>{item.Orders_Products.length}</td>
+                           <td>{dateFormat(new Date(item.createdAt), 'dd-mm-yyyy HH:MM:ss')}</td>
+                           <td>
+                              <span className='Success p-1 rounded-3 text-white'><RemixIcons.RiEyeLine size={15} /></span>
+                           </td>
+                        </tr>
+                     ))
                      }
                   </tbody>
                </table>

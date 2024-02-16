@@ -36,7 +36,7 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
 
         loadUser()
     }, [idUser])
-    
+
     // START PROCESSING IMAGE RENDERING =======================================================
     useEffect(() => {
         const getImageToShow = (access, user, logoPlaceholder) => {
@@ -110,15 +110,15 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
                                 access === 20 ? ItemsExternalServer.map((item, index) => {
                                     return <SubMenu item={item} key={index} />
                                 }) :
-                                access === 21 ? ItemsExternalUser.map((item, index) => {
-                                    return <SubMenu item={item} key={index} />
-                                }) :
-                                    access === 22 ? ItemsExternalAdmin.map((item, index) => {
+                                    access === 21 ? ItemsExternalUser.map((item, index) => {
                                         return <SubMenu item={item} key={index} />
                                     }) :
-                                        access === 23 ? ItemsExternalSuperAdmin.map((item, index) => {
+                                        access === 22 ? ItemsExternalAdmin.map((item, index) => {
                                             return <SubMenu item={item} key={index} />
-                                        }) : ""
+                                        }) :
+                                            access === 23 ? ItemsExternalSuperAdmin.map((item, index) => {
+                                                return <SubMenu item={item} key={index} />
+                                            }) : ""
                 }
 
                 <NavLink to={'/auth/login'} onClick={logout}>
