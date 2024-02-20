@@ -30,12 +30,12 @@ const update = (id, data) => {
    return Axios.patch(`/${route}/${id}`, data)
 }
 
-const changeStatus = (id) => {
-   return Axios.patch(`/${route}/${id}/status`)
+const updateUserIdInOrder = (id, data) => {
+   return Axios.patch(`/${route}/${id}`, data)
 }
 
-const changePicture = (id, data) => {
-   return Axios.patch(`/${route}/${id}/profile-image`, data)
+const updateIdSatusInNotification = (id, data) => {
+   return Axios.patch(`/${route}/${id}`, data)
 }
 
 const deleted = (id) => {
@@ -50,7 +50,7 @@ export const Orders = {
    getOne,
    add,
    update,
-   changeStatus,
-   changePicture,
+   updateUserIdInOrder,
+   updateIdSatusInNotification,
    deleted
 }

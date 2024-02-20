@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Dashboard, Layout, ListCompany, ListOrganization, ListSurvey, CreateCompany, CreateOrganization, CreateSurvey, UpdateCompany, UpdateOrganization, ListCustomer, ListUser, CreateUser, UpdateUser, Settings, ListNote, Product, Table, CreateProduct, CreateTable, UpdateTable, Website } from '../pages'
+import { Dashboard, Layout, ListCompany, ListOrganization, ListSurvey, CreateCompany, CreateOrganization, CreateSurvey, UpdateCompany, UpdateOrganization, ListCustomer, ListUser, CreateUser, UpdateUser, Settings, ListNote, Product, UpdateProduct, Table, CreateProduct, CreateTable, Website, Order, Menu, UpdateTable} from '../pages'
 import Profil from '../components/Profil'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
-import UpdateProduct from '../pages/Managers/Products/Update'
 // import Erreur404 from '../_util/Erreur404'
 
 const PrivateRouter = () => {
@@ -56,6 +55,8 @@ const PrivateRouter = () => {
                      <Route path='/managers/tables/new' element={<CreateTable />} />
                      <Route path='/managers/tables/update/:id' element={<UpdateTable />} />
                      <Route path='/managers/tables' element={<Table />} />
+                     <Route path='/orders' element={<Order />} />
+                     <Route path='/menu' element={<Menu />} />
                      {/* <Route path='*' element={<Website/>} /> */}
                   </Route>
                </Routes>

@@ -59,6 +59,12 @@ const HeaderMain = ({ total }) => {
         else if (urlLink.includes('managers') && urlLink.includes('tables')) {
             return "liste Tables"
         }
+        else if (urlLink.includes('orders')) {
+            return "liste commandes"
+        }
+        else if (urlLink.includes('menu')) {
+            return "liste menu"
+        }
     }
     return (
         <div className='HeaderMain'>

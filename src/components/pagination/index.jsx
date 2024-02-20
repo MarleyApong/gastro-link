@@ -3,10 +3,10 @@ import * as RemixIcons from "react-icons/ri"
 import ReactPaginate from 'react-paginate'
 import './pagination.scss'
 
-const Pagination = ({ pageable }) => {
+const Pagination = ({ pageable, setPage }) => {
+    
     const handlePageClick = (data) => {
-        // setRefresh((current) => current + 1)
-        // setCurrentPage(data.selected)
+        setPage(data.selected + 1)
     }
 
     return (
@@ -30,7 +30,7 @@ const Pagination = ({ pageable }) => {
                                 breakLabel={"..."}
                                 pageCount={pageable.totalPages}
                                 marginPagesDisplayed={2}
-                                pageRangeDisplayed={3}
+                                pageRangeDisplayed={2}
                                 onPageChange={handlePageClick}
                                 containerClassName={"pagination-container"}
                                 pageClassName={"page-items"}

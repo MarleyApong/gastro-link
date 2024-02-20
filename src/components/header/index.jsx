@@ -1,19 +1,21 @@
 import React, { useEffect } from 'react'
 import * as RemixIcons from "react-icons/ri"
-import io from 'socket.io-client'
 import { useLocation, useNavigate } from 'react-router-dom'
 import logo from '../../assets/img/logo/cs-logo-red.png'
 import Access from '../../utils/utilsAccess'
 import './header.scss'
 import toast from 'react-hot-toast'
+import EventOrder from '../EventOrder'
 
 const Header = ({ sidebar, setSidebar }) => {
     const Navigate = useNavigate()
     const location = useLocation()
     const access = Access()
+    const eventOrder = EventOrder()
 
     const id = localStorage.getItem("id")
 
+    // REDIRECTION
     const newOrganization = () => Navigate('/organizations/new')
     const newCompany = () => Navigate('/companies/new')
     const newSurvey = () => Navigate('/surveys/new')
@@ -21,43 +23,12 @@ const Header = ({ sidebar, setSidebar }) => {
     const newProduct = () => Navigate('/managers/products/new')
     const newTable = () => Navigate('/managers/tables/new')
 
-    // useEffect(() => {
-    //     const socket = io('http://localhost:8000') // CONNECTION TO SERVER 'Socket.io'
+    useEffect(() => {
+        if (eventOrder !== '') {
+            toast.success("Vous avez une nouvelle commande")
+        }
+    }, [eventOrder])
 
-    //     socket.on('newOrder', (data) => {
-    //         // Afficher une notification à l'utilisateur pour une nouvelle commande
-    //         toast((t) => (
-    //             <span>
-    //                 Custom and <b>bold</b>
-    //                 <button onClick={() => toast.dismiss(t.id)}>
-    //                 {'Nouvelle commande:' + data.message}
-    //                 </button>
-    //             </span>
-    //         ))
-    //         console.log('Nouvelle commande:', data.message)
-    //         // Utilisez ici votre bibliothèque de notifications (comme react-hot-toast)
-    //     })
-
-    //     return () => {
-    //         socket.disconnect()
-    //     }
-    // }, [])
-
-    // // SHOW NOTIFICATION OF ORDER
-    // const orderNotification = () => {
-    //     if (access === 20) {
-    //         toast((t) => (
-    //             <span>
-    //                 Custom and <b>bold</b>
-    //                 <button onClick={() => toast.dismiss(t.id)}>
-    //                     Dismiss
-    //                 </button>
-    //             </span>
-    //         ))
-    //     }
-    // }
-
-    // orderNotification()
 
     return (
         <header>

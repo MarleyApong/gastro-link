@@ -10,16 +10,19 @@ import './dashboard.scss'
 import { Answer } from '../../services/answersService'
 import useHandleError from '../../hooks/useHandleError'
 import { Orders } from '../../services/orderService'
+import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
    const access = Access()
    const idUser = localStorage.getItem('id')
+   const Navigate = useNavigate()
 
    const [companies, setCompanies] = useState([])
    const [allCount, setAllCount] = useState([])
    const [surveys, setSurveys] = useState([])
    const [answers, setAnswers] = useState([])
    const [statisticServer, setStatisticServer] = useState([])
+   const [statisticServer2, setStatisticServer2] = useState([])
    const [chart, setChart] = useState([])
    const [chartAnswers, setChartAnswers] = useState([])
    const [chartStatisticServer, setChartStatisticServer] = useState([])
@@ -81,6 +84,7 @@ const Dashboard = () => {
 
          res = await Orders.getOrderByUser(company, idUser, status, limit, page)
          setStatisticServer(res.data.content.data)
+         setStatisticServer2(res.data.content)
       }
       catch (err) {
       }
@@ -158,7 +162,7 @@ const Dashboard = () => {
          setChartStatisticServer(Object.entries(orderByDay).map(([dayOfWeek, count]) => ({ day: dayOfWeek, total: count })))
       }
       secondGroupDataExterneServer()
-   }, [])
+   }, [statisticServer])
 
    return (
       <>
@@ -178,6 +182,7 @@ const Dashboard = () => {
                            <FirstGroupExternalServer
                               idUser={idUser}
                               orderState={orderState}
+                              statistic={statisticServer2}
                            /> : ""
                }
             </div>

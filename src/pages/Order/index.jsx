@@ -1,28 +1,29 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import HeaderMain from '../../components/HeaderMain'
 import SelectOption from '../../components/SelectOption'
 import SearchInput from '../../components/SearchInput'
-import logoPlaceholder from "../../assets/img/avatar/product.jpg"
 import { sortOption } from "../../data/optionFilter"
 import CustomDataTable from "../../components/CustomDataTable"
-import { Users } from "../../services/userService"
-import { Companies } from "../../services/companyService"
 import dateFormat from "dateformat"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import Access from "../../utils/utilsAccess"
 import useHandleError from "../../hooks/useHandleError"
+import { Orders } from "../../services/orderService"
+import { User } from "../../services/userService"
+import EventOrder from "../../components/EventOrder"
 
 const Order = () => {
    const Navigate = useNavigate()
    const access = Access()
    const idUser = localStorage.getItem('id')
+   const eventOrder = EventOrder()
 
    const [data, setData] = useState([])
-   const [oneData, setOneData] = useState([])
+   const [currentIdOrder, setCurrentIdOrder] = useState(null)
    const [company, setCompany] = useState('')
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
@@ -35,7 +36,6 @@ const Order = () => {
    const [showDetailCompanyModal, setshowDetailCompanyModal] = useState(false)
    const [refresh, setRefresh] = useState(0)
    const [allCount, setAllCount] = useState(0)
-   const [getImage, setGetImage] = useState('')
 
    // RECOVERING THE ID OF THE SELECTED LINE
    const patch = (itemId) => {
@@ -46,7 +46,6 @@ const Order = () => {
    // CLOSE THE TEMPLATE MODAL
    const hideModal = () => {
       setshowDetailCompanyModal(false)
-      setGetImage('')
       setRefresh((current) => current + 1)
    }
 
@@ -69,135 +68,51 @@ const Order = () => {
    useEffect(() => {
       const loadCompany = async () => {
          try {
-            const res = await Users.getOrganizationCompany(idUser)
-            setCompany(res.data.Company.id)
-         }
-         catch (err) {
-
+            const res = await User.getOrganizationCompany(idUser)
+            const idCompany = res.data.content.Company.id
+            setCompany(idCompany)
+         } catch (err) {
+            // Handle error
          }
       }
 
       loadCompany()
-   }, [])
-
-   alert(company)
+   }, [idUser])
 
    // FETCH ALL DATA
    useEffect(() => {
       const loadData = async () => {
          try {
-            if (access === 23 || access === 22) {
-               const res = await Product.getProductsByUser(idUser, order, filter, search, limit, page)
+            if (access === 20) {
+               const status = 'actif'
+               let res = await Orders.getOrderByCompany(company, order, filter, search, status, limit, page)
                setData(res.data.content.data)
                setAllCount(res.data.content.totalElements)
                setTotalPages(res.data.content.totalPages)
             }
-            else if (access === 12 || access === 13) {
-               const res = await Product.getAll(order, filter, search, limit, page)
-               setData(res.data.content.data)
-               setAllCount(res.data.content.totalElements)
-               setTotalPages(res.data.content.totalPages)
-            }
-         }
-         catch (err) {
+         } catch (err) {
             useHandleError(err, Navigate)
-         }
-         finally {
+         } finally {
             setLoading(false)
          }
       }
 
       loadData()
-   }, [access, idUser, order, filter, search, refresh, limit, page])
+   }, [access, idUser, order, filter, search, refresh, limit, page, eventOrder, company])
 
    // FETCH ONE DATA
    useEffect(() => {
-      Product.getOne(id).then((res) => {
-         setOneData(res.data.content)
-      }).catch((err) => {
-         useHandleError(err, Navigate)
-      })
+      Orders.getOne(id)
+         .then((res) => {
+            // Handle data
+         }).catch((err) => {
+            useHandleError(err, Navigate)
+         })
    }, [id, refresh])
-
-   // START LOGO PROCESSING PART =======================================================
-   const uploadPicture = () => {
-      if (getImage) {
-         const formData = new FormData()
-         formData.append('picture', getImage)
-         Product.changePicture(id, formData)
-            .then((res) => {
-               toast.success("Image importée avec succès !")
-               setRefresh((current) => current + 1)
-               setGetImage('')
-            })
-            .catch((err) => {
-               setRefresh((current) => current + 1)
-               useHandleError(err, Navigate)
-            })
-
-      }
-      else {
-         toast.error("Selectionner une photo pour continuer !")
-      }
-   }
-   const imageRef = useRef(null)
-   const imageTypes = ['image/png', 'image/jpg', 'image/jpeg']
-   const isImageEmpty = getImage === '' && imageTypes.includes(getImage.type)
-   const hasValidImage = getImage && imageTypes.includes(getImage.type)
-
-   let buttonLabel = 'Choisir logo'
-   let buttonAction = () => imageRef.current.click()
-   let buttonClass = 'Btn Send me-2'
-
-   if (hasValidImage) {
-      buttonLabel = 'Modifier logo'
-      buttonClass = 'Btn Update me-2'
-      buttonAction = uploadPicture
-   }
-   else if (isImageEmpty) {
-      buttonAction = () => imageRef.current.click()
-   }
-   // END LOGO PROCESSING PART =======================================================
-
-   // START PROCESSING IMAGE RENDERING =======================================================
-   const getImageToShow = (getImage, oneData, imageTypes, logoPlaceholder) => {
-      let imageToShow = logoPlaceholder
-
-      if (getImage === '' && oneData.picture) {
-         imageToShow = 'http://localhost:8000' + oneData.picture
-      } else if (getImage === '' && oneData.picture === '') {
-         imageToShow = logoPlaceholder
-      } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
-         imageToShow = URL.createObjectURL(getImage)
-      }
-
-      return imageToShow
-   }
-
-   // SIMPLIFICATION OF THE FUNCTION FOR DISPLAY
-   const imageToShow = getImageToShow(getImage, oneData, imageTypes, logoPlaceholder)
-   // END PROCESSING IMAGE RENDERING =======================================================
-
-   // DELETED PRODUCT
-   const deleteProduct = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Product.deleted(id)
-            .then((res) => {
-               toast.success("Produit supprimé avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => {
-               useHandleError(err, Navigate)
-            })
-      }
-   }
 
    // FILTER SELECT TAG DATA
    const filterOptions = [
-      { value: 'name', label: 'nom' },
-      { value: 'price', label: 'prix' },
-      { value: 'category', label: 'catérorie' },
+      { value: 'name', label: 'commande n°' },
       { value: 'createdAt', label: 'date de créat.' },
    ]
 
@@ -222,12 +137,12 @@ const Order = () => {
       },
       {
          name: 'Table',
-         selector: row => row.price,
+         selector: row => row.Table.tableNumber,
          wrap: true,
       },
       {
          name: 'Produit',
-         selector: row => row.category,
+         selector: row => row.Orders_Products.length,
          wrap: true,
       },
       {
@@ -239,34 +154,40 @@ const Order = () => {
          name: 'Actions',
          cell: (row) => (
             <div className="d-flex ">
-               <button className="Btn Update" title="Détails" onClick={() => patch(row.id)}>
-                  <RemixIcons.RiEyeLine fontSize={15} />
+               <button
+                  onClick={() => handleTakeOrder(row.id)}
+                  className="Btn Success"
+                  title={currentIdOrder === row.id ? "Terminer la commande" : "Prendre la commande"}
+                  disabled={currentIdOrder !== null && currentIdOrder !== row.id}
+               >
+                  {currentIdOrder === row.id ? <RemixIcons.RiCheckboxMultipleLine /> : <RemixIcons.RiEyeLine />}
+                  {currentIdOrder === row.id ? "Terminer" : "Prendre"}
                </button>
-               <button className="Btn Send" title="Modifier" onClick={() => Navigate(`/managers/products/update/${row.id}`)}>
-                  <RemixIcons.RiPenNibLine fontSize={15} />
-               </button>
-               {access === 13 && <button className="Btn Error" title="Supprimer" onClick={() => deleteProduct(row.id)}>
-                  <RemixIcons.RiDeleteBin2Line fontSize={15} />
-               </button>}
             </div>
          )
       },
    ]
 
-   if (access === 13 || access === 23) {
-      columns.splice(4, 0, {
-         name: 'Entreprise',
-         selector: row => row.id && row.Company.name,
-         wrap: true,
-      })
-   }
-
-   if (access === 13) {
-      columns.splice(5, 0, {
-         name: 'Organisation',
-         selector: row => row.id && row.Company.Organization.name,
-         wrap: true,
-      })
+   // Take order function
+   const handleTakeOrder = async (idOrder) => {
+      try {
+         if (currentIdOrder === idOrder) {
+            // Finish order logic
+            await Orders.finishOrder(idOrder)
+            setCurrentIdOrder(null)
+            localStorage.removeItem('currentIdOrder') // Supprimer l'identifiant de la commande du localStorage
+            toast.success("Commande terminée avec succès !")
+         } else {
+            // Take order logic
+            await Orders.updateUserIdInOrder(idOrder, idUser)
+            setCurrentIdOrder(idOrder)
+            localStorage.setItem('currentIdOrder', idOrder) // Stocker l'identifiant de la commande dans le localStorage
+            toast.success("Commande prise en charge avec succès !")
+         }
+      } catch (err) {
+         // Handle error
+         toast.error("Une erreur s'est produite !")
+      }
    }
 
    return (
@@ -322,48 +243,16 @@ const Order = () => {
             className="modal-react-bootstrap">
             <Modal.Header closeButton className="header-react-bootstrap">
                <Modal.Title id="contained-modal-title-vcenter" className="title-react-bootstrap">
-                  Detail du produit : {oneData.name}
+                  Detail de la commande : {/* Afficher le nom de la commande ici */}
                </Modal.Title>
             </Modal.Header>
             <Modal.Body className="body-react-bootstrap">
                <div className="container">
-                  <div className="row ">
-                     <div onClick={() => imageRef.current.click()} title="cliquez pour choisir une autre image" className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" crossorigin="anonymous" src={imageToShow} alt="" width="100%" height="400px" />
-                        <input type="file" id="Profil" hidden ref={imageRef} accept=".jpg, .jpeg, .png" onChange={(e) => setGetImage(e.target.files[0])} />
-                     </div>
-                     {oneData.id && (
-                        <div className="col-md-6 infoDetail ml-4 ">
-                           <div className="fw-bold fs-2 shadow p-2 mb-4">{oneData.name.toUpperCase()}</div>
-                           <div className="mb-3">
-                              <p className="fw-bold me-1">Catégorie : {oneData.category ? oneData.category : '---'}</p>
-                              <p>Prix : {oneData.price}</p>
-                           </div>
-                           <div className="mb-3">Ajouté le : {dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss')}</div>
-                           <div className="mb-3">Modifié le : {dateFormat(oneData.updatedAt, 'dd-mm-yyyy HH:MM:ss')}</div>
-                           <>
-                              <h5 className="mb-3 mt-3 p-2 shadow">Affiliation</h5>
-                              <div className="ps-4">
-                                 <p className="mb-2"><span className="fw-bold">Organisation :</span> {oneData.Company.Organization.name || 'Aucune'}</p>
-                                 <p className="mb-2"><span className="fw-bold">Entreprise :</span> {oneData.Company.name || 'Aucune'}</p>
-                              </div>
-                           </>
-                        </div>
-                     )}
-                  </div>
+                  {/* Afficher les détails de la commande ici */}
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               <div className="d-flex">
-                  <Button onClick={buttonAction} className={buttonClass} title={buttonLabel}>
-                     <RemixIcons.RiPictureInPictureLine />
-                     {buttonLabel}
-                  </Button>
-                  <Button onClick={() => Navigate(`/managers/products/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos"><RemixIcons.RiPenNibLine />Modifier le prod.</Button>
-               </div>
-               <div>
-                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
-               </div>
+               <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
             </Modal.Footer>
          </Modal >
       </>

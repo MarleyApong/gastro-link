@@ -5,9 +5,7 @@ import { Company } from '../../../services/companyService'
 import { Average } from '../../../services/average'
 import { useNavigate } from 'react-router-dom'
 import { Survey } from '../../../services/surveyService'
-import { User } from '../../../services/userService'
 import dateFormat from 'dateformat'
-import { Orders } from '../../../services/orderService'
 
 export const SecondGroupInternal = ({ chart }) => {
    const Navigate = useNavigate()
@@ -221,7 +219,7 @@ export const SecondGroupExternal = ({ idUser, chart }) => {
                   <tbody>
                      {
                         survey.map((item, index) => (
-                           <tr>
+                           <tr key={index}>
                               <td>{index + 1}</td>
                               <td>{item.name}</td>
                               <td>{item.Company.name}</td>
@@ -329,7 +327,7 @@ export const SecondGroupExternalServer = ({ idUser, chart, orderInProgressData }
                   </thead>
                   <tbody>
                      {orderInProgressData.map((item, index) => (
-                        <tr>
+                        <tr key={index}>
                            <td>{item.name}</td>
                            <td>{item.Table.tableNumber}</td>
                            <td>{item.Orders_Products.length}</td>

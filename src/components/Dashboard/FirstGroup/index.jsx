@@ -118,33 +118,7 @@ export const FirstGroupExternal = ({idUser}) => {
    )
 }
 
-export const FirstGroupExternalServer = ({idUser, orderState}) => {
-   const [count, setCount] = useState({})
-   const [countCustomer, setCountCustomer] = useState(0)
-   const [companiesBlocked, setCompaniesBlocked] = useState(0)
-
-   const order = 'desc'
-   const filter = 'createdAt'
-   const status = ''
-   const search = ''
-   const limit = 5
-   const page = 0
-
-   useEffect(() => {
-      const loadData = async () => {
-         let res = await Survey.getSurveysByUser(idUser)  
-         setCount(res.data) 
-
-         res = await Customer.getCustomersByUser(idUser, order, filter, status, search, limit, page)
-         setCountCustomer(res.data.content.totalCutomerByUser)
-
-         const statusState = 'inactif'
-         res = await Company.getCompanyByUser(idUser, order, filter, search, statusState, limit, page)
-         setCompaniesBlocked(res.data.content.totalElements)
-      }
-      
-      loadData()
-   }, [idUser, order, filter, status, search, limit, page])
+export const FirstGroupExternalServer = ({idUser, orderState, statistic}) => {
 
    return (
       <>
@@ -161,7 +135,7 @@ export const FirstGroupExternalServer = ({idUser, orderState}) => {
             <div className="Element">
                <span>Commande traitée aujourd'hui</span>
                <div className="Length">
-               {orderState.processed}
+               {statistic.ordersToday}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiCheckLine /></div>
@@ -170,10 +144,19 @@ export const FirstGroupExternalServer = ({idUser, orderState}) => {
             <div className="Element">
                <span>Total Commande traitée</span>
                <div className="Length">
-               {count.inProgress}
+               {statistic.totalElements}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiCheckDoubleLine /></div>
+         </div>
+         <div className="TBox">
+            <div className="Element">
+               <span>Total Commande traitée aujourd'hui (all severs)</span>
+               <div className="Length">
+               {orderState.processed}
+               </div>
+            </div>
+            <div className='IconM'><RemixIcons.RiCheckLine /></div>
          </div>
       </>
    )

@@ -24,7 +24,7 @@ const Order = () => {
    const filter = 'name'
    const search = ''
    const limit = 14
-   const page = 0
+   const [page, setPage] = useState(1)
 
    useEffect(() => {
       const loadProducts = async () => {
@@ -35,7 +35,7 @@ const Order = () => {
       }
 
       loadProducts()
-   }, [])
+   }, [company, page])
 
    const handleAddToCart = (product) => {
       const existingItem = cart.find(item => item.id === product.id)
@@ -78,6 +78,12 @@ const Order = () => {
    }
 
    // SAVED ORDER
+   let totalArray = cart.map(item => item.price * item.quantity)
+   let total = 0
+   for (let index = 0; index < totalArray.length; index++) {
+      total += parseFloat(totalArray[index])
+   }
+
    const orderSummary = {
       orders: cart.map(item => ({
          idProduct: item.id,
@@ -87,7 +93,8 @@ const Order = () => {
          total: item.price * item.quantity
       })),
       idTable: idTable,
-      webPageCompany: company
+      webPageCompany: company,
+      total: total
    }
 
    const handleSubmitOrder = async (e) => {
@@ -143,7 +150,12 @@ const Order = () => {
                   </div>
                ))}
             </div>
-            <Pagination pageable={pageable} />
+            <div className='d-flex justify-content-center align-items-center'>
+               <Pagination
+                  pageable={pageable}
+                  setPage={setPage}
+               />
+            </div>
          </div>
 
          <div className={showCart ? 'container-carts-show' : 'container-carts'}>
