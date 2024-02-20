@@ -23,7 +23,8 @@ const Order = () => {
    const eventOrder = EventOrder()
 
    const [data, setData] = useState([])
-   const [currentIdOrder, setCurrentIdOrder] = useState(null)
+   const [oneData, setOneData] = useState([])
+   const [currentIdOrder, setCurrentIdOrder] = useState(localStorage.getItem('currentIdOrder'))
    const [company, setCompany] = useState('')
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
@@ -102,12 +103,11 @@ const Order = () => {
 
    // FETCH ONE DATA
    useEffect(() => {
-      Orders.getOne(id)
-         .then((res) => {
-            // Handle data
-         }).catch((err) => {
-            useHandleError(err, Navigate)
-         })
+      Orders.getOne(id).then((res) => {
+         setOneData(res.data.content)
+      }).catch((err) => {
+         useHandleError(err, Navigate)
+      })
    }, [id, refresh])
 
    // FILTER SELECT TAG DATA
@@ -154,14 +154,8 @@ const Order = () => {
          name: 'Actions',
          cell: (row) => (
             <div className="d-flex ">
-               <button
-                  onClick={() => handleTakeOrder(row.id)}
-                  className="Btn Success"
-                  title={currentIdOrder === row.id ? "Terminer la commande" : "Prendre la commande"}
-                  disabled={currentIdOrder !== null && currentIdOrder !== row.id}
-               >
-                  {currentIdOrder === row.id ? <RemixIcons.RiCheckboxMultipleLine /> : <RemixIcons.RiEyeLine />}
-                  {currentIdOrder === row.id ? "Terminer" : "Prendre"}
+               <button className="Btn Update" title="Détails" onClick={() => patch(row.id)}>
+                  <RemixIcons.RiEyeLine fontSize={15} />
                </button>
             </div>
          )
@@ -173,7 +167,7 @@ const Order = () => {
       try {
          if (currentIdOrder === idOrder) {
             // Finish order logic
-            await Orders.finishOrder(idOrder)
+            await Orders.updateIdSatusInNotification(idOrder)
             setCurrentIdOrder(null)
             localStorage.removeItem('currentIdOrder') // Supprimer l'identifiant de la commande du localStorage
             toast.success("Commande terminée avec succès !")
@@ -243,15 +237,49 @@ const Order = () => {
             className="modal-react-bootstrap">
             <Modal.Header closeButton className="header-react-bootstrap">
                <Modal.Title id="contained-modal-title-vcenter" className="title-react-bootstrap">
-                  Detail de la commande : {/* Afficher le nom de la commande ici */}
+                  Detail de la commande : {oneData.name}
                </Modal.Title>
             </Modal.Header>
             <Modal.Body className="body-react-bootstrap">
                <div className="container">
-                  {/* Afficher les détails de la commande ici */}
+                  {oneData.id && (
+                     <div className="row ">
+                        <div className="col-md-12">
+                           <div className="fw-bold shadow p-2 mb-4">Coomande n° {oneData.name.toUpperCase()}</div>
+                           <div className="mb-3 d-flex flex-column">
+                              <span className="mb-3">Table : {oneData.Table.tableNumber}</span>
+                              <span className="mb-3">Ajouté le : {dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss')}</span>
+                              <span className="mb-3">Modifié le : {dateFormat(oneData.updatedAt, 'dd-mm-yyyy HH:MM:ss')}</span>
+                           </div>
+                           <div className="fw-bold shadow p-2 mb-3">Produit(s)</div>
+                           <div className="mb-3 sm-cart">
+                              {oneData.Orders_Products.map((item, index) => (
+                                 <div className="d-flex align-items-center mb-2 border border-1 p-1" key={index}>
+                                    <img src={'http://localhost:8000' + item.Product.picture} alt="" style={{ width: "60px", height: "60px", objectFit: "cover", marginRight: "10px", borderRadius: "5px" }} />
+                                    <div className="d-flex flex-column">
+                                       <span>Produit: {item.Product.name}</span>
+                                       <span>Prix: {item.Product.price}</span>
+                                       <span>Qté: {item.quantity}</span>
+                                    </div>
+                                 </div>
+                              ))}
+                              <span className="fw-bold">Total de la commande: {oneData.total} FCFA</span>
+                           </div>
+                        </div>
+                     </div>
+                  )}
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
+            <button
+                  onClick={() => handleTakeOrder(oneData.id)}
+                  className="Btn Success"
+                  title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
+                  disabled={currentIdOrder !== null && currentIdOrder !== oneData.id}
+               >
+                  {currentIdOrder === oneData.id ? <RemixIcons.RiCheckDoubleLine /> : <RemixIcons.RiCheckboxMultipleLine />}
+                  {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
+               </button>
                <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
             </Modal.Footer>
          </Modal >
