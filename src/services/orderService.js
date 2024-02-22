@@ -30,12 +30,12 @@ const update = (id, data) => {
    return Axios.patch(`/${route}/${id}`, data)
 }
 
-const updateUserIdInOrder = (id, data) => {
-   return Axios.patch(`/${route}/${id}`, data)
+const updateUserIdInOrder = (id, user) => {
+   return Axios.patch(`/${route}/${id}/user`, { user: user })
 }
 
 const updateIdSatusInNotification = (id, data) => {
-   return Axios.patch(`/${route}/${id}`, data)
+   return Axios.patch(`/${route}/${id}/notification`, data)
 }
 
 const deleted = (id) => {

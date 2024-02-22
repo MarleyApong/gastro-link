@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal'
 import HeaderMain from '../../components/HeaderMain'
 import SelectOption from '../../components/SelectOption'
 import SearchInput from '../../components/SearchInput'
-import { sortOption } from "../../data/optionFilter"
+import { StatusOption, sortOption } from "../../data/optionFilter"
 import CustomDataTable from "../../components/CustomDataTable"
 import dateFormat from "dateformat"
 import toast from "react-hot-toast"
@@ -21,6 +21,7 @@ const Order = () => {
    const access = Access()
    const idUser = localStorage.getItem('id')
    const eventOrder = EventOrder()
+   const statusOption = StatusOption()
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])
@@ -29,6 +30,7 @@ const Order = () => {
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('name')
+   const [status, setStatus] = useState('')
    const [search, setSearch] = useState('')
    const [limit, setLimit] = useState(10)
    const [page, setPage] = useState(1)
@@ -37,6 +39,13 @@ const Order = () => {
    const [showDetailCompanyModal, setshowDetailCompanyModal] = useState(false)
    const [refresh, setRefresh] = useState(0)
    const [allCount, setAllCount] = useState(0)
+
+   // GET ID OF STATUS
+   let idStatus = ''
+   const objetFounded = statusOption.filter((item, _) => item.label === 'inactif').map((status, _) => status.value)
+   if (objetFounded) {
+      idStatus = objetFounded.toString()
+   }
 
    // RECOVERING THE ID OF THE SELECTED LINE
    const patch = (itemId) => {
@@ -58,6 +67,11 @@ const Order = () => {
    // GET FILTER VALUE
    const handleFilterChange = (e) => {
       setFilter(e.target.value)
+   }
+
+   // GET STATUS VALUE
+   const handleStatusChange = (e) => {
+      setStatus(e.target.value)
    }
 
    // GET RESEARCH VALUE
@@ -85,7 +99,6 @@ const Order = () => {
       const loadData = async () => {
          try {
             if (access === 20) {
-               const status = 'actif'
                let res = await Orders.getOrderByCompany(company, order, filter, search, status, limit, page)
                setData(res.data.content.data)
                setAllCount(res.data.content.totalElements)
@@ -99,7 +112,7 @@ const Order = () => {
       }
 
       loadData()
-   }, [access, idUser, order, filter, search, refresh, limit, page, eventOrder, company])
+   }, [access, idUser, order, filter, status, search, refresh, limit, page, eventOrder, company])
 
    // FETCH ONE DATA
    useEffect(() => {
@@ -162,24 +175,25 @@ const Order = () => {
       },
    ]
 
-   // Take order function
+   console.log("oneData", oneData)
+
+   // TAKE AND FINISH ORDER
    const handleTakeOrder = async (idOrder) => {
       try {
          if (currentIdOrder === idOrder) {
-            // Finish order logic
+            // FINISH ORDER
             await Orders.updateIdSatusInNotification(idOrder)
             setCurrentIdOrder(null)
-            localStorage.removeItem('currentIdOrder') // Supprimer l'identifiant de la commande du localStorage
+            localStorage.removeItem('currentIdOrder')
             toast.success("Commande terminée avec succès !")
          } else {
-            // Take order logic
+            // TAKE ORDER
             await Orders.updateUserIdInOrder(idOrder, idUser)
             setCurrentIdOrder(idOrder)
-            localStorage.setItem('currentIdOrder', idOrder) // Stocker l'identifiant de la commande dans le localStorage
+            localStorage.setItem('currentIdOrder', idOrder)
             toast.success("Commande prise en charge avec succès !")
          }
       } catch (err) {
-         // Handle error
          toast.error("Une erreur s'est produite !")
       }
    }
@@ -205,6 +219,15 @@ const Order = () => {
                value={filter}
                onChange={handleFilterChange}
                options={filterOptions}
+            />
+
+            <SelectOption
+               label="Statut"
+               id="status"
+               name={status}
+               value={status}
+               onChange={handleStatusChange}
+               options={statusOption}
             />
 
             <SearchInput
@@ -271,16 +294,27 @@ const Order = () => {
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-            <button
-                  onClick={() => handleTakeOrder(oneData.id)}
-                  className="Btn Success"
-                  title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
-                  disabled={currentIdOrder !== null && currentIdOrder !== oneData.id}
-               >
-                  {currentIdOrder === oneData.id ? <RemixIcons.RiCheckDoubleLine /> : <RemixIcons.RiCheckboxMultipleLine />}
-                  {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
-               </button>
-               <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
+               {oneData.id ?
+                  oneData.idUser !== '' && oneData.Notifications[0].idStatus === idStatus ?
+                     <button className="Btn">
+                        <RemixIcons.RiCheckDoubleLine size={15}/>
+                        Commande traitée
+                     </button>
+                     :
+                     <button
+                        onClick={() => handleTakeOrder(oneData.id)}
+                        className={currentIdOrder === oneData.id ? "Btn Update" : "Btn Success"}
+                        title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
+                        disabled={currentIdOrder !== null && currentIdOrder !== oneData.id}
+                     >
+                        {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15}/> : <RemixIcons.RiCheckboxMultipleLine size={15}/>}
+                        {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
+                     </button>
+                     :
+                     null
+               }
+
+               <button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></button>
             </Modal.Footer>
          </Modal >
       </>

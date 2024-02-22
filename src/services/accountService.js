@@ -1,4 +1,3 @@
-import toast from "react-hot-toast"
 import Access from "../utils/utilsAccess"
 
 const saveToken = (token, id, role, env, status) => {

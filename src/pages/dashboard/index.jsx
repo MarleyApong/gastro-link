@@ -73,9 +73,9 @@ const Dashboard = () => {
    const loadOrder = async (company) => {
       const order = 'desc'
       const filter = 'createdAt'
-      const status = 'actif'
+      const status = ''
       const search = ''
-      const limit = 5
+      const limit = 0
       const page = 0
       try {
          let res = await Orders.getOrderByCompany(company, order, filter, search, status, limit, page)

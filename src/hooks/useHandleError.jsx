@@ -35,21 +35,11 @@ const useHandleError = (err, Navigate, setValidator) => {
             toast.error("Le nouveau mot de passe n'est pas valide !")
             break
          default:
-            switch (err.response.data.message) {
-               case 'missing token':
-                  Navigate('/auth/login')
-                  toast.error("Token manquant !")
-                  break
-               case 'bad token':
-                  Navigate('/auth/login')
-                  toast.error("Votre session a expiré !")
-                  break
-               default:
-                  toast.error("Quelque chose a mal tourné.")
-                  toast.error("Oups !")
-            }
+            toast.error("Quelque chose a mal tourné.")
+            toast.error("Oups !")
       }
-   } else {
+   }
+   else {
       toast.error("Connexion au serveur a échoué !")
    }
 }
