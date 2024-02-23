@@ -9,7 +9,7 @@ import { StatusOption, sortOption } from "../../data/optionFilter"
 import CustomDataTable from "../../components/CustomDataTable"
 import dateFormat from "dateformat"
 import toast from "react-hot-toast"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Access from "../../utils/utilsAccess"
 import useHandleError from "../../hooks/useHandleError"
 import { Orders } from "../../services/orderService"
@@ -22,6 +22,9 @@ const Order = () => {
    const idUser = localStorage.getItem('id')
    const eventOrder = EventOrder()
    const statusOption = StatusOption()
+
+   //GET ID COMPANY
+   const { idComp } = useParams()
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])
@@ -83,11 +86,15 @@ const Order = () => {
    useEffect(() => {
       const loadCompany = async () => {
          try {
-            const res = await User.getOrganizationCompany(idUser)
-            const idCompany = res.data.content.Company.id
-            setCompany(idCompany)
+            if (access === 20) {
+               const res = await User.getOrganizationCompany(idUser)
+               const idCompany = res.data.content.Company.id
+               setCompany(idCompany)
+            }
+            else {
+               setCompany(idComp)
+            }
          } catch (err) {
-            // Handle error
          }
       }
 
@@ -100,6 +107,12 @@ const Order = () => {
          try {
             if (access === 20) {
                let res = await Orders.getOrderByCompany(company, order, filter, search, status, limit, page)
+               setData(res.data.content.data)
+               setAllCount(res.data.content.totalElements)
+               setTotalPages(res.data.content.totalPages)
+            }
+            else {
+               let res = await Orders.getOrderByCompany(idComp, order, filter, search, status, limit, page)
                setData(res.data.content.data)
                setAllCount(res.data.content.totalElements)
                setTotalPages(res.data.content.totalPages)
@@ -174,8 +187,6 @@ const Order = () => {
          )
       },
    ]
-
-   console.log("oneData", oneData)
 
    // TAKE AND FINISH ORDER
    const handleTakeOrder = async (idOrder) => {
@@ -294,10 +305,10 @@ const Order = () => {
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               {oneData.id ?
+               {oneData.id && access === 20 ?
                   oneData.idUser !== '' && oneData.Notifications[0].idStatus === idStatus ?
                      <button className="Btn">
-                        <RemixIcons.RiCheckDoubleLine size={15}/>
+                        <RemixIcons.RiCheckDoubleLine size={15} />
                         Commande traitée
                      </button>
                      :
@@ -307,11 +318,31 @@ const Order = () => {
                         title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
                         disabled={currentIdOrder !== null && currentIdOrder !== oneData.id}
                      >
-                        {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15}/> : <RemixIcons.RiCheckboxMultipleLine size={15}/>}
+                        {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15} /> : <RemixIcons.RiCheckboxMultipleLine size={15} />}
                         {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
                      </button>
+                  :
+                  null
+               }
+
+               {oneData.id && access !== 20 ?
+                  oneData.idUser !== '' && oneData.Notifications[0].idStatus === idStatus ?
+                     <button className="Btn" disabled={true}>
+                        <RemixIcons.RiCheckDoubleLine size={15} />
+                        Commande traitée
+                     </button>
                      :
-                     null
+                     <button
+                        onClick={() => handleTakeOrder(oneData.id)}
+                        className="Btn"
+                        title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
+                        disabled={true}
+                     >
+                        {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15} /> : <RemixIcons.RiCheckboxMultipleLine size={15} />}
+                        {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
+                     </button>
+                  :
+                  null
                }
 
                <button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></button>

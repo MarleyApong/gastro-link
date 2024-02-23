@@ -17,11 +17,11 @@
         height: 80px;
         width: 229px;
         background: var(--user-color);
-        box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
         padding: 0 10px;
         cursor: pointer;
         transition: 1s all;
         overflow: hidden;
+        box-shadow: 5px 5px 10px var(--shadow-color);
         
         .Avatar {
             display: flex;
@@ -61,7 +61,7 @@
         height: calc(100vh - 10.5rem);
         // border-radius: 5px;
         background: var(--aside-color);
-        box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
+        box-shadow: 5px 5px 10px var(--shadow-color);
         overflow-x: hidden;
 
         a {

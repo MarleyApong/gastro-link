@@ -107,9 +107,9 @@ const ListCompany = () => {
       Company.getOne(id).then((res) =>
          setOneData(res.data.content)
       )
-      .catch((err) => {
-         useHandleError(err, Navigate)
-      })
+         .catch((err) => {
+            useHandleError(err, Navigate)
+         })
    }, [id, refresh])
 
    // START LOGO PROCESSING PART =======================================================
@@ -413,11 +413,22 @@ const ListCompany = () => {
                <div className="d-flex">
                   <Button onClick={buttonAction} className={buttonClass} title={buttonLabel}>
                      <RemixIcons.RiPictureInPictureLine />
+                     {buttonLabel}
                   </Button>
-                  <Button onClick={() => Navigate(`/companies/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos"><RemixIcons.RiPenNibLine /></Button>
+                  <Button onClick={() => Navigate(`/companies/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos">
+                     <RemixIcons.RiPenNibLine />
+                     Modifier infos
+                  </Button>
                   {access === 12 || access === 13 &&
-                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.Status && oneData.Status.name === 'actif' ? ' Btn Error  me-2' : 'Btn Send  me-2'} title={oneData.Status && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}><RemixIcons.RiExchangeBoxLine /></Button>
+                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.Status && oneData.Status.name === 'actif' ? ' Btn Error  me-2' : 'Btn Send  me-2'} title={oneData.Status && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}>
+                        <RemixIcons.RiExchangeBoxLine />
+                        {oneData.Status && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}
+                     </Button>
                   }
+                  <Button onClick={() => Navigate(`/companies/orders/${oneData.id}`)} className="Btn Send  me-2" title="Voir les commandes">
+                     <RemixIcons.RiAlarmWarningLine />
+                     Voir les cmd.
+                  </Button>
                </div>
                <div>
                   <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>

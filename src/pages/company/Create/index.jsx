@@ -134,7 +134,7 @@ const CreateCompany = () => {
 					<h5>Entrez les informations concernant votre entreprise.</h5>
 					<PleaseNote />
 					<blockquote className="blockquote mb-0">
-						<form onSubmit={handleSubmit} className="row g-2 form" for>
+						<form onSubmit={handleSubmit} className="row g-2 form">
 							{(access === 13 || access === 12 || access === 11) && (
 								<div className="col-md-6">
 									<label htmlFor="" className="form-label">

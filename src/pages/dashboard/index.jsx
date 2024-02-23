@@ -50,7 +50,7 @@ const Dashboard = () => {
          res = await Answer.getAnswersByOrganization(organization)
          setAnswers(res.data.content)
       } catch (err) {
-         useHandleError(err, Navigate)
+         
       }
    }
 

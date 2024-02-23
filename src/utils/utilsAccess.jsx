@@ -17,17 +17,6 @@ const Access = () => {
    })
 
    const [data, setData] = useState(0)
-
-   const handleAuthError = useCallback((err) => {
-      if (err.response && err.response.data && err.response.data.message) {
-         const errorMessage = err.response.data.message
-         if (errorMessage === 'missing token' || errorMessage === 'bad token') {
-            toast.error(errorMessage === 'missing token' ? "Token manquant !" : "Votre session a expiré !")
-            Navigate('/auth/login')
-         }
-      }
-   }, [Navigate])
-
    useEffect(() => {
       const loadUserData = async () => {
          try {
@@ -39,10 +28,10 @@ const Access = () => {
    
             filterStatusData(user, statusData)
          } catch (err) {
-            handleAuthError(err)
          }
       }
    
+      // PROCESSING OF ACCESS
       const filterStatusData = (user, statusData) => {
          try {
             const statusActif = statusData.find(obj => obj.name === 'actif')
@@ -109,7 +98,7 @@ const Access = () => {
    
       loadUserData()
    
-   }, [userData, handleAuthError])
+   }, [userData])
 
    useEffect(() => {
       const handleLocalStorageChange = () => {

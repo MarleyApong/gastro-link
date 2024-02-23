@@ -115,7 +115,7 @@ const UpdateCompany = () => {
 				<div className="card-body CardBody card">
 					<h5>Modifiez les informations concernant votre entreprise.</h5>
 					<blockquote className="blockquote mb-0">
-						<form onSubmit={handleSubmit} className="row g-2 form" for>
+						<form onSubmit={handleSubmit} className="row g-2 form">
 							<div className="col-md-6">
 								<label htmlFor="name" className="form-label">
 									Nom de l'entreprise :

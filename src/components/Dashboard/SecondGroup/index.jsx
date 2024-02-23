@@ -322,7 +322,6 @@ export const SecondGroupExternalServer = ({ idUser, chart, orderInProgressData }
                         <td>Table</td>
                         <td>Produit</td>
                         <td>date</td>
-                        <td>Détails</td>
                      </tr>
                   </thead>
                   <tbody>
@@ -332,9 +331,6 @@ export const SecondGroupExternalServer = ({ idUser, chart, orderInProgressData }
                            <td>{item.Table.tableNumber}</td>
                            <td>{item.Orders_Products.length}</td>
                            <td>{dateFormat(new Date(item.createdAt), 'dd-mm-yyyy HH:MM:ss')}</td>
-                           <td>
-                              <span className='Success p-1 rounded-3 text-white'><RemixIcons.RiEyeLine size={15} /></span>
-                           </td>
                         </tr>
                      ))
                      }

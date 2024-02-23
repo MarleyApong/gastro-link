@@ -35,6 +35,7 @@ const PrivateRouter = () => {
                      <Route path='/companies/list' element={<ListCompany />} />
                      <Route path='/companies/new' element={<CreateCompany />} />
                      <Route path='/companies/update/:id' element={<UpdateCompany />} />
+                     <Route path='/companies/orders/:idComp' element={<Order />} />
                      <Route path='/organizations' element={<ListOrganization />} />
                      <Route path='/organizations/list' element={<ListOrganization />} />
                      <Route path='/organizations/new' element={<CreateOrganization />} />
@@ -51,6 +52,7 @@ const PrivateRouter = () => {
                      <Route path='/settings' element={<Settings />} />
                      <Route path='/managers/products/new' element={<CreateProduct />} />
                      <Route path='/managers/products/update/:id' element={<UpdateProduct />} />
+                     <Route path='/managers' element={<Product />} />
                      <Route path='/managers/products' element={<Product />} />
                      <Route path='/managers/tables/new' element={<CreateTable />} />
                      <Route path='/managers/tables/update/:id' element={<UpdateTable />} />

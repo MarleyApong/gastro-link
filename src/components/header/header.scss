@@ -71,15 +71,33 @@ header {
         }
 
         .NotificationIcon {
-            background: var(--logo-color);
+            position: relative;
+            background: var(--color-notification);
+            box-shadow: 5px 5px 20px var(--shadow-color);
             width: 30px;
             height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            // border-radius: 10%;
             color: var(--color-1);
             cursor: pointer;
+
+            .newNotification {
+                position: absolute;
+                top: -15px;
+                right: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: var(--color-1);
+                color: var(--logo-color);
+                border: 1px solid;
+                border-style: dashed;
+                // box-shadow: 5px 5px 20px #00000056;
+                font-weight: 600;
+                height: 20px;
+                width: 20px;
+            }
         }
     }
 }
