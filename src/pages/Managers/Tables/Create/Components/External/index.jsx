@@ -13,6 +13,7 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
    const limit = 20
    const page = 0
 
+   const [isSubmitting, setIsSubmitting] = useState(false)
    const [selectedCompanyValue, setSelectedCompanyValue] = useState({})
    const [company, setCompany] = useState([])
    const [table, setTable] = useState({
@@ -50,6 +51,7 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
          .catch((err) => {
             useHandleError(err, Navigate)
          })
+        
    }, [idUser, idStatus])
 
    // ADD TABLE
@@ -64,9 +66,13 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
             .then((res) => {
                toast.success("Table ajouté avec succès !")
                Navigate('/managers/tables')
+               setIsSubmitting(true)
             })
             .catch((err) => {
                useHandleError(err, Navigate)
+            })
+            .finally(() => {
+               setIsSubmitting(false)
             })
       }
    }
@@ -102,7 +108,7 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
             )}
             <div className="col-md-12 d-flex gap-2">
                <button type="submit" className="Btn Send btn-sm">
-                  <RemixIcons.RiSendPlaneLine />
+                  <RemixIcons.RiSendPlaneLine disabled={isSubmitting}/>
                   Ajouter
                </button>
             </div>

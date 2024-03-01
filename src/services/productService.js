@@ -2,16 +2,16 @@ import Axios from "./callerService"
 
 const route = 'products'
 
-const getAll = (order, filter, search, limit, page) => {
-   return Axios.get(`/${route}?limit=${limit}&page=${page}&sort=${order}&filter=${filter}&k=${search}`)
+const getAll = (order, filter, status, search, limit, page) => {
+   return Axios.get(`/${route}?limit=${limit}&page=${page}&sort=${order}&status=${status}&filter=${filter}&k=${search}`)
 }
 
-const getProductsByUser = (idUser, order, filter, search, limit, page) => {
-   return Axios.get(`/${route}/users/${idUser}?limit=${limit}&page=${page}&sort=${order}&filter=${filter}&k=${search}`)
+const getProductsByUser = (idUser, order, filter, status, search, limit, page) => {
+   return Axios.get(`/${route}/users/${idUser}?limit=${limit}&page=${page}&sort=${order}&status=${status}&filter=${filter}&k=${search}`)
 }
 
-const getProductByCompany = (Company, order, filter, search, limit, page) => {
-   return Axios.get(`/${route}/companies/${Company}?limit=${limit}&page=${page}&sort=${order}&filter=${filter}&k=${search}`)
+const getProductByCompany = (Company, order, filter, status, search, limit, page) => {
+   return Axios.get(`/${route}/companies/${Company}?limit=${limit}&page=${page}&sort=${order}&status=${status}&filter=${filter}&k=${search}`)
 }
 
 const getOne = (id) => {

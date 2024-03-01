@@ -9,6 +9,7 @@ import useHandleError from "../../../../../hooks/useHandleError"
 const External = ({ Navigate, idStatus, access, CustomSelect }) => {
    const idUser = localStorage.getItem('id')
 
+   const [isSubmitting, setIsSubmitting] = useState(false)
    const [idOrganization, setOrganization] = useState('')
    const [company, setCompany] = useState([])
    const [selectedCompanyValue, setSelectedCompanyValue] = useState({})
@@ -83,8 +84,13 @@ const External = ({ Navigate, idStatus, access, CustomSelect }) => {
          Survey.add(survey).then((res) => {
             toast.success("Enquête ajoutée avec succès !")
             Navigate('/surveys/list')
-         }).catch((err) => {
+            setIsSubmitting(true)
+         })
+         .catch((err) => {
             useHandleError(err, Navigate)
+         })
+         .finally(() => {
+            setIsSubmitting(false)
          })
       }
    }
@@ -119,7 +125,7 @@ const External = ({ Navigate, idStatus, access, CustomSelect }) => {
             )}
 
             <div className="col-md-12 d-flex gap-2">
-               <button type="submit" className="Btn Send btn-sm">
+               <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
                   <RemixIcons.RiSendPlaneLine />
                   Ajouter
                </button>

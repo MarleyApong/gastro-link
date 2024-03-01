@@ -12,6 +12,7 @@ const External = ({ Navigate, CustomSelect }) => {
    const roleOption = RoleOption()
    const idUser = localStorage.getItem('id')
 
+   const [isSubmitting, setIsSubmitting] = useState(false)
    const [validator, setValidator] = useState(0)
    const [idOrganization, setIdOrganization] = useState('')
    const [company, setCompany] = useState([])
@@ -86,8 +87,13 @@ const External = ({ Navigate, CustomSelect }) => {
       User.add(user).then((res) => {
          toast.success("Utilisateur ajouté avec succès !")
          Navigate('/users/list')
-      }).catch((err) => {
+         setIsSubmitting(true)
+      })
+      .catch((err) => {
          useHandleError(err, Navigate, setValidator)
+      })
+      .finally(() => {
+         setIsSubmitting(false)
       })
    }
 
@@ -211,7 +217,7 @@ const External = ({ Navigate, CustomSelect }) => {
                   <CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
                </div>
                <div className="col-md-12 d-flex gap-2">
-                  <button type="submit" className="Btn Send btn-sm">
+                  <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
                      <RemixIcons.RiSendPlaneLine />
                      Enregistrer
                   </button>

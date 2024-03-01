@@ -6,13 +6,15 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
    const customStyles = {
       headRow: {
          style: {
-            // backgroundColor: 'var(--color-modal-head)',
+            backgroundColor: 'var(--bg-modal-head)',
             fontWeight: 'bold',
-            color: "var(--color-3)",
+            color: "var(--color-modal-head)",
          },
       },
       rows: {
          style: {
+            backgroundColor: 'var(--bg-modal-head) !important',
+            color: "var(--color-modal-head) !important",
             minHeight: '45px',
          },
       },
@@ -26,6 +28,18 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
             paddingLeft: '25px',
          },
       },
+      pagination: {
+         style: {
+            backgroundColor: 'var(--bg-modal-head)',
+            color: "var(--color-modal-head)",
+         },
+      },
+      // button: {
+      //    style: {
+      //       backgroundColor: 'var(--color-modal-head) !important',
+      //       color: "var(--bg-modal-head) !important",
+      //    },
+      // },
    }
 
    const EmptyTableMessage = () => (
@@ -35,32 +49,20 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
                visible={true}
                height="20"
                width="20"
-               color="var(--user-color)"
+               color="var(--color-scroll)"
                ariaLabel="tail-spin-loading"
                radius="1"
                wrapperStyle={{}}
                wrapperClass=""
             />
          </div>) : (
-         <div style={{ textAlign: 'center', padding: '20px' }}>
+         <div style={{ textAlign: 'center', padding: '20px', width: '100%', background: 'var(--bg-modal-head)', color: 'var(--color-modal-head)' }}>
             Aucune donnée disponible pour le moment.
          </div>
       )
    )
 
    const baseHeight = 200
-   const threshold = 10
-   const calculatedHeight = Math.max(baseHeight, data.length * 50)
-
-   const paginationOption = () => {
-      custom: () => {
-         const rowsPerPageSelector = document.querySelector('.rdt_TableRowPerPage')
-         if (rowsPerPageSelector) {
-            rowsPerPageSelector.style.height = `${Math.max(baseHeight, data.length * 50)}px`
-         }
-      }
-   }
-
    return (
       <>
          <DataTable
@@ -70,23 +72,15 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
             // selectableRows
             responsive
             striped
-            highlightOnHover
+            // highlightOnHover
             customStyles={customStyles}
             expandableRowsComponent={ExpandedComponent}
             noDataComponent={<EmptyTableMessage />}
-            // paginationComponentOptions={paginationOption}
-            // progressPending={true}
-            // progressComponent={<TailSpin
-            //    visible={true}
-            //    height="20"
-            //    width="20"
-            //    color="var(--user-color)"
-            //    ariaLabel="tail-spin-loading"
-            //    radius="3"
-            //    wrapperStyle={{}}
-            //    wrapperClass=""
-            // />}
-
+            paginationComponentOptions={{
+               rowsPerPageText: 'total par page:',
+               rangeSeparatorText: 'sur',
+               noRowsPerPage: false,
+            }}
             pagination
             paginationServer
             paginationTotalRows={paginationTotalRows}
@@ -98,12 +92,12 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
             paginationRowsPerPageOptions={[10, 15, 20, 30]}
          />
          {loading && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                <TailSpin
                   visible={true}
                   height="20"
                   width="20"
-                  color="var(--user-color)"
+                  color="var(--color-scroll)"
                   ariaLabel="tail-spin-loading"
                   radius="3"
                   wrapperStyle={{}}

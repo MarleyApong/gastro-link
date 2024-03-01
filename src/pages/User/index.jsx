@@ -123,11 +123,13 @@ const ListUser = () => {
       const loadOneData = async () => {
          try {
             setAffiliation({})
-            let res = await User.getOne(id)
-            setOneData(res.data.content)
+            if (id !== '') {
+               let res = await User.getOne(id)
+               setOneData(res.data.content)
 
-            res = await User.getOrganizationCompany(id)
-            setAffiliation(res.data)
+               res = await User.getOrganizationCompany(id)
+               setAffiliation(res.data)
+            }
          }
          catch (err) {
             useHandleError(err, Navigate)

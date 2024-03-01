@@ -12,6 +12,7 @@ const CreateOrganization = () => {
 	const Navigate = useNavigate()
 	const statusOption = StatusOption()
 	const [file, setFile] = useState('')
+	const [isSubmitting, setIsSubmitting] = useState(false)
 
 	// ORGANIZATION OWNERSHIP
 	const [organization, setOrganization] = useState({
@@ -62,9 +63,14 @@ const CreateOrganization = () => {
 			Organization.add(formData).then((res) => {
 				toast.success("organization ajoutée avec succès !")
 				Navigate('/organizations/')
-			}).catch((err) => {
+				setIsSubmitting(true)
+			})
+			.catch((err) => {
 				useHandleError(err, Navigate)
 			})
+			.finally(() => {
+            setIsSubmitting(false)
+         })
 		}
 	}
 
@@ -188,7 +194,7 @@ const CreateOrganization = () => {
 							</div>
 
 							<div className="col-md-12 d-flex gap-2">
-								<button type="submit" className="Btn Send btn-sm">
+								<button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
 									<RemixIcons.RiSendPlaneLine />
 									Enregistrer
 								</button>

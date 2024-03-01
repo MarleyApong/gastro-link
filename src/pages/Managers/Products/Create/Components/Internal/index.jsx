@@ -4,9 +4,12 @@ import toast from "react-hot-toast"
 import { Organization } from "../../../../../../services/organizationService"
 import { Company } from "../../../../../../services/companyService"
 import { Product } from "../../../../../../services/productService"
+import { StatusOption } from "../../../../../../data/optionFilter"
 import useHandleError from "../../../../../../hooks/useHandleError"
 
 const Internal = ({ Navigate, access, CustomSelect }) => {
+   const statusOption = StatusOption()
+
    const order = 'asc'
    const filter = 'name'
    const status = 'actif'
@@ -15,6 +18,8 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
    const page = 0
 
    let idOrganization = ''
+
+   const [isSubmitting, setIsSubmitting] = useState(false)
    const [file, setFile] = useState('')
    const [organization, setOrganization] = useState([])
    const [selectedOrganizationValue, setSelectedOrganizationValue] = useState({})
@@ -22,6 +27,7 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
    const [company, setCompany] = useState([])
    const [product, setProduct] = useState({
       idCompany: "",
+      idStatus: "",
       name: "",
       category: "",
       price: "",
@@ -99,9 +105,13 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
             .then((res) => {
                toast.success("Produit ajouté avec succès !")
                Navigate('/managers/products')
+               setIsSubmitting(true)
             })
             .catch((err) => {
                useHandleError(err, Navigate)
+            })
+            .finally(() => {
+               setIsSubmitting(false)
             })
       }
    }
@@ -187,10 +197,23 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
                <CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
             </div>
             <div className="col-md-12 d-flex gap-2">
-               <button type="submit" className="Btn Send btn-sm">
+               <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
                   <RemixIcons.RiSendPlaneLine />
                   Ajouter
                </button>
+            </div>
+            <div className="col-md-6 ">
+               <label htmlFor="idStatus" className="form-label">
+                  Status :
+                  <span className="text-danger taille_etoile">*</span>
+               </label>
+               <select className="form-control no-focus-outline p-2 custom-select" name="idStatus" id="idStatus" value={product.idStatus} required
+                  onChange={handleAdd}
+                  autoComplete='off'>
+                  {statusOption.map((item) => (
+                     <option key={item.value} value={item.value}>{item.label}</option>
+                  ))}
+               </select>
             </div>
          </form>
       </blockquote>

@@ -20,6 +20,7 @@ const Internal = ({ Navigate, CustomSelect, access }) => {
    const limit = 10000
    const page = 0
 
+   const [isSubmitting, setIsSubmitting] = useState(false)
    const [validator, setValidator] = useState(0)
    const [organization, setOrganization] = useState([])
    const [company, setCompany] = useState([])
@@ -87,8 +88,13 @@ const Internal = ({ Navigate, CustomSelect, access }) => {
       User.add(user).then((res) => {
          toast.success("Utilisateur ajouté avec succès !")
          Navigate('/users/list')
-      }).catch((err) => {
+         setIsSubmitting(true)
+      })
+      .catch((err) => {
          useHandleError(err, Navigate, setValidator)
+      })
+      .finally(() => {
+         setIsSubmitting(false)
       })
    }
 
@@ -231,7 +237,7 @@ const Internal = ({ Navigate, CustomSelect, access }) => {
                   <CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
                </div>}
                <div className="col-md-12 d-flex gap-2">
-                  <button type="submit" className="Btn Send btn-sm">
+                  <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
                      <RemixIcons.RiSendPlaneLine />
                      Enregistrer
                   </button>

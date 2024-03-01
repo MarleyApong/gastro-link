@@ -99,7 +99,7 @@ const Order = () => {
       }
 
       loadCompany()
-   }, [idUser])
+   }, [idUser, access])
 
    // FETCH ALL DATA
    useEffect(() => {
@@ -305,45 +305,48 @@ const Order = () => {
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               {oneData.id && access === 20 ?
-                  oneData.idUser !== '' && oneData.Notifications[0].idStatus === idStatus ?
-                     <button className="Btn">
-                        <RemixIcons.RiCheckDoubleLine size={15} />
-                        Commande traitée
-                     </button>
+               <div className="d-flex">
+                  {oneData.id && access === 20 ?
+                     oneData.idUser !== '' && oneData.Notifications[0].idStatus === idStatus ?
+                        <button className="Btn">
+                           <RemixIcons.RiCheckDoubleLine size={15} />
+                           Commande traitée
+                        </button>
+                        :
+                        <button
+                           onClick={() => handleTakeOrder(oneData.id)}
+                           className={currentIdOrder === oneData.id ? "Btn Update" : "Btn Success"}
+                           title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
+                           disabled={currentIdOrder !== null && currentIdOrder !== oneData.id}
+                        >
+                           {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15} /> : <RemixIcons.RiCheckboxMultipleLine size={15} />}
+                           {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
+                        </button>
                      :
-                     <button
-                        onClick={() => handleTakeOrder(oneData.id)}
-                        className={currentIdOrder === oneData.id ? "Btn Update" : "Btn Success"}
-                        title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
-                        disabled={currentIdOrder !== null && currentIdOrder !== oneData.id}
-                     >
-                        {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15} /> : <RemixIcons.RiCheckboxMultipleLine size={15} />}
-                        {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
-                     </button>
-                  :
-                  null
-               }
+                     null
+                  }
 
-               {oneData.id && access !== 20 ?
-                  oneData.idUser !== '' && oneData.Notifications[0].idStatus === idStatus ?
-                     <button className="Btn" disabled={true}>
-                        <RemixIcons.RiCheckDoubleLine size={15} />
-                        Commande traitée
-                     </button>
+                  {oneData.id && access !== 20 ?
+                     oneData.idUser !== '' && oneData.Notifications[0].idStatus === idStatus ?
+                        <button className="Btn" disabled={true}>
+                           <RemixIcons.RiCheckDoubleLine size={15} />
+                           Commande traitée
+                        </button>
+                        :
+                        <button
+                           onClick={() => handleTakeOrder(oneData.id)}
+                           className="Btn"
+                           title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
+                           disabled={true}
+                        >
+                           {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15} /> : <RemixIcons.RiCheckboxMultipleLine size={15} />}
+                           {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
+                        </button>
                      :
-                     <button
-                        onClick={() => handleTakeOrder(oneData.id)}
-                        className="Btn"
-                        title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
-                        disabled={true}
-                     >
-                        {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15} /> : <RemixIcons.RiCheckboxMultipleLine size={15} />}
-                        {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
-                     </button>
-                  :
-                  null
-               }
+                     null
+                  }
+                  <button className="Btn Error ms-1">Annuler la Cmd.</button>
+               </div>
 
                <button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></button>
             </Modal.Footer>

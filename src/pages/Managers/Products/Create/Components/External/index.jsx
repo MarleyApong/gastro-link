@@ -3,9 +3,12 @@ import * as RemixIcons from "react-icons/ri"
 import toast from "react-hot-toast"
 import { Company } from "../../../../../../services/companyService"
 import { Product } from "../../../../../../services/productService"
+import { StatusOption } from "../../../../../../data/optionFilter"
 import useHandleError from "../../../../../../hooks/useHandleError"
 
 const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
+   const statusOption = StatusOption()
+
    const order = 'asc'
    const filter = 'name'
    const status = 'actif'
@@ -13,11 +16,13 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
    const limit = 20
    const page = 0
 
+   const [isSubmitting, setIsSubmitting] = useState(false)
    const [file, setFile] = useState('')
    const [selectedCompanyValue, setSelectedCompanyValue] = useState({})
    const [company, setCompany] = useState([])
    const [product, setProduct] = useState({
       idCompany: "",
+      idStatus: "",
       name: "",
       category: "",
       price: "",
@@ -66,7 +71,9 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
       e.preventDefault()
       if (
          product.idCompany === ""
+         || product.idStatus === ""
          || product.name === ""
+         || product.price === ""
          || file === '') {
          toast.error("Les champs marqués par une etoile sont obligations !")
       }
@@ -83,9 +90,13 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
             .then((res) => {
                toast.success("Produit ajouté avec succès !")
                Navigate('/managers/products')
+               setIsSubmitting(true)
             })
             .catch((err) => {
                useHandleError(err, Navigate)
+            })
+            .finally(() => {
+               setIsSubmitting(false)
             })
       }
    }
@@ -113,7 +124,7 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
             <div className="col-md-6">
                <label htmlFor="category" className="form-label">
                   Catégorie :
-                  <span className="text-danger taille_etoile">*</span>
+                  <span className="text-danger taille_etoile"></span>
                </label>
 
                <input
@@ -165,8 +176,21 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
                   <CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
                </div>
             )}
+            <div className="col-md-6 ">
+               <label htmlFor="idStatus" className="form-label">
+                  Status :
+                  <span className="text-danger taille_etoile">*</span>
+               </label>
+               <select className="form-control no-focus-outline p-2 custom-select" name="idStatus" id="idStatus" value={product.idStatus} required
+                  onChange={handleAdd}
+                  autoComplete='off'>
+                  {statusOption.map((item) => (
+                     <option key={item.value} value={item.value}>{item.label}</option>
+                  ))}
+               </select>
+            </div>
             <div className="col-md-12 d-flex gap-2">
-               <button type="submit" className="Btn Send btn-sm">
+               <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
                   <RemixIcons.RiSendPlaneLine />
                   Ajouter
                </button>

@@ -15,6 +15,8 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
    const page = 0
 
    let idOrganization = ''
+
+   const [isSubmitting, setIsSubmitting] = useState(false)
    const [organization, setOrganization] = useState([])
    const [selectedOrganizationValue, setSelectedOrganizationValue] = useState({})
    const [selectedCompanyValue, setSelectedCompanyValue] = useState({})
@@ -81,9 +83,13 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
             .then((res) => {
                toast.success("Table ajouté avec succès !")
                Navigate('/managers/tables')
+               setIsSubmitting(true)
             })
             .catch((err) => {
                useHandleError(err, Navigate)
+            })
+            .finally(() => {
+               setIsSubmitting(false)
             })
       }
    }
@@ -123,7 +129,7 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
                <CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
             </div>
             <div className="col-md-12 d-flex gap-2">
-               <button type="submit" className="Btn Send btn-sm">
+               <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
                   <RemixIcons.RiSendPlaneLine />
                   Ajouter
                </button>

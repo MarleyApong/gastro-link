@@ -17,6 +17,9 @@ const useHandleError = (err, Navigate, setValidator) => {
          else if (err.response.data.error.name === 'BadRequest') {
             toast.error("Mauvaise requête !")
          }
+         else if (err.response.data.error.name === 'AddSurveyError') {
+            toast.error("La limite des enquêtes est fixée à 1 !")
+         }
          else if (err.response.data.error.name === 'NotFound') {
             toast.error("Demande ou données non trouvée !")
          }

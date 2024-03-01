@@ -46,11 +46,16 @@
             overflow: hidden;
             text-transform: capitalize;
         }
+
+        .IconText {
+            font-size: 20px;
+            color: var(--color-1);
+        }
     }
 
     .IconText {
-        font-size: 20px;
-        color: var(--color-1);
+        font-size: 14px;
+        color: var(--aside-text-color);
         transition: .3s;
     }
 
@@ -63,6 +68,7 @@
         background: var(--aside-color);
         box-shadow: 5px 5px 10px var(--shadow-color);
         overflow-x: hidden;
+        // overflow-y: scroll;
 
         a {
             color: var(--aside-text-color);
@@ -98,7 +104,7 @@
             }
 
             &.LinkActive2 {
-                background: var(--color-2) !important;
+                // background: var(--color-2) !important;
                 color: var(--aside-text-color);
                 border: 1px solid var(--aside-text-color);
                 border-style: dashed;

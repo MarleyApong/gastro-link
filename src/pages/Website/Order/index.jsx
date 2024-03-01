@@ -19,16 +19,18 @@ const Order = () => {
    const [cart, setCart] = useState([])
    const [pageable, setPageable] = useState({})
    const [showCart, setShowCart] = useState(false)
+   const [mode, setMode] = useState(true)
 
    const order = 'asc'
    const filter = 'name'
    const search = ''
-   const limit = 14
+   const status = 'actif'
+   const limit = 16
    const [page, setPage] = useState(1)
 
    useEffect(() => {
       const loadProducts = async () => {
-         const res = await Product.getProductByCompany(company, order, filter, search, limit, page)
+         const res = await Product.getProductByCompany(company, order, filter, status, search, limit, page)
          // INITIALIZE QUANTITY TO 0
          setProducts(res.data.content.data.map(product => ({ ...product, quantity: 0 })))
          setPageable(res.data.content)
@@ -115,7 +117,7 @@ const Order = () => {
          setProducts(resetProducts)
          toast.success("Nous avons recu votre commande.")
       } catch (err) {
-         console.log("Error:", err);
+
       }
    }
 
@@ -123,39 +125,89 @@ const Order = () => {
       <div className='order'>
          <div className='container-products' >
             <div className='content-title'>
-               <span className='title'>Nos produits</span>
-               <span className='show-cart' onClick={() => setShowCart(true)}>Afficher le panier</span>
+               <button className='Btn Error' onClick={(e) => window.location.reload()}>Nos produits</button>
+               <div className='d-flex'>
+                  <div className='d-flex'>
+                     <button className='Btn Success Btn-size me-1'>
+                        <RemixIcons.RiArrowGoBackLine size={15} />
+                        <span className='btn-text'>Retour</span>
+                     </button>
+                     <button className='Btn Update Btn-size me-1' onClick={() => setMode(!mode)}>
+                        {mode ? <RemixIcons.RiMenu2Line size={15} /> : <RemixIcons.RiDashboardLine size={15} />}
+                        <span className='btn-text'>Mode d'affichage</span>
+                     </button>
+                  </div>
+                  <button className='Btn Update Btn-size' onClick={() => setShowCart(true)}>
+                     <RemixIcons.RiShoppingCartLine size={15} />
+                     <span className='btn-text'>Afficher le panier</span>
+                  </button>
+               </div>
             </div>
 
-            <div className='content'>
-               {products.length > 0 && products.map((product) => (
-                  <div className='product' key={product.id} onClick={() => setShowCart(true)}>
-                     <img src={'http://localhost:8000' + product.picture} alt='' />
-                     <div className='details'>
-                        <div className='resource'>
-                           <span className='name-product'>{product.name}</span>
-                        </div>
-                        <div className='control'>
-                           <div className='control-btn'>
-                              <button onClick={() => updateProductQuantity(product.id, product.quantity - 1)}>-</button>
-                              <span>{product.quantity}</span>
-                              <button onClick={() => updateProductQuantity(product.id, product.quantity + 1)}>+</button>
+            {mode ?
+               <div className='content-menu'>
+                  {products.length > 0 ? products.map((product) => (
+                     <div className='product' key={product.id} onClick={() => setShowCart(true)}>
+                        <img src={'http://localhost:8000' + product.picture} alt='' />
+                        <div className='details'>
+                           <div className='resource'>
+                              <span className='name-product'>{product.name}</span>
                            </div>
-                           <span>{product.price} fcfa</span>
-                        </div>
-                        <div className='add-btn'>
-                           <button onClick={() => handleAddToCart(product)} disabled={cart.some(item => item.id === product.id)}><RemixIcons.RiShoppingCartLine /> panier</button>
+                           <div className='control'>
+                              <div className='control-btn'>
+                                 <button onClick={() => updateProductQuantity(product.id, product.quantity - 1)}>-</button>
+                                 <span>{product.quantity}</span>
+                                 <button onClick={() => updateProductQuantity(product.id, product.quantity + 1)}>+</button>
+                              </div>
+                              <span>{product.price} fcfa</span>
+                           </div>
+                           <div className='add-btn'>
+                              <button onClick={() => handleAddToCart(product)} disabled={cart.some(item => item.id === product.id)}><RemixIcons.RiShoppingCartLine /> panier</button>
+                           </div>
                         </div>
                      </div>
-                  </div>
-               ))}
-            </div>
+                  )) : <div> Aucun produit disponible !</div>}
+               </div>
+               :
+               <div className='content-list'>
+                  <table>
+                     <thead>
+                        <th>Produit</th>
+                        <th className='text-center'>Qté</th>
+                        <th className='text-center'>P.U</th>
+                        <th className='text-end'>Détails</th>
+                     </thead>
+                     <tbody>
+                        {products.length > 0 ? products.map((product) => (
+                           <tr key={product.id} onClick={() => setShowCart(true)}>
+                              <td >{product.name}</td>
+                              <td className='text-center'>
+                                 <div className='control-btn'>
+                                    <button onClick={() => updateProductQuantity(product.id, product.quantity - 1)}>-</button>
+                                    <span>{product.quantity}</span>
+                                    <button onClick={() => updateProductQuantity(product.id, product.quantity + 1)}>+</button>
+                                 </div>
+                              </td>
+                              <td className='text-center'>{product.price} fcfa</td>
+                              <td className='add-btn text-end'>
+                                 <button onClick={() => handleAddToCart(product)} disabled={cart.some(item => item.id === product.id)}>
+                                    <RemixIcons.RiShoppingCartLine />
+                                    <span> panier</span>
+                                 </button>
+                              </td>
+                           </tr>
+                        )) : <div> Aucun produit disponible !</div>}
+                     </tbody>
+                  </table>
+               </div>
+            }
             <div className='d-flex justify-content-center align-items-center'>
                <Pagination
                   pageable={pageable}
                   setPage={setPage}
                />
             </div>
+
          </div>
 
          <div className={showCart ? 'container-carts-show' : 'container-carts'}>

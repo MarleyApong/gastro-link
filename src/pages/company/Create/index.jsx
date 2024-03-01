@@ -25,6 +25,7 @@ const CreateCompany = () => {
 	const limit = 10000
 	const page = 0
 
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [file, setFile] = useState('')
 	const [idOrganization, setIdOrganization] = useState('')
 	const [organization, setOrganization] = useState([])
@@ -118,9 +119,13 @@ const CreateCompany = () => {
 				.then((res) => {
 					toast.success("Entreprise ajoutée avec succès !")
 					Navigate('/companies/')
+					setIsSubmitting(true)
 				})
 				.catch((err) => {
 					useHandleError(err, Navigate)
+				})
+				.finally(() => {
+					setIsSubmitting(false)
 				})
 		}
 	}
@@ -287,7 +292,7 @@ const CreateCompany = () => {
 							</div>
 
 							<div className="col-md-12 d-flex gap-2">
-								<button type="submit" className="Btn Send btn-sm">
+								<button type="submit" className="Btn Send btn-sm"  disabled={isSubmitting}>
 									<RemixIcons.RiSendPlaneLine />
 									Enregistrer
 								</button>

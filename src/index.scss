@@ -12,11 +12,14 @@
   --color-1: #fff;
   --color-2: #f1f1f1e1;
   --color-3: #000;
-  --color-modal-head: #Ed1f24;
-  --shadow-color: #77777756;
+  --color-modal-head: #000;
+  --bg-modal-head: #fefefe;
+  --shadow-color: #7777773b;
   --color-err: #5d0606;
   --color-err-hv: #Ed1f24;
   --color-notification: #Ed1f24;
+  --color-scroll: #Ed1f24;
+  --color-body-content: #fff;
 
   --website-color: #Ed1f24;
   --order-color: #c01d20;
@@ -64,7 +67,7 @@ body::-webkit-scrollbar-track {
 .CustomerData::-webkit-scrollbar-thumb,
 .container-carts-show::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
-  border: 3px solid var(--user-color);
+  border: 3px solid var(--color-scroll);
   border-radius: 10px;
 }
 
@@ -227,7 +230,7 @@ textarea {
   gap: 10px;
   margin-bottom: 10px;
   box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
-  background: var(--color-1);
+  background: var(--color-body-content);
   border-radius: 2px;
   padding: 5px;
 
@@ -259,7 +262,7 @@ textarea {
 
 .CustomerData {
   box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color), 2px -2px 3px var(--shadow-color), -2px 2px 3px var(--shadow-color) !important;
-  background: var(--color-1);
+  background: var(--color-body-content);
   min-height: calc(100vh - 14rem) !important;
 }
 

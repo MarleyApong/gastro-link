@@ -6,7 +6,7 @@ import HeaderMain from '../../../components/HeaderMain'
 import SelectOption from '../../../components/SelectOption'
 import SearchInput from '../../../components/SearchInput'
 import logoPlaceholder from "../../../assets/img/avatar/product.jpg"
-import { sortOption } from "../../../data/optionFilter"
+import { StatusOption, sortOption } from "../../../data/optionFilter"
 import CustomDataTable from "../../../components/CustomDataTable"
 import { Product } from "../../../services/productService"
 import dateFormat from "dateformat"
@@ -14,10 +14,12 @@ import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import Access from "../../../utils/utilsAccess"
 import useHandleError from "../../../hooks/useHandleError"
+import ToggleButton from "../../../components/ToggleButton"
 
 const Products = () => {
    const Navigate = useNavigate()
    const access = Access()
+   const statusOption = StatusOption()
    const idUser = localStorage.getItem('id')
 
    const [data, setData] = useState([])
@@ -25,6 +27,7 @@ const Products = () => {
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('name')
+   const [status, setStatus] = useState('')
    const [search, setSearch] = useState('')
    const [limit, setLimit] = useState(10)
    const [page, setPage] = useState(1)
@@ -58,9 +61,26 @@ const Products = () => {
       setFilter(e.target.value)
    }
 
+   // GET STATUS VALUE
+   const handleStatusChange = (e) => {
+      setStatus(e.target.value)
+   }
+
    // GET RESEARCH VALUE
    const handleSearchChange = (e) => {
       setSearch(e.target.value)
+   }
+
+   // CHANGE STATUS WITH SIMPLE BUTTON
+   const detailsStatusChange = (id) => {
+      Product.changeStatus(id).then((res) => {
+         if (res.data.message === 'product active') toast.success("Produit activé !")
+         else toast.success("Produit désactivé !")
+         setRefresh((current) => current + 1)
+      }).catch((err) => {
+         setRefresh((current) => current + 1)
+         useHandleError(err, Navigate)
+      })
    }
 
    // FETCH ALL DATA
@@ -68,13 +88,13 @@ const Products = () => {
       const loadData = async () => {
          try {
             if (access === 23 || access === 22) {
-               const res = await Product.getProductsByUser(idUser, order, filter, search, limit, page)
+               const res = await Product.getProductsByUser(idUser, order, filter, status, search, limit, page)
                setData(res.data.content.data)
                setAllCount(res.data.content.totalElements)
                setTotalPages(res.data.content.totalPages)
             }
             else if (access === 12 || access === 13) {
-               const res = await Product.getAll(order, filter, search, limit, page)
+               const res = await Product.getAll(order, filter, status, search, limit, page)
                setData(res.data.content.data)
                setAllCount(res.data.content.totalElements)
                setTotalPages(res.data.content.totalPages)
@@ -89,7 +109,7 @@ const Products = () => {
       }
 
       loadData()
-   }, [access, idUser, order, filter, search, refresh, limit, page])
+   }, [access, idUser, order, filter, status, search, refresh, limit, page])
 
    // FETCH ONE DATA
    useEffect(() => {
@@ -99,6 +119,19 @@ const Products = () => {
          useHandleError(err, Navigate)
       })
    }, [id, refresh])
+
+   // CHANGE STATUS WITH TOGGLE BUTTON
+   const handleToggle = (idRow) => {
+      Product.changeStatus(idRow).then((res) => {
+         if (res.data.message === 'product active') toast.success("Produit activé !")
+         else toast.success("Produit désactivé !")
+         setRefresh((current) => current + 1)
+      }).catch((err) => {
+         setRefresh((current) => current + 1)
+         useHandleError(err, Navigate)
+      })
+   }
+
 
    // START LOGO PROCESSING PART =======================================================
    const uploadPicture = () => {
@@ -248,9 +281,23 @@ const Products = () => {
    }
 
    if (access === 13) {
-      columns.splice(5, 0, {
+      columns.splice(4, 0, {
          name: 'Organisation',
          selector: row => row.id && row.Company.Organization.name,
+         wrap: true,
+      })
+   }
+
+   if (access === 12 || access === 13 || access === 23 || access === 22) {
+      columns.splice(5, 0, {
+         name: 'Status',
+         cell: (row) => (
+            <ToggleButton
+               checked={row.Status.name === 'actif' ? true : false}
+               onChange={(id) => handleToggle(id)}
+               id={row.id}
+            />
+         ),
          wrap: true,
       })
    }
@@ -276,6 +323,15 @@ const Products = () => {
                value={filter}
                onChange={handleFilterChange}
                options={filterOptions}
+            />
+
+            <SelectOption
+               label="Statut"
+               id="status"
+               name={status}
+               value={status}
+               onChange={handleStatusChange}
+               options={statusOption}
             />
 
             <SearchInput
@@ -346,6 +402,9 @@ const Products = () => {
                      {buttonLabel}
                   </Button>
                   <Button onClick={() => Navigate(`/managers/products/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos"><RemixIcons.RiPenNibLine />Modifier le prod.</Button>
+                  {(access === 12 || access === 13 || access === 23 || access === 22) &&
+                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.id && oneData.Status.name === 'actif' ? ' Btn Error me-2' : 'Btn Send me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.id && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}</Button>
+                  }
                </div>
                <div>
                   <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>

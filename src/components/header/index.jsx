@@ -104,11 +104,14 @@ const Header = ({ sidebar, setSidebar }) => {
             root.style.setProperty('--color-1', '#fff')
             root.style.setProperty('--color-2', '#f1f1f1e1')
             root.style.setProperty('--color-3', '#000')
-            root.style.setProperty('--color-modal-head', '#Ed1f24')
-            root.style.setProperty('--shadow-color', '#77777756')
+            root.style.setProperty('--color-modal-head', '#333')
+            root.style.setProperty('--bg-modal-head', '#fff')
+            root.style.setProperty('--shadow-color', '#7777773b')
             root.style.setProperty('--color-err', '#5d0606')
             root.style.setProperty('--color-err-hv', '#Ed1f24')
             root.style.setProperty('--color-notification', '#Ed1f24')
+            root.style.setProperty('--color-scroll', '#Ed1f24')
+            root.style.setProperty('--color-body-content', '#fff')
             root.style.setProperty('--website-color', '#Ed1f24')
             root.style.setProperty('--order-color', '#c01d20')
         }
@@ -117,7 +120,7 @@ const Header = ({ sidebar, setSidebar }) => {
             root.style.setProperty('--aside-color', '#333')
             root.style.setProperty('--aside-text-color', '#f1f1f1')
             root.style.setProperty('--active-color', '#Ed1f24')
-            root.style.setProperty('--header-color', '#fefefe')
+            root.style.setProperty('--header-color', '#333')
             root.style.setProperty('--user-color', '#333')
             root.style.setProperty('--toggle-color', '#Ed1f24')
             root.style.setProperty('--logo-color', '#Ed1f24')
@@ -126,11 +129,14 @@ const Header = ({ sidebar, setSidebar }) => {
             root.style.setProperty('--color-1', '#fff')
             root.style.setProperty('--color-2', '#f1f1f1e1')
             root.style.setProperty('--color-3', '#000')
-            root.style.setProperty('--color-modal-head', '#333')
-            root.style.setProperty('--shadow-color', '#77777756')
+            root.style.setProperty('--color-modal-head', '#fefefe')
+            root.style.setProperty('--bg-modal-head', '#333')
+            root.style.setProperty('--shadow-color', '#7777773b')
             root.style.setProperty('--color-err', '#5d0606')
             root.style.setProperty('--color-err-hv', '#333')
             root.style.setProperty('--color-notification', '#333')
+            root.style.setProperty('--color-scroll', '#Ed1f24')
+            root.style.setProperty('--color-body-content', '#333')
             root.style.setProperty('--website-color', '#333')
             root.style.setProperty('--order-color', '#c01d20')
         }
@@ -175,7 +181,7 @@ const Header = ({ sidebar, setSidebar }) => {
                         </button>)}
 
                     <div className="NotificationIcon" onClick={toggleTheme}>
-                        {theme === 'light' ? <RemixIcons.RiSunLine /> : <RemixIcons.RiMoonLine />}
+                        {theme === 'light' ? <RemixIcons.RiMoonLine /> : <RemixIcons.RiSunLine />}
                     </div>
                     {access === 20 && (
                         <div className="NotificationIcon" onClick={() => Navigate('/orders')}>
