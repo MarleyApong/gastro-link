@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import * as RemixIcons from "react-icons/ri"
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-import { PulseLoader } from 'react-spinners'
+import * as Spinners from 'react-loader-spinner'
 import { Authentification } from '../../services/authentificationService'
 import { Account } from '../../services/accountService'
 import logo from '../../assets/img/logo/cs-logo-red.png'
@@ -40,22 +40,22 @@ const Login = () => {
          } catch (err) {
             setWait(true)
             if (err.response) {
-               if (err.response.data.error.name === 'NotFound') {
+               if (err.response.data.name === 'UserAutNotFound') {
                   toast.error("Email ou mot de passe incorrect !")
                }
-               else if (err.response.data.error.name === 'ProcessHashFailed') {
+               else if (err.response.data.name === 'ProcessHashFailed') {
                   toast.error("Email ou mot de passe incorrect !")
                }
-               else if (err.response.data.error.name === 'MissingData') {
+               else if (err.response.data.name === 'MissingData') {
                   toast.error("Veuillez remplir tous les champs !")
                }
-               else if (err.response.data.error.name === 'BadRequest') {
+               else if (err.response.data.name === 'BadRequest') {
                   toast.error("Mauvaise requête !")
                }
-               else if (err.response.data.error.name === 'NotFound') {
+               else if (err.response.data.name === 'NotFound') {
                   toast.error("Demande non trouvée !")
                }
-               else if (err.response.data.error.name === 'AccessForbidden') {
+               else if (err.response.data.name === 'AccessForbidden') {
                   toast.error("Contactez votre superviseur.")
                   toast.error("Accès réfusé !")
                }
@@ -88,21 +88,21 @@ const Login = () => {
                   <h2>Connexion</h2>
                   <div className="InputBox">
                      <div className="Icon">
-                        <RemixIcons.RiMailLine />
+                        <RemixIcons.RiMailLine size={18} />
                      </div>
                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' autoComplete='off' />
                   </div>
                   <div className="InputBox">
                      <div className="Icon">
-                        <RemixIcons.RiKeyLine />
+                        <RemixIcons.RiKeyLine size={18}/>
                      </div>
                      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Mot de passe' autoComplete='off' />
                   </div>
                   <div className="InputBox">
                      {
                         wait ?
-                           <input type="submit" value='Se connecter' /> :
-                           <button>Vérification <PulseLoader color="#fff" size='5' /></button>
+                           <button type="submit">Se connecter</button> :
+                           <button>Vérification <span className='ms-2'><Spinners.TailSpin height="20" width="20" ariaLabel="tail-spin-loading" radius="5" color="#fff" /></span></button>
                      }
                   </div>
                </form>

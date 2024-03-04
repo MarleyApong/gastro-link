@@ -13,8 +13,8 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
       },
       rows: {
          style: {
-            backgroundColor: 'var(--bg-modal-head) !important',
-            color: "var(--color-modal-head) !important",
+            backgroundColor: 'var(--bg-modal-head)',
+            color: "var(--color-modal-head)",
             minHeight: '45px',
          },
       },
@@ -28,12 +28,12 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
             paddingLeft: '25px',
          },
       },
-      pagination: {
-         style: {
-            backgroundColor: 'var(--bg-modal-head)',
-            color: "var(--color-modal-head)",
-         },
-      },
+      // pagination: {
+      //    style: {
+      //       backgroundColor: 'var(--bg-modal-head)',
+      //       color: "var(--color-modal-head)",
+      //    },
+      // },
       // button: {
       //    style: {
       //       backgroundColor: 'var(--color-modal-head) !important',
@@ -44,25 +44,23 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
 
    const EmptyTableMessage = () => (
       loading ? (
-         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px', width: '100%', background: 'var(--bg-modal-head) !important', color: 'var(--color-modal-head) !important' }}>
             <TailSpin
-               visible={true}
                height="20"
                width="20"
                color="var(--color-scroll)"
                ariaLabel="tail-spin-loading"
-               radius="1"
+               radius="5"
                wrapperStyle={{}}
                wrapperClass=""
             />
          </div>) : (
-         <div style={{ textAlign: 'center', padding: '20px', width: '100%', background: 'var(--bg-modal-head)', color: 'var(--color-modal-head)' }}>
+         <div style={{ textAlign: 'center', padding: '20px', width: '100%', background: 'var(--bg-modal-head) !important', color: 'var(--color-modal-head) !important' }}>
             Aucune donnée disponible pour le moment.
          </div>
       )
    )
 
-   const baseHeight = 200
    return (
       <>
          <DataTable
@@ -72,7 +70,7 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
             // selectableRows
             responsive
             striped
-            // highlightOnHover
+            highlightOnHover
             customStyles={customStyles}
             expandableRowsComponent={ExpandedComponent}
             noDataComponent={<EmptyTableMessage />}
@@ -92,14 +90,13 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
             paginationRowsPerPageOptions={[10, 15, 20, 30]}
          />
          {loading && (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg-modal-head) !important', color: 'var(--color-modal-head) !important' }}>
                <TailSpin
-                  visible={true}
                   height="20"
                   width="20"
                   color="var(--color-scroll)"
                   ariaLabel="tail-spin-loading"
-                  radius="3"
+                  radius="5"
                   wrapperStyle={{}}
                   wrapperClass=""
                />

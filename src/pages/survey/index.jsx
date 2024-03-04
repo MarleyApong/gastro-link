@@ -170,7 +170,6 @@ const ListSurvey = () => {
          }
       }
 
-
       loadData()
    }, [id, refresh, order, filter, search, status, limit, page])
 
@@ -200,8 +199,8 @@ const ListSurvey = () => {
    }, [id])
 
    // CHANGE STATUS WITH TOGGLE BUTTON
-   const handleToggle = (idRow) => {
-      Survey.changeStatus(idRow).then((res) => {
+   const handleToggle = (idRow, idCompany) => {
+      Survey.changeStatus(idRow, idCompany).then((res) => {
          if (res.data.message === 'survey active') toast.success("Enquête activée !")
          else toast.success("Enquête désactivée !")
          setRefresh((current) => current + 1)
@@ -212,8 +211,8 @@ const ListSurvey = () => {
    }
 
    // CHANGE STATUS WITH SIMPLE BUTTON
-   const detailsStatusChange = (id) => {
-      Survey.changeStatus(id).then((res) => {
+   const detailsStatusChange = (id, idCompany) => {
+      Survey.changeStatus(id, idCompany).then((res) => {
          if (res.data.message === 'survey active') toast.success("Enquête activée !")
          else toast.success("Enquête désactivée !")
          setRefresh((current) => current + 1)
@@ -341,7 +340,7 @@ const ListSurvey = () => {
          cell: (row) => (
             <ToggleButton
                checked={row.Status.name === 'actif' ? true : false}
-               onChange={(id) => handleToggle(id)}
+               onChange={(id) => handleToggle(id, row.Company.id)}
                id={row.id}
             />
          ),
@@ -547,7 +546,7 @@ const ListSurvey = () => {
                      Modifier l'enquête
                   </Button>
                   {access === 12 || access === 13 &&
-                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.id && oneData.Status.name === 'actif' ? ' Btn Error me-2' : 'Btn Send me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.id && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}</Button>
+                     <Button onClick={() => detailsStatusChange(oneData.id, oneData.idCompany)} className={oneData.id && oneData.Status.name === 'actif' ? ' Btn Error me-2' : 'Btn Send me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.id && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}</Button>
                   }
                   <Button onClick={() => addQuestion(oneData.Questions.length)} className={oneData.id && oneData.Questions.length >= 5 ? 'Btn Error me-2' : 'Btn Success me-2'} title="Nouvelle question">
                      <RemixIcons.RiAddLine />

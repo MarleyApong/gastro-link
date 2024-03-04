@@ -196,12 +196,6 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
                </label>
                <CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
             </div>
-            <div className="col-md-12 d-flex gap-2">
-               <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
-                  <RemixIcons.RiSendPlaneLine />
-                  Ajouter
-               </button>
-            </div>
             <div className="col-md-6 ">
                <label htmlFor="idStatus" className="form-label">
                   Status :
@@ -214,6 +208,12 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
                      <option key={item.value} value={item.value}>{item.label}</option>
                   ))}
                </select>
+            </div>
+            <div className="col-md-12 d-flex gap-2">
+               <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
+                  <RemixIcons.RiSendPlaneLine />
+                  Ajouter
+               </button>
             </div>
          </form>
       </blockquote>

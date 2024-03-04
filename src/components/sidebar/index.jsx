@@ -123,7 +123,7 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
 
                 <NavLink to={'/auth/login'} onClick={logout}>
                     <i><RemixIcons.RiLogoutBoxLine /></i>
-                    <span>Exit</span>
+                    <span>Se déconnecter</span>
                 </NavLink>
             </div>
 

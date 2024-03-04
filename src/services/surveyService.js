@@ -26,8 +26,8 @@ const update = (id, data) => {
    return Axios.patch(`/${route}/${id}`, data)
 }
 
-const changeStatus = (id) => {
-   return Axios.patch(`/${route}/${id}/status`)
+const changeStatus = (id, idCompany) => {
+   return Axios.patch(`/${route}/${id}/status`, { idCompany: idCompany })
 }
 
 const deleted = (id) => {

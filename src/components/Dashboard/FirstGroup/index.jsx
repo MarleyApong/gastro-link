@@ -153,7 +153,7 @@ export const FirstGroupExternalServer = ({idUser, orderState, statistic}) => {
             <div className="Element">
                <span>Total Commande traitée aujourd'hui (all severs)</span>
                <div className="Length">
-               {orderState.processed}
+               {orderState.orderFinalizedToday}
                </div>
             </div>
             <div className='IconM'><RemixIcons.RiCheckLine /></div>

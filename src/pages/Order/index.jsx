@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
-import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import HeaderMain from '../../components/HeaderMain'
 import SelectOption from '../../components/SelectOption'
@@ -127,6 +126,7 @@ const Order = () => {
       loadData()
    }, [access, idUser, order, filter, status, search, refresh, limit, page, eventOrder, company])
 
+
    // FETCH ONE DATA
    useEffect(() => {
       Orders.getOne(id).then((res) => {
@@ -193,19 +193,37 @@ const Order = () => {
       try {
          if (currentIdOrder === idOrder) {
             // FINISH ORDER
-            await Orders.updateIdSatusInNotification(idOrder)
+            await Orders.finalizeOrder(idOrder, idUser)
             setCurrentIdOrder(null)
             localStorage.removeItem('currentIdOrder')
             toast.success("Commande terminée avec succès !")
-         } else {
+            hideModal()
+         }
+         else {
             // TAKE ORDER
-            await Orders.updateUserIdInOrder(idOrder, idUser)
+            await Orders.underTreatment(idOrder, idUser)
             setCurrentIdOrder(idOrder)
             localStorage.setItem('currentIdOrder', idOrder)
             toast.success("Commande prise en charge avec succès !")
+            hideModal()
          }
-      } catch (err) {
+      }
+      catch (err) {
          toast.error("Une erreur s'est produite !")
+      }
+   }
+
+   // CANCEL ORDER
+   const cancelOrder = (idOrder) => {
+      if (confirm("Voulez-vous vraiment annuler cette commande ?")) {
+         Orders.cancelOrder(idOrder, idUser)
+            .then((res) => {
+               toast.success("Commande annulée !")
+               hideModal()
+            })
+            .catch((err) => {
+               useHandleError(err, Navigate)
+            })
       }
    }
 
@@ -232,14 +250,19 @@ const Order = () => {
                options={filterOptions}
             />
 
-            <SelectOption
-               label="Statut"
-               id="status"
-               name={status}
-               value={status}
-               onChange={handleStatusChange}
-               options={statusOption}
-            />
+            <div className="AllOptionBox" style={{ background: 'var(--active-color)', color: '#fff', paddingLeft: '3px' }}>
+               <label htmlFor='status'>Status : </label>
+               <select className="input ml-2"
+                  id="status"
+                  name={status}
+                  value={status}
+                  onChange={handleStatusChange}>
+                  <option value="">Nouvelle cmd.</option>
+                  <option value="progress">en cours de trait.</option>
+                  <option value="actif">traitée</option>
+                  <option value="inactif">annulée</option>
+               </select>
+            </div>
 
             <SearchInput
                filter={filter}
@@ -306,46 +329,44 @@ const Order = () => {
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
                <div className="d-flex">
-                  {oneData.id && access === 20 ?
-                     oneData.idUser !== '' && oneData.Notifications[0].idStatus === idStatus ?
-                        <button className="Btn">
-                           <RemixIcons.RiCheckDoubleLine size={15} />
-                           Commande traitée
-                        </button>
-                        :
-                        <button
-                           onClick={() => handleTakeOrder(oneData.id)}
-                           className={currentIdOrder === oneData.id ? "Btn Update" : "Btn Success"}
-                           title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
-                           disabled={currentIdOrder !== null && currentIdOrder !== oneData.id}
-                        >
-                           {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15} /> : <RemixIcons.RiCheckboxMultipleLine size={15} />}
-                           {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
-                        </button>
-                     :
-                     null
-                  }
+                  {access === 20 && oneData.id && oneData.Status !== null && oneData.Status && oneData.Status.name === 'actif' ? (
+                     <button className="Btn" disabled={true}>
+                        <RemixIcons.RiCheckDoubleLine size={15} />
+                        Commande traitée
+                     </button>
+                  ) : null}
 
-                  {oneData.id && access !== 20 ?
-                     oneData.idUser !== '' && oneData.Notifications[0].idStatus === idStatus ?
-                        <button className="Btn" disabled={true}>
-                           <RemixIcons.RiCheckDoubleLine size={15} />
-                           Commande traitée
+                  {(access === 20 && oneData.id && oneData.idUser && !oneData.Status) && (
+                     <button
+                        onClick={() => handleTakeOrder(oneData.id)}
+                        className="Btn Update"
+                        disabled={oneData.idUser !== idUser ? true : false}
+                        title="Finaliser la commande">
+                        <RemixIcons.RiCheckboxMultipleFill size={15} />
+                        Finaliser
+                     </button>
+                  )}
+
+                  {(access === 20 && oneData.id && !oneData.idUser && !oneData.Status) && (
+                     <button onClick={() => handleTakeOrder(oneData.id)} className="Btn Success" title="Prendre la commande">
+                        <RemixIcons.RiCheckboxMultipleLine size={15} />
+                        Prendre commande
+                     </button>
+                  )}
+
+                  {(access === 20 && oneData.id) && (
+                     !oneData.idUser && !oneData.Status ? (
+                        <button className="Btn Error ms-1" onClick={() => cancelOrder(oneData.id)}>
+                           Annuler la Cmd.
                         </button>
-                        :
-                        <button
-                           onClick={() => handleTakeOrder(oneData.id)}
-                           className="Btn"
-                           title={currentIdOrder === oneData.id ? "Terminer la commande" : "Traiter la commande"}
-                           disabled={true}
-                        >
-                           {currentIdOrder === oneData.id ? <RemixIcons.RiCheckboxMultipleFill size={15} /> : <RemixIcons.RiCheckboxMultipleLine size={15} />}
-                           {currentIdOrder === oneData.id ? "Terminer" : "Traiter commande"}
-                        </button>
-                     :
-                     null
+                     ) : (oneData.idUser && oneData.Status && oneData.Status.name === 'inactif') ?
+                        (
+                           <button className="Btn" onClick={() => toast.error("Cette commande a été annulée !")}>
+                              Commande annulée
+                           </button>
+
+                        ) : null)
                   }
-                  <button className="Btn Error ms-1">Annuler la Cmd.</button>
                </div>
 
                <button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></button>

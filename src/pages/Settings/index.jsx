@@ -194,15 +194,15 @@ const Settings = () => {
 							<h5 className="mt-4">Modifiez votre mot de passe</h5>
 							{validator === 2 && <RequirePassword />}
 							<div className="col-md-6">
-								<label htmlFor="phone" className="form-label">
+								<label htmlFor="lastPassword" className="form-label">
 									Ancien mot de passe :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
 									type="password"
 									className={validator === 1 ? "form-control no-focus-outline border border-danger" : validator === 2 ? "form-control no-focus-outline border border-success" : "form-control no-focus-outline"}
-									id="phone"
-									name="phone"
+									id="lastPassword"
+									name="lastPassword"
 									value={lastPassword}
 									onChange={(e) => setLastPassword(e.target.value)}
 									autoComplete='off'

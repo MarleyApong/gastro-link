@@ -8,11 +8,14 @@ import { Account } from "../../../services/accountService"
 import { Role } from "../../../services/roleService"
 import { StatusOption } from "../../../data/optionFilter"
 import useHandleError from "../../../hooks/useHandleError"
+import Access from "../../../utils/utilsAccess"
 
 const UpdateUser = () => {
 	const Navigate = useNavigate()
 	const statusOption = StatusOption()
+	const access = Access()
 	const { id } = useParams()
+	const idUser = localStorage.getItem('id')
 
 	// USER OWNERSHIP
 	const [lastData, setLastData] = useState({
@@ -34,8 +37,9 @@ const UpdateUser = () => {
 		idStatus: ""
 	})
 
-	// // ROLEDATA OWNERSHIP
+	// ROLEDATA OWNERSHIP
 	const [roleData, setRoleData] = useState([])
+	const [idUserData, setIdUserData] = useState('')
 
 	// SET ALL VALUE
 	const handleUpdate = (e) => {
@@ -65,6 +69,7 @@ const UpdateUser = () => {
 				role: res.data.content.role,
 				status: res.data.content.status
 			})
+			setIdUserData(res.data.content.id)
 		}).catch((err) => {
 			useHandleError(err, Navigate)
 		})
@@ -178,29 +183,35 @@ const UpdateUser = () => {
 									required
 								/>
 							</div>
-							<div className="col-md-6">
-								<label htmlFor="idRole" className="form-label">
-									Rôle :
-									<span className="text-danger taille_etoile"></span>
-								</label>
-								<select name="idRole" id="idRole" onChange={handleUpdate} className="form-control no-focus-outline">
-									<option value=""></option>
-									{roleData.map((item) => (
-										<option key={item.id} value={item.id}>{item.name}</option>
-									))}
-								</select>
-							</div>
-							<div className="col-md-6">
-								<label htmlFor="status" className="form-label">
-									Statut :
-									<span className="text-danger taille_etoile"></span>
-								</label>
-								<select name="idStatus" id="idStatus" onChange={handleUpdate} className="form-control no-focus-outline">
-									{statusOption.map((item) => (
-										<option key={item.value} value={item.value}>{item.label}</option>
-									))}
-								</select>
-							</div>
+							{((access === 13 || access === 23) && idUser === idUserData) ? null : (
+								<div className="col-md-6">
+									<label htmlFor="idRole" className="form-label">
+										Rôle :
+										<span className="text-danger taille_etoile"></span>
+									</label>
+
+									<select name="idRole" id="idRole" onChange={handleUpdate} className="form-control no-focus-outline">
+										<option value=""></option>
+										{roleData.map((item) => (
+											<option key={item.id} value={item.id}>{item.name}</option>
+										))}
+									</select>
+								</div>
+							)}
+
+							{((access === 13 || access === 23) && idUser === idUserData) ? null : (
+								<div className="col-md-6">
+									<label htmlFor="status" className="form-label">
+										Statut :
+										<span className="text-danger taille_etoile"></span>
+									</label>
+									<select name="idStatus" id="idStatus" onChange={handleUpdate} className="form-control no-focus-outline">
+										{statusOption.map((item) => (
+											<option key={item.value} value={item.value}>{item.label}</option>
+										))}
+									</select>
+								</div>
+							)}
 
 							<div className="col-md-12 d-flex gap-2 justify-content-between">
 								<button type="submit" className="Btn Send btn-sm">

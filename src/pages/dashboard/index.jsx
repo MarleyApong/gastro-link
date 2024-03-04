@@ -11,11 +11,13 @@ import { Answer } from '../../services/answersService'
 import useHandleError from '../../hooks/useHandleError'
 import { Orders } from '../../services/orderService'
 import { useNavigate } from 'react-router-dom'
+import EventOrder from '../../components/EventOrder'
 
 const Dashboard = () => {
    const access = Access()
-   const idUser = localStorage.getItem('id')
    const Navigate = useNavigate()
+   const eventOrder = EventOrder()
+   const idUser = localStorage.getItem('id')
 
    const [companies, setCompanies] = useState([])
    const [allCount, setAllCount] = useState([])
@@ -49,7 +51,8 @@ const Dashboard = () => {
 
          res = await Answer.getAnswersByOrganization(organization)
          setAnswers(res.data.content)
-      } catch (err) {
+      } 
+      catch (err) {
          
       }
    }
@@ -68,7 +71,7 @@ const Dashboard = () => {
       }
 
       loadCompany()
-   }, [])
+   }, [eventOrder])
 
    const loadOrder = async (company) => {
       const order = 'desc'
@@ -162,7 +165,7 @@ const Dashboard = () => {
          setChartStatisticServer(Object.entries(orderByDay).map(([dayOfWeek, count]) => ({ day: dayOfWeek, total: count })))
       }
       secondGroupDataExterneServer()
-   }, [statisticServer])
+   }, [statisticServer, eventOrder])
 
    return (
       <>

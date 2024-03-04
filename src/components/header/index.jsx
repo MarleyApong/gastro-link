@@ -159,30 +159,47 @@ const Header = ({ sidebar, setSidebar }) => {
             </div> */}
             <div className="Right">
                 <div className="Not-SM">
-
                     {access != 20 && (
-                        <button className='Btn Success'>
-                            <RemixIcons.RiAddLine />
-                            {
-                                location.pathname.includes('organizations') && !location.pathname.includes('new') ?
-                                    <small onClick={newOrganization}>Nouvelle Organizat.</small> :
-                                    location.pathname.includes('companies') && !location.pathname.includes('new') ?
-                                        <small onClick={newCompany}>Nouvelle Entreprise</small> :
-                                        location.pathname.includes('surveys') && !location.pathname.includes('new') ?
-                                            <small onClick={newSurvey}>Nouvelle Enquête</small> :
-                                            location.pathname.includes('users') && !location.pathname.includes('new') ?
-                                                <small onClick={newUser}>Nouveau utilisateur</small> :
-                                                location.pathname.includes('managers') && location.pathname.includes('products') ?
-                                                    <small onClick={newProduct}>Ajouter un produit</small> :
-                                                    location.pathname.includes('managers') && location.pathname.includes('tables') ?
-                                                        <small onClick={newTable}>Ajouter une table</small> :
-                                                        <small onClick={newSurvey}>Nouvelle Enquête</small>
-                            }
-                        </button>)}
+                        location.pathname.includes('organizations') && !location.pathname.includes('new') ?
+                            <button className='Btn Success' onClick={newOrganization}>
+                                <RemixIcons.RiAddLine />
+                                <small>Nouvelle Organizat.</small>
+                            </button> :
+                            location.pathname.includes('companies') && !location.pathname.includes('new') ?
+                                <button className='Btn Success' onClick={newCompany}>
+                                    <RemixIcons.RiAddLine />
+                                    <small>Nouvelle Entreprise</small>
+                                </button> :
+                                location.pathname.includes('surveys') && !location.pathname.includes('new') ?
+                                    <button className='Btn Success' onClick={newSurvey}>
+                                        <RemixIcons.RiAddLine />
+                                        <small>Nouvelle Enquête</small>
+                                    </button> :
+                                    location.pathname.includes('users') && !location.pathname.includes('new') ?
+                                        <button className='Btn Success' onClick={newUser}>
+                                            <RemixIcons.RiAddLine />
+                                            <small>Nouveau utilisateur</small>
+                                        </button> :
+                                        location.pathname.includes('managers') && location.pathname.includes('products') ?
+                                            <button className='Btn Success' onClick={newProduct}>
+                                                <RemixIcons.RiAddLine />
+                                                <small>Ajouter un produit</small>
+                                            </button> :
+                                            location.pathname.includes('managers') && location.pathname.includes('tables') ?
+                                                <button className='Btn Success' onClick={newTable}>
+                                                    <RemixIcons.RiAddLine />
+                                                    <small>Ajouter une table</small>
+                                                </button> :
+                                                <button className='Btn Success' onClick={newSurvey}>
+                                                    <RemixIcons.RiAddLine />
+                                                    <small>Nouvelle Enquête</small>
+                                                </button>
 
-                    <div className="NotificationIcon" onClick={toggleTheme}>
+                    )}
+
+                    {/* <div className="NotificationIcon" onClick={toggleTheme}>
                         {theme === 'light' ? <RemixIcons.RiMoonLine /> : <RemixIcons.RiSunLine />}
-                    </div>
+                    </div> */}
                     {access === 20 && (
                         <div className="NotificationIcon" onClick={() => Navigate('/orders')}>
                             <RemixIcons.RiNotification3Line />
@@ -191,10 +208,10 @@ const Header = ({ sidebar, setSidebar }) => {
                     )}
                 </div>
                 <div className="NotificationIcon" onClick={() => setSidebar(!sidebar)}>
-                    <RemixIcons.RiMenu2Line />
+                    <RemixIcons.RiMenu2Line size={18} />
                 </div>
             </div>
-        </header>
+        </header >
     )
 }
 

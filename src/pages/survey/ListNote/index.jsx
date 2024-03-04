@@ -56,15 +56,17 @@ const ListNote = () => {
             // RETRIEVE ALL Note
             const res = await QuestionAnswer.getByQuestion(id)
             setData(res.data.content.data)
-         } catch (err) {
+         } 
+         catch (err) {
             useHandleError(err, Navigate)
-         }  finally {
+         }  
+         finally {
             setLoading(false)
          }
       }
 
       loadData()
-   }, [order, filter, search, id, loading])
+   }, [order, filter, search, id])
 
    // SYSTEM PAGINATION
    // const handlePageChange = (newPage) => {

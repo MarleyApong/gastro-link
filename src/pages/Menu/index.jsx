@@ -19,6 +19,7 @@ const Menu = () => {
    const [allCount, setAllCount] = useState(0)
    const [products, setProducts] = useState([])
    const [pageable, setPageable] = useState({})
+   const [mode, setMode] = useState(true)
 
    // GET ORDER VALUE
    const handleOrderChange = (e) => {
@@ -37,7 +38,8 @@ const Menu = () => {
 
    useEffect(() => {
       const loadProducts = async () => {
-         const res = await Product.getProductsByUser(idUser, order, filter, search, limit, page)
+         const status = 'actif'
+         const res = await Product.getProductsByUser(idUser, order, filter, status, search, limit, page)
          // INITIALIZE QUANTITY TO 0
          setProducts(res.data.content.data.map(product => ({ ...product, quantity: 0 })))
          setPageable(res.data.content)
@@ -55,7 +57,8 @@ const Menu = () => {
 
    return (
       <div className="menu">
-         <HeaderMain/>
+         <HeaderMain />
+
          <div className="OptionFilter">
             <SelectOption
                label="Trier par"
@@ -82,27 +85,55 @@ const Menu = () => {
                value={search}
                onChange={handleSearchChange}
             />
-         </div>
-         <div className='content'>
-            {products.length > 0 && products.map((product) => (
-               <div className='product' key={product.id} onClick={() => setShowCart(true)}>
-                  <img src={'http://localhost:8000' + product.picture} alt='' />
-                  <div className='details'>
-                     <div className='resource'>
-                        <span className='name-product'>{product.name}</span>
-                     </div>
-                     <span>{product.price} fcfa</span>
-                  </div>
-               </div>
-            ))}
-         </div>
-         <div className='d-flex justify-content-center align-items-center'>
-            <Pagination
-               pageable={pageable}
-               setPage={setPage}
-            />
+
+            <button className='Btn Update Btn-size me-1' onClick={() => setMode(!mode)}>
+               {mode ? <RemixIcons.RiMenu5Line size={15} /> : <RemixIcons.RiListCheck2 size={15} />}
+               {/* <span className='btn-text'>Mode d'affichage</span> */}
+            </button>
          </div>
 
+         <div className="container-products">
+            {mode ?
+               <div className='content-menu'>
+                  {products.length > 0 ? products.map((product) => (
+                     <div className='product' key={product.id} onClick={() => setShowCart(true)}>
+                        <img src={'http://localhost:8000' + product.picture} alt='' />
+                        <div className='details'>
+                           <div className='resource'>
+                              <span className='name-product'>{product.name}</span>
+                           </div>
+                           <div className='control'>
+                              <span>{product.price} fcfa</span>
+                           </div>
+                        </div>
+                     </div>
+                  )) : <div> Aucun produit disponible !</div>}
+               </div>
+               :
+               <div className='content-list'>
+                  <table>
+                     <thead>
+                        <th>Produit</th>
+                        <th className='text-center'>P.U</th>
+                     </thead>
+                     <tbody>
+                        {products.length > 0 ? products.map((product) => (
+                           <tr key={product.id} onClick={() => setShowCart(true)}>
+                              <td >{product.name}</td>
+                              <td className='text-center'>{product.price} fcfa</td>
+                           </tr>
+                        )) : <div> Aucun produit disponible !</div>}
+                     </tbody>
+                  </table>
+               </div>
+            }
+            <div className='d-flex justify-content-center align-items-center'>
+               <Pagination
+                  pageable={pageable}
+                  setPage={setPage}
+               />
+            </div>
+         </div>
       </div>
    )
 }

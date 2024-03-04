@@ -78,6 +78,7 @@ const ListCompany = () => {
    useEffect(() => {
       const loadData = async () => {
          try {
+            setLoading(true)
             if (access === 23) {
                const res = await Company.getCompanyByUser(idUser, order, filter, search, status, limit, page)
                setData(res.data.content.data)

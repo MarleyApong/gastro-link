@@ -30,12 +30,16 @@ const update = (id, data) => {
    return Axios.patch(`/${route}/${id}`, data)
 }
 
-const updateUserIdInOrder = (id, user) => {
-   return Axios.patch(`/${route}/${id}/user`, { user: user })
+const underTreatment = (id, user) => {
+   return Axios.patch(`/${route}/${id}/underTreatment`, { user: user })
 }
 
-const updateIdSatusInNotification = (id, data) => {
-   return Axios.patch(`/${route}/${id}/notification`, data)
+const cancelOrder = (id, user) => {
+   return Axios.patch(`/${route}/${id}/cancelOrder`, { user: user })
+}
+
+const finalizeOrder = (id, user) => {
+   return Axios.patch(`/${route}/${id}/finalizeOrder`, { user: user })
 }
 
 const deleted = (id) => {
@@ -50,7 +54,8 @@ export const Orders = {
    getOne,
    add,
    update,
-   updateUserIdInOrder,
-   updateIdSatusInNotification,
+   underTreatment,
+   cancelOrder,
+   finalizeOrder,
    deleted
 }
