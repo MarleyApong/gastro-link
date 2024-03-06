@@ -65,6 +65,7 @@ const Login = () => {
                }
             }
             else {
+               console.log('err', err)
                toast.error("Connexion au serveur a échoué !")
             }
          }
