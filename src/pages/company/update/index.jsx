@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
 import { useNavigate, useParams } from "react-router-dom"
@@ -11,6 +12,7 @@ const UpdateCompany = () => {
 	const Navigate = useNavigate()
 	const { id } = useParams()
 
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	// COMPANY OWNERSHIP
 	const [company, setCompany] = useState({
 		name: "",
@@ -73,6 +75,7 @@ const UpdateCompany = () => {
 	// ADD COMPANY
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		setIsSubmitting(true)
 		if (
 			company.name === "" ||
 			company.description === "" ||
@@ -80,7 +83,9 @@ const UpdateCompany = () => {
 			company.category === "" ||
 			company.phone === "" ||
 			company.city === "" ||
-			company.neighborhood === "") {
+			company.neighborhood === ""
+		) {
+			setIsSubmitting(false)
 			toast.error("Les champs marqués par une etoile sont obligations !")
 		}
 		else if (
@@ -92,6 +97,7 @@ const UpdateCompany = () => {
 			company.city === lastData.city &&
 			company.neighborhood === lastData.neighborhood
 		) {
+			setIsSubmitting(false)
 			toast.error("Aucune valeur n'a été modifiée.")
 			toast.error("Echec de l'opération  !")
 		}
@@ -103,6 +109,9 @@ const UpdateCompany = () => {
 				})
 				.catch((err) => {
 					useHandleError(err, Navigate)
+				})
+				.finally(() => {
+					setIsSubmitting(false)
 				})
 		}
 	}
@@ -234,8 +243,8 @@ const UpdateCompany = () => {
 
 							<div className="col-md-12 d-flex gap-2 justify-content-between">
 								<button type="submit" className="Btn Send btn-sm">
-									<RemixIcons.RiEditCircleLine />
-									Modifier
+									{isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiEditCircleLine />}
+									{isSubmitting ? 'Modif. en cours' : 'Modifier'}
 								</button>
 								<button className="Btn Error btn-sm" onClick={() => Navigate('/companies')}>
 									<RemixIcons.RiCloseLine />

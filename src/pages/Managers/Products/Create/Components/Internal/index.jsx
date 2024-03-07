@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import { Organization } from "../../../../../../services/organizationService"
 import { Company } from "../../../../../../services/companyService"
@@ -89,7 +90,9 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
          selectedOrganizationValue === false
          || product.idCompany === ""
          || product.name === ""
-         || file === '') {
+         || file === ''
+      ) {
+         setIsSubmitting(true)
          toast.error("Les champs marqués par une etoile sont obligations !")
       }
       else {
@@ -105,7 +108,6 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
             .then((res) => {
                toast.success("Produit ajouté avec succès !")
                Navigate('/managers/products')
-               setIsSubmitting(true)
             })
             .catch((err) => {
                useHandleError(err, Navigate)
@@ -211,8 +213,8 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
             </div>
             <div className="col-md-12 d-flex gap-2">
                <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
-                  <RemixIcons.RiSendPlaneLine />
-                  Ajouter
+                  {isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
+                  {isSubmitting ? 'Ajout en cours' : 'Ajouter'}
                </button>
             </div>
          </form>

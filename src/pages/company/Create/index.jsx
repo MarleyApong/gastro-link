@@ -83,7 +83,8 @@ const CreateCompany = () => {
 					res = await Organization.getAll(order, filter, status, search, limit, page)
 					setOrganization(res.data.content.data)
 				}
-			} catch (err) {
+			}
+			catch (err) {
 				useHandleError(err, Navigate)
 			}
 		}
@@ -94,6 +95,7 @@ const CreateCompany = () => {
 	// ADD COMPANY
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		setIsSubmitting(true)
 		if (
 			selectedValue === false
 			|| company.name === ""
@@ -102,24 +104,25 @@ const CreateCompany = () => {
 			|| company.phone === ""
 			|| company.city === ""
 			|| company.neighborhood === ""
-			|| company.idStatus === "") {
+			|| company.idStatus === ""
+		) {
+			setIsSubmitting(false)
 			toast.error("Les champs marqués par une etoile sont obligations !")
 		}
 		else {
 			const formData = new FormData();
 			Object.keys(company).forEach((key) => {
-				formData.append(key, company[key]);
+				formData.append(key, company[key])
 			})
 
 			if (file) {
-				formData.append('picture', file);
+				formData.append('picture', file)
 			}
 
 			Company.add(formData)
 				.then((res) => {
 					toast.success("Entreprise ajoutée avec succès !")
 					Navigate('/companies/')
-					setIsSubmitting(true)
 				})
 				.catch((err) => {
 					useHandleError(err, Navigate)
@@ -292,9 +295,9 @@ const CreateCompany = () => {
 							</div>
 
 							<div className="col-md-12 d-flex gap-2">
-								<button type="submit" className="Btn Send btn-sm"  disabled={isSubmitting}>
-									<RemixIcons.RiSendPlaneLine />
-									Enregistrer
+								<button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
+									{isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
+									{isSubmitting ? 'Ajout en cours' : 'Ajouter'}
 								</button>
 							</div>
 						</form>

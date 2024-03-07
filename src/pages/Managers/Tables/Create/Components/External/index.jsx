@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import { Company } from "../../../../../../services/companyService"
 import { Table } from "../../../../../../services/tableService"
@@ -51,14 +52,15 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
          .catch((err) => {
             useHandleError(err, Navigate)
          })
-        
+
    }, [idUser, idStatus])
 
    // ADD TABLE
    const handleSubmit = (e) => {
       e.preventDefault()
-      if (
-         table.idCompany === "" || table.tableNumber === "") {
+      setIsSubmitting(true)
+      if (table.idCompany === "" || table.tableNumber === "") {
+         setIsSubmitting(false)
          toast.error("Les champs marqués par une etoile sont obligations !")
       }
       else {
@@ -66,7 +68,6 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
             .then((res) => {
                toast.success("Table ajouté avec succès !")
                Navigate('/managers/tables')
-               setIsSubmitting(true)
             })
             .catch((err) => {
                useHandleError(err, Navigate)
@@ -108,8 +109,8 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
             )}
             <div className="col-md-12 d-flex gap-2">
                <button type="submit" className="Btn Send btn-sm">
-                  <RemixIcons.RiSendPlaneLine disabled={isSubmitting}/>
-                  Ajouter
+                  {isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
+                  {isSubmitting ? 'Ajout en cours' : 'Ajouter'}
                </button>
             </div>
          </form>

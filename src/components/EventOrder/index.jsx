@@ -4,7 +4,7 @@ const EventOrder = () => {
    const [messages, setMessages] = useState('')
 
    useEffect(() => {
-      const eventSource = new EventSource('http://localhost:8000/event/order')
+      const eventSource = new EventSource('https://deploy-api-customer.onrender.com/event/order')
 
       eventSource.onopen = () => {
          // console.log('Connection to server opened')

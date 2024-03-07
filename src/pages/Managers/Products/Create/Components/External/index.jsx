@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import { Company } from "../../../../../../services/companyService"
 import { Product } from "../../../../../../services/productService"
@@ -69,12 +70,15 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
    // ADD PRODUCT
    const handleSubmit = (e) => {
       e.preventDefault()
+      setIsSubmitting(true)
       if (
          product.idCompany === ""
          || product.idStatus === ""
          || product.name === ""
          || product.price === ""
-         || file === '') {
+         || file === ''
+      ) {
+         setIsSubmitting(false)
          toast.error("Les champs marqués par une etoile sont obligations !")
       }
       else {
@@ -90,7 +94,6 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
             .then((res) => {
                toast.success("Produit ajouté avec succès !")
                Navigate('/managers/products')
-               setIsSubmitting(true)
             })
             .catch((err) => {
                useHandleError(err, Navigate)
@@ -190,10 +193,8 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
                </select>
             </div>
             <div className="col-md-12 d-flex gap-2">
-               <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
-                  <RemixIcons.RiSendPlaneLine />
-                  Ajouter
-               </button>
+               {isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
+               {isSubmitting ? 'Ajout en cours' : 'Ajouter'}
             </div>
          </form>
       </blockquote>

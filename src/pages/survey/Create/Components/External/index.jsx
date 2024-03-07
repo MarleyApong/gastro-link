@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import { User } from "../../../../../services/userService"
 import { Survey } from "../../../../../services/surveyService"
@@ -73,25 +74,28 @@ const External = ({ Navigate, idStatus, access, CustomSelect }) => {
 
    const handleSubmit = (e) => {
       e.preventDefault()
+      setIsSubmitting(true)
       if (
          survey.idCompany === ""
          || survey.name === ""
-         || survey.idStatus === "") {
+         || survey.idStatus === ""
+      ) {
+         setIsSubmitting(false)
          toast.error("obligatoire(s)")
          toast.error("Veuillez remplir le ou les champs,")
       }
       else {
-         Survey.add(survey).then((res) => {
-            toast.success("Enquête ajoutée avec succès !")
-            Navigate('/surveys/list')
-            setIsSubmitting(true)
-         })
-         .catch((err) => {
-            useHandleError(err, Navigate)
-         })
-         .finally(() => {
-            setIsSubmitting(false)
-         })
+         Survey.add(survey)
+            .then((res) => {
+               toast.success("Enquête ajoutée avec succès !")
+               Navigate('/surveys/list')
+            })
+            .catch((err) => {
+               useHandleError(err, Navigate)
+            })
+            .finally(() => {
+               setIsSubmitting(false)
+            })
       }
    }
 
@@ -126,8 +130,8 @@ const External = ({ Navigate, idStatus, access, CustomSelect }) => {
 
             <div className="col-md-12 d-flex gap-2">
                <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
-                  <RemixIcons.RiSendPlaneLine />
-                  Ajouter
+                  {isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
+                  {isSubmitting ? 'Ajout en cours' : 'Ajouter'}
                </button>
             </div>
          </form>

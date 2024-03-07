@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import { Organization } from "../../../../../services/organizationService"
 import { Survey } from "../../../../../services/surveyService"
@@ -13,7 +14,7 @@ const Internal = ({ Navigate, idStatus, access, CustomSelect }) => {
    const search = ''
    const limit = 10000
    const page = 0
-   
+
    let idOrganization = ''
 
    const [isSubmitting, setIsSubmitting] = useState(false)
@@ -72,24 +73,27 @@ const Internal = ({ Navigate, idStatus, access, CustomSelect }) => {
    // ADD SURVEY
    const handleSubmit = (e) => {
       e.preventDefault()
+      setIsSubmitting(true)
       if (
          selectedOrganizationValue === false
          || survey.idCompany === ""
-         || survey.name === "") {
+         || survey.name === ""
+      ) {
+         setIsSubmitting(false)
          toast.error("Les champs marqués par une etoile sont obligations !")
       }
       else {
-         Survey.add(survey).then((res) => {
-            toast.success("Enquête ajoutée avec succès !")
-            Navigate('/surveys/list')
-            setIsSubmitting(true)
-         })
-         .catch((err) => {
-            useHandleError(err, Navigate)
-         })
-         .finally(() => {
-            setIsSubmitting(false)
-         })
+         Survey.add(survey)
+            .then((res) => {
+               toast.success("Enquête ajoutée avec succès !")
+               Navigate('/surveys/list')
+            })
+            .catch((err) => {
+               useHandleError(err, Navigate)
+            })
+            .finally(() => {
+               setIsSubmitting(false)
+            })
       }
    }
 
@@ -129,8 +133,8 @@ const Internal = ({ Navigate, idStatus, access, CustomSelect }) => {
 
             <div className="col-md-12 d-flex gap-2">
                <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
-                  <RemixIcons.RiSendPlaneLine />
-                  Ajouter
+                  {isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
+                  {isSubmitting ? 'AJout en cours' : 'Ajouter'}
                </button>
             </div>
          </form>

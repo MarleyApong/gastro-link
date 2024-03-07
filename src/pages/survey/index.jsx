@@ -546,7 +546,10 @@ const ListSurvey = () => {
                      Modifier l'enquête
                   </Button>
                   {access === 12 || access === 13 &&
-                     <Button onClick={() => detailsStatusChange(oneData.id, oneData.idCompany)} className={oneData.id && oneData.Status.name === 'actif' ? ' Btn Error me-2' : 'Btn Send me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.id && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}</Button>
+                     <Button onClick={() => detailsStatusChange(oneData.id, oneData.idCompany)} className={oneData.id && oneData.Status.name === 'actif' ? ' Btn Error me-2' : 'Btn Send me-2'}>
+                        <RemixIcons.RiExchangeBoxLine />
+                        {oneData.id && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}
+                     </Button>
                   }
                   <Button onClick={() => addQuestion(oneData.Questions.length)} className={oneData.id && oneData.Questions.length >= 5 ? 'Btn Error me-2' : 'Btn Success me-2'} title="Nouvelle question">
                      <RemixIcons.RiAddLine />

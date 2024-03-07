@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
 import { Organization } from "../../../services/organizationService"
@@ -48,7 +49,9 @@ const CreateOrganization = () => {
 			organization.phone === "" ||
 			organization.city === "" ||
 			organization.neighborhood === "" ||
-			organization.idStatus === "") {
+			organization.idStatus === ""
+		) {
+			setIsSubmitting(false)
 			toast.error("Les champs marqués par une etoile sont obligations !")
 		}
 		else {
@@ -59,18 +62,18 @@ const CreateOrganization = () => {
 			if (file) {
 				formData.append('picture', file)
 			}
-
-			Organization.add(formData).then((res) => {
-				toast.success("organization ajoutée avec succès !")
-				Navigate('/organizations/')
-				setIsSubmitting(true)
-			})
-			.catch((err) => {
-				useHandleError(err, Navigate)
-			})
-			.finally(() => {
-            setIsSubmitting(false)
-         })
+			Organization.add(formData)
+			setIsSubmitting(true)
+				.then((res) => {
+					toast.success("organization ajoutée avec succès !")
+					Navigate('/organizations/')
+				})
+				.catch((err) => {
+					useHandleError(err, Navigate)
+				})
+				.finally(() => {
+					setIsSubmitting(false)
+				})
 		}
 	}
 
@@ -83,7 +86,7 @@ const CreateOrganization = () => {
 					<h5>Entrez les informations concernant votre organisation.</h5>
 					<PleaseNote />
 					<blockquote className="blockquote mb-0">
-						<form onSubmit={handleSubmit} className="row g-2 form" for>
+						<form onSubmit={handleSubmit} className="row g-2 form">
 							<div className="col-md-6">
 								<label htmlFor="name" className="form-label">
 									Nom de l'organisation :
@@ -195,8 +198,8 @@ const CreateOrganization = () => {
 
 							<div className="col-md-12 d-flex gap-2">
 								<button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
-									<RemixIcons.RiSendPlaneLine />
-									Enregistrer
+									{isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
+									{isSubmitting ? 'Ajout en cours' : 'Ajouter'}
 								</button>
 							</div>
 						</form>

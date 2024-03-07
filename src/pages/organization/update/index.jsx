@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
 import { Organization } from "../../../services/organizationService"
@@ -9,7 +10,8 @@ import useHandleError from "../../../hooks/useHandleError"
 const UpdateOrganization = () => {
 	const Navigate = useNavigate()
 	const { id } = useParams()
-
+	
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	// ORGANIZATION OWNERSHIP
 	const [organization, setOrganization] = useState({
 		name: "",
@@ -62,13 +64,16 @@ const UpdateOrganization = () => {
 	// UPDATE ORGANIZATION
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		setIsSubmitting(true)
 		if (
 			organization.name === "" ||
 			organization.description === "" ||
 			organization.phone === "" ||
 			organization.city === "" ||
-			organization.neighborhood === "") {
+			organization.neighborhood === ""
+		) {
 			toast.error("Les champs marqués par une etoile sont obligations !")
+			setIsSubmitting(false)
 		}
 		else if (
 			organization.name === lastData.name &&
@@ -77,15 +82,21 @@ const UpdateOrganization = () => {
 			organization.city === lastData.city &&
 			organization.neighborhood === lastData.neighborhood
 		) {
+			setIsSubmitting(false)
 			toast.error("Aucune valeur n'a été modifiée.")
 			toast.error("Echec de l'opération  !")
 		}
 		else {
-			Organization.update(id, organization).then((res) => {
+			Organization.update(id, organization)
+			.then((res) => {
 				toast.success("organization modifiée avec succès !")
 				Navigate('/organizations/')
-			}).catch((err) => {
+			})
+			.catch((err) => {
 				useHandleError(err, Navigate)
+			})
+			.finally(() => {
+				setIsSubmitting(false)
 			})
 		}
 	}
@@ -187,8 +198,8 @@ const UpdateOrganization = () => {
 
 							<div className="col-md-12 d-flex gap-2 justify-content-between">
 								<button type="submit" className="Btn Send btn-sm">
-									<RemixIcons.RiEditCircleLine />
-									Modifier
+									{isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiEditCircleLine />}
+									{isSubmitting ? 'Modif. en cours' : 'Modifier'}
 								</button>
 								<button className="Btn Error btn-sm" onClick={() => Navigate('/organizations')}>
 									<RemixIcons.RiCloseLine />

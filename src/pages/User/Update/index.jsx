@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import HeaderMain from "../../../components/HeaderMain"
 import { User } from "../../../services/userService"
@@ -16,6 +17,8 @@ const UpdateUser = () => {
 	const access = Access()
 	const { id } = useParams()
 	const idUser = localStorage.getItem('id')
+
+	const [isSubmitting, setIsSubmitting] = useState(false)
 
 	// USER OWNERSHIP
 	const [lastData, setLastData] = useState({
@@ -88,6 +91,7 @@ const UpdateUser = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (user.firstName === "" || user.phone === "" || user.email === "" || user.idRole === "" || user.idStatus === "") {
+			setIsSubmitting(false)
 			toast.error("Les champs marqués par une étoile sont obligations !")
 		}
 		else if (
@@ -98,15 +102,20 @@ const UpdateUser = () => {
 			user.idRole === lastData.role &&
 			user.idStatus === lastData.idStatus
 		) {
+			setIsSubmitting(false)
 			toast.error("Aucune valeur n'a été modifiée.")
 			toast.error("Echec de l'opération !")
 		}
 		else {
-			User.update(id, user).then((res) => {
+			User.update(id, user)
+			.then((res) => {
 				toast.success("Utilisateur modifié avec succès !")
 				Navigate('/users')
 			}).catch((err) => {
 				useHandleError(err, Navigate)
+			})
+			.finally(() => {
+				setIsSubmitting(false)
 			})
 		}
 	}
@@ -215,8 +224,8 @@ const UpdateUser = () => {
 
 							<div className="col-md-12 d-flex gap-2 justify-content-between">
 								<button type="submit" className="Btn Send btn-sm">
-									<RemixIcons.RiEditCircleLine />
-									Modifier
+									{isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiEditCircleLine />}
+									{isSubmitting ? 'Modif. en cours' : 'Modifier'}
 								</button>
 								<button className="Btn Error btn-sm" onClick={() => Navigate('/users')}>
 									<RemixIcons.RiCloseLine />

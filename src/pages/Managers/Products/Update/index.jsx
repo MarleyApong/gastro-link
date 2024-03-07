@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import HeaderMain from "../../../../components/HeaderMain"
 import * as RemixIcons from "react-icons/ri"
+import * as Spinners from 'react-loader-spinner'
 import toast from "react-hot-toast"
 import { Account } from "../../../../services/accountService"
 import { Product } from "../../../../services/productService"
@@ -11,6 +12,7 @@ const UpdateProduct = () => {
 	const Navigate = useNavigate()
 	const { id } = useParams()
 
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	// PRODUCT OWNERSHIP
 	const [product, setProduct] = useState({
 		name: "",
@@ -55,10 +57,13 @@ const UpdateProduct = () => {
 	// UPDATE PRODUCT
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		setIsSubmitting(true)
 		if (
 			product.name === "" ||
 			product.category === "" ||
-			product.price === "") {
+			product.price === ""
+		) {
+			setIsSubmitting(false)
 			toast.error("Les champs marqués par une etoile sont obligations !")
 		}
 		else if (
@@ -66,6 +71,7 @@ const UpdateProduct = () => {
 			product.category === lastData.category &&
 			product.price === lastData.price
 		) {
+			setIsSubmitting(false)
 			toast.error("Aucune valeur n'a été modifiée.")
 			toast.error("Echec de l'opération  !")
 		}
@@ -77,6 +83,9 @@ const UpdateProduct = () => {
 				})
 				.catch((err) => {
 					useHandleError(err, Navigate)
+				})
+				.finally(() => {
+					setIsSubmitting(false)
 				})
 		}
 	}
@@ -142,8 +151,8 @@ const UpdateProduct = () => {
 
 							<div className="col-md-12 d-flex gap-2 justify-content-between">
 								<button type="submit" className="Btn Send btn-sm">
-									<RemixIcons.RiEditCircleLine />
-									Modifier
+									{isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiEditCircleLine />}
+									{isSubmitting ? 'Modif. en cours' : 'Modifier'}
 								</button>
 								<button className="Btn Error btn-sm" onClick={() => Navigate('/managers/products')}>
 									<RemixIcons.RiCloseLine />

@@ -157,8 +157,9 @@ const ListCompany = () => {
    const getImageToShow = (getImage, oneData, imageTypes, logoPlaceholder) => {
       let imageToShow = logoPlaceholder
 
+      console.log('imageToShow', oneData.picture)
       if (getImage === '' && oneData.picture) {
-         imageToShow = 'http://localhost:8000' + oneData.picture
+         imageToShow = oneData.picture
       } else if (getImage === '' && oneData.picture === '') {
          imageToShow = logoPlaceholder
       } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
@@ -383,7 +384,7 @@ const ListCompany = () => {
                <div className="container">
                   <div className="row ">
                      <div onClick={() => imageRef.current.click()} title="cliquez pour choisir une autre image" className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" crossorigin="anonymous" src={imageToShow} alt="" width="100%" height="400px" />
+                        <img className="object-fit-cover" src={imageToShow} alt="" width="100%" height="400px" />
                         <input type="file" id="Profil" hidden ref={imageRef} accept=".jpg, .jpeg, .png" onChange={(e) => setGetImage(e.target.files[0])} />
                      </div>
 
