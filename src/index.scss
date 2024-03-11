@@ -239,12 +239,15 @@ textarea {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: var(--shadow-color);
+    // background: var(--active-color);
+    border: 1px solid;
+    border-style: dashed;
 
     label {
       font-size: 13px;
-      color: var(--color-6);
-      width: 73px;
+      // color: var(--active-color);
+      font-weight: 600;
+      width: 75px;
       padding-left: 3px;
     }
 
@@ -254,6 +257,7 @@ textarea {
       outline: none;
       padding: 5px;
       background: var(--color-2);
+      // color: var(--active-color);
       border-radius: 2px;
       width: 200px;
     }
