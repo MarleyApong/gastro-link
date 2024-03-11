@@ -213,7 +213,8 @@ textarea {
   width: calc(100% - 230px);
   height: calc(100vh - 5rem);
   left: 230px;
-  margin-left: .5rem;
+  padding: 0 .5rem;
+  padding-right: 0;
   // border-radius: 5px;
   transition: 1s all;
 }
@@ -238,10 +239,13 @@ textarea {
     display: flex;
     align-items: center;
     gap: 10px;
+    background: var(--shadow-color);
 
     label {
       font-size: 13px;
       color: var(--color-6);
+      width: 73px;
+      padding-left: 3px;
     }
 
     input,
@@ -251,11 +255,11 @@ textarea {
       padding: 5px;
       background: var(--color-2);
       border-radius: 2px;
-      max-width: 200px;
+      width: 200px;
     }
 
     input {
-      width: 300px;
+      width: 285px;
     }
   }
 }
@@ -355,6 +359,34 @@ textarea {
 
   input {
     font-size: 10px;
+  }
+
+  .OptionFilter {  
+    .AllOptionBox {
+
+      label {
+        width: 100%;
+        padding-left: 3px;
+      }
+  
+      input,
+      select {
+        width: 100%;
+      }
+  
+      input {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 545px) {
+  .Content,
+  .ContentMax {
+    width: 100%;
+    left: 0px;
+    padding: 0;
   }
 }
 

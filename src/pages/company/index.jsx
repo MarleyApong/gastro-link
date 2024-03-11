@@ -18,6 +18,7 @@ import { sortOption, StatusOption } from "../../data/optionFilter"
 import Access from "../../utils/utilsAccess"
 import { Account } from "../../services/accountService"
 import useHandleError from "../../hooks/useHandleError"
+import config from "../../config"
 
 const ListCompany = () => {
    const Navigate = useNavigate()
@@ -157,9 +158,8 @@ const ListCompany = () => {
    const getImageToShow = (getImage, oneData, imageTypes, logoPlaceholder) => {
       let imageToShow = logoPlaceholder
 
-      console.log('imageToShow', oneData.picture)
       if (getImage === '' && oneData.picture) {
-         imageToShow = oneData.picture
+         imageToShow = config.serverUrl + oneData.picture
       } else if (getImage === '' && oneData.picture === '') {
          imageToShow = logoPlaceholder
       } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
@@ -384,7 +384,7 @@ const ListCompany = () => {
                <div className="container">
                   <div className="row ">
                      <div onClick={() => imageRef.current.click()} title="cliquez pour choisir une autre image" className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" src={imageToShow} alt="" width="100%" height="400px" />
+                        <img className="object-fit-cover" crossorigin="anonymous" src={imageToShow} alt="" width="100%" height="400px" />
                         <input type="file" id="Profil" hidden ref={imageRef} accept=".jpg, .jpeg, .png" onChange={(e) => setGetImage(e.target.files[0])} />
                      </div>
 
@@ -412,12 +412,12 @@ const ListCompany = () => {
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               <div className="d-flex">
+               <div className="d-lg-flex d-sm-block">
                   <Button onClick={buttonAction} className={buttonClass} title={buttonLabel}>
                      <RemixIcons.RiPictureInPictureLine />
                      {buttonLabel}
                   </Button>
-                  <Button onClick={() => Navigate(`/companies/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos">
+                  <Button onClick={() => Navigate(`/companies/update/${oneData.id}`)} className="Btn Send me-2" title="Modifier infos">
                      <RemixIcons.RiPenNibLine />
                      Modifier infos
                   </Button>
@@ -427,13 +427,13 @@ const ListCompany = () => {
                         {oneData.Status && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}
                      </Button>
                   }
-                  <Button onClick={() => Navigate(`/companies/orders/${oneData.id}`)} className="Btn Send  me-2" title="Voir les commandes">
+                  <Button onClick={() => Navigate(`/companies/orders/${oneData.id}`)} className="Btn Send me-2" title="Voir les commandes">
                      <RemixIcons.RiAlarmWarningLine />
                      Voir les cmd.
                   </Button>
                </div>
                <div>
-                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
+                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine />Fermer</Button>
                </div>
             </Modal.Footer>
          </Modal >

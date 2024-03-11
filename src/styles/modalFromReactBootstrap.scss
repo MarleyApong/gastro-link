@@ -1,12 +1,12 @@
 .modal-content {
-   background: red;
+   background: var(--user-color);
    border: none !important;
    border-radius: 0 !important;
 }
 
 .modal-react-bootstrap {
    .header-react-bootstrap {
-      background: var(--color-modal-head);
+      background: var(--user-color);
       height: 0px;
       padding: 20px;
       border-radius: 0 !important;
@@ -49,9 +49,6 @@
    padding: 5px;
 }
 
-// .titre{
-//     color: rgb(136, 64, 64)(148, 58, 58);
-// }
 
 // table
 .voir {
@@ -68,31 +65,31 @@
 }
 
 //   icon 
-.password-icon1 {
-   position: relative;
-   float: right;
-   cursor: pointer;
-   bottom: 16px;
-   transform: translateY(-50%);
-   display: inline-block;
-   margin-right: 5px;
+// .password-icon1 {
+//    position: relative;
+//    float: right;
+//    cursor: pointer;
+//    bottom: 16px;
+//    transform: translateY(-50%);
+//    display: inline-block;
+//    margin-right: 5px;
 
-}
+// }
 
-.password-confirm1 {
-   position: relative;
-   float: right;
-   cursor: pointer;
-   bottom: 16px;
-   transform: translateY(-50%);
-   display: inline-block;
-   margin-right: 5px;
-}
+// .password-confirm1 {
+//    position: relative;
+//    float: right;
+//    cursor: pointer;
+//    bottom: 16px;
+//    transform: translateY(-50%);
+//    display: inline-block;
+//    margin-right: 5px;
+// }
 
-.border_detail {
-   // margin-top: 30px;
-   border: 0.5px solid #9c3b3b;
-}
+// .border_detail {
+//    // margin-top: 30px;
+//    border: 0.5px solid #9c3b3b;
+// }
 
 .logo {
    margin-top: 20%;
@@ -187,6 +184,16 @@
             height: 200px;
          }
 
+      }
+   }
+}
+
+@media screen and (max-width: 600px){
+   .footer-react-bootstrap {
+      .Btn {
+         // &:last-child {
+         //    display: none;
+         // }
       }
    }
 }

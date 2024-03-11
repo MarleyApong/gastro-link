@@ -27,7 +27,7 @@ const Header = ({ sidebar, setSidebar }) => {
 
     const [allCount, setAllCount] = useState(0)
     const [company, setCompany] = useState('')
-    const [theme, setTheme] = useState(localStorage.getItem('theme'))
+    // const [theme, setTheme] = useState(localStorage.getItem('theme'))
 
     // REDIRECTION
     const newOrganization = () => Navigate('/organizations/new')
@@ -41,14 +41,14 @@ const Header = ({ sidebar, setSidebar }) => {
         new Audio(songOfNewOrder).play()
     }
 
-    const toggleTheme = () => {
-        if (theme === 'dark') {
-            setTheme('light')
-        }
-        else {
-            setTheme('dark')
-        }
-    }
+    // const toggleTheme = () => {
+    //     if (theme === 'dark') {
+    //         setTheme('light')
+    //     }
+    //     else {
+    //         setTheme('dark')
+    //     }
+    // }
 
     useEffect(() => {
         if (eventOrder !== '' && access === 20) {
@@ -88,66 +88,66 @@ const Header = ({ sidebar, setSidebar }) => {
         loadData()
     }, [access, idUser, eventOrder, company])
 
-    useEffect(() => {
-        const root = document.documentElement
-        if (theme === 'light') {
-            root.style.setProperty('--color-primary', '#f1f1f1')
-            root.style.setProperty('--aside-color', '#fefefe')
-            root.style.setProperty('--aside-text-color', '#Ed1f24')
-            root.style.setProperty('--active-color', '#Ed1f24')
-            root.style.setProperty('--header-color', '#fefefe')
-            root.style.setProperty('--user-color', '#Ed1f24')
-            root.style.setProperty('--toggle-color', '#Ed1f24')
-            root.style.setProperty('--logo-color', '#Ed1f24')
-            root.style.setProperty('--z-color-1', '#6E659C')
-            root.style.setProperty('--z-color-2', '#D49D38')
-            root.style.setProperty('--color-1', '#fff')
-            root.style.setProperty('--color-2', '#f1f1f1e1')
-            root.style.setProperty('--color-3', '#000')
-            root.style.setProperty('--color-modal-head', '#333')
-            root.style.setProperty('--bg-modal-head', '#fff')
-            root.style.setProperty('--shadow-color', '#7777773b')
-            root.style.setProperty('--color-err', '#5d0606')
-            root.style.setProperty('--color-err-hv', '#Ed1f24')
-            root.style.setProperty('--color-notification', '#Ed1f24')
-            root.style.setProperty('--color-scroll', '#Ed1f24')
-            root.style.setProperty('--color-body-content', '#fff')
-            root.style.setProperty('--website-color', '#Ed1f24')
-            root.style.setProperty('--order-color', '#c01d20')
-        }
-        else {
-            root.style.setProperty('--color-primary', '#f1f1f1')
-            root.style.setProperty('--aside-color', '#333')
-            root.style.setProperty('--aside-text-color', '#f1f1f1')
-            root.style.setProperty('--active-color', '#Ed1f24')
-            root.style.setProperty('--header-color', '#333')
-            root.style.setProperty('--user-color', '#333')
-            root.style.setProperty('--toggle-color', '#Ed1f24')
-            root.style.setProperty('--logo-color', '#Ed1f24')
-            root.style.setProperty('--z-color-1', '#6E659C')
-            root.style.setProperty('--z-color-2', '#D49D38')
-            root.style.setProperty('--color-1', '#fff')
-            root.style.setProperty('--color-2', '#f1f1f1e1')
-            root.style.setProperty('--color-3', '#000')
-            root.style.setProperty('--color-modal-head', '#fefefe')
-            root.style.setProperty('--bg-modal-head', '#333')
-            root.style.setProperty('--shadow-color', '#7777773b')
-            root.style.setProperty('--color-err', '#5d0606')
-            root.style.setProperty('--color-err-hv', '#333')
-            root.style.setProperty('--color-notification', '#333')
-            root.style.setProperty('--color-scroll', '#Ed1f24')
-            root.style.setProperty('--color-body-content', '#333')
-            root.style.setProperty('--website-color', '#333')
-            root.style.setProperty('--order-color', '#c01d20')
-        }
+    // useEffect(() => {
+    //     const root = document.documentElement
+    //     if (theme === 'light') {
+    //         root.style.setProperty('--color-primary', '#f1f1f1')
+    //         root.style.setProperty('--aside-color', '#fefefe')
+    //         root.style.setProperty('--aside-text-color', '#Ed1f24')
+    //         root.style.setProperty('--active-color', '#Ed1f24')
+    //         root.style.setProperty('--header-color', '#fefefe')
+    //         root.style.setProperty('--user-color', '#Ed1f24')
+    //         root.style.setProperty('--toggle-color', '#Ed1f24')
+    //         root.style.setProperty('--logo-color', '#Ed1f24')
+    //         root.style.setProperty('--z-color-1', '#6E659C')
+    //         root.style.setProperty('--z-color-2', '#D49D38')
+    //         root.style.setProperty('--color-1', '#fff')
+    //         root.style.setProperty('--color-2', '#f1f1f1e1')
+    //         root.style.setProperty('--color-3', '#000')
+    //         root.style.setProperty('--color-modal-head', '#333')
+    //         root.style.setProperty('--bg-modal-head', '#fff')
+    //         root.style.setProperty('--shadow-color', '#7777773b')
+    //         root.style.setProperty('--color-err', '#5d0606')
+    //         root.style.setProperty('--color-err-hv', '#Ed1f24')
+    //         root.style.setProperty('--color-notification', '#Ed1f24')
+    //         root.style.setProperty('--color-scroll', '#Ed1f24')
+    //         root.style.setProperty('--color-body-content', '#fff')
+    //         root.style.setProperty('--website-color', '#Ed1f24')
+    //         root.style.setProperty('--order-color', '#c01d20')
+    //     }
+    //     else {
+    //         root.style.setProperty('--color-primary', '#f1f1f1')
+    //         root.style.setProperty('--aside-color', '#333')
+    //         root.style.setProperty('--aside-text-color', '#f1f1f1')
+    //         root.style.setProperty('--active-color', '#Ed1f24')
+    //         root.style.setProperty('--header-color', '#333')
+    //         root.style.setProperty('--user-color', '#333')
+    //         root.style.setProperty('--toggle-color', '#Ed1f24')
+    //         root.style.setProperty('--logo-color', '#Ed1f24')
+    //         root.style.setProperty('--z-color-1', '#6E659C')
+    //         root.style.setProperty('--z-color-2', '#D49D38')
+    //         root.style.setProperty('--color-1', '#fff')
+    //         root.style.setProperty('--color-2', '#f1f1f1e1')
+    //         root.style.setProperty('--color-3', '#000')
+    //         root.style.setProperty('--color-modal-head', '#fefefe')
+    //         root.style.setProperty('--bg-modal-head', '#333')
+    //         root.style.setProperty('--shadow-color', '#7777773b')
+    //         root.style.setProperty('--color-err', '#5d0606')
+    //         root.style.setProperty('--color-err-hv', '#333')
+    //         root.style.setProperty('--color-notification', '#333')
+    //         root.style.setProperty('--color-scroll', '#Ed1f24')
+    //         root.style.setProperty('--color-body-content', '#333')
+    //         root.style.setProperty('--website-color', '#333')
+    //         root.style.setProperty('--order-color', '#c01d20')
+    //     }
 
-        localStorage.setItem('theme', theme)
-    }, [theme])
+    //     localStorage.setItem('theme', theme)
+    // }, [theme])
 
 
     return (
         <header>
-            <div className="Left">
+            <div className="Left" onClick={() => Navigate('/dashboard')}>
                 <div className="Company">
                     <img src={logo} alt="" />
                     <span>CUSTOMER SPACE</span>
@@ -208,7 +208,7 @@ const Header = ({ sidebar, setSidebar }) => {
                     )}
                 </div>
                 <div className="NotificationIcon" onClick={() => setSidebar(!sidebar)}>
-                    <RemixIcons.RiMenu2Line size={18} />
+                    <RemixIcons.RiMenu4Line size={18} />
                 </div>
             </div>
         </header >

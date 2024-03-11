@@ -17,6 +17,7 @@ import SearchInput from "../../components/SearchInput"
 import Access from "../../utils/utilsAccess"
 import { sortOption, StatusOption } from "../../data/optionFilter"
 import useHandleError from "../../hooks/useHandleError"
+import config from "../../config"
 
 const ListOrganization = () => {
    const Navigate = useNavigate()
@@ -143,7 +144,7 @@ const ListOrganization = () => {
       let imageToShow = logoPlaceholder
 
       if (getImage === '' && oneData.picture) {
-         imageToShow = 'http://localhost:8000' + oneData.picture
+         imageToShow = config.serverUrl + oneData.picture
       } else if (getImage === '' && oneData.picture === '') {
          imageToShow = logoPlaceholder
       } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
@@ -363,7 +364,7 @@ const ListOrganization = () => {
                            <p className="fw-bold me-1 text-center">Description </p>
                            {oneData.description ? oneData.description : '---'}
                         </div>
-                        <div className="NumIden mb-3"><AiOutlineFieldNumber className="icon" size={18} />{oneData.id ? oneData.id : '---'}</div>
+                        {/* <div className="NumIden mb-3"><AiOutlineFieldNumber className="icon" size={18} />{oneData.id ? oneData.id : '---'}</div> */}
                         <div className="immatriculation mb-3"><RemixIcons.RiCalendar2Line className="icon" />{oneData.createdAt ? dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss') : '---'}</div>
                         <div className="telephone mb-3"><AiOutlinePhone className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
                         <div className="ville mb-3"><FaCity className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
@@ -383,12 +384,12 @@ const ListOrganization = () => {
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               <div className="d-flex">
+               <div className="d-lg-flex d-sm-block">
                   <Button onClick={buttonAction} className={buttonClass} title={buttonLabel}>
                      <RemixIcons.RiPictureInPictureLine />
                      {buttonLabel}
                   </Button>
-                  <Button onClick={() => Navigate(`/organizations/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos">
+                  <Button onClick={() => Navigate(`/organizations/update/${oneData.id}`)} className="Btn Send me-2" title="Modifier infos">
                      <RemixIcons.RiPenNibLine />
                      Modifier infos
                   </Button>
@@ -398,7 +399,7 @@ const ListOrganization = () => {
                   </Button>
                </div>
                <div>
-                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
+                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine />Fermer</Button>
                </div>
             </Modal.Footer>
          </Modal >

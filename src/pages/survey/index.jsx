@@ -472,12 +472,12 @@ const ListSurvey = () => {
                <div className="container">
                   <div className="row ">
                      <div className="col-md-12 ml-4">
-                        <div className="mb-2 fw-bold p-2 shadow d-flex justify-content-between align-items-center">
-                           <div className="d-flex align-items-center">
-                              <span className="me-2 fs-6">Enquête: {oneData.name ? oneData.name : '---'}:</span>
+                        <div className="mb-2 fw-bold p-2 shadow d-lg-flex d-sm-block justify-content-between align-items-center">
+                           <div className="d-flex align-items-center justify-content-between">
+                              <span className="me-2 fs-6">Enquête: {oneData.name ? oneData.name : '---'}</span>
                               <span className={averageSurvey > 2.5 ? "Btn Success" : "Btn Error"}>{averageSurvey}</span>
                            </div>
-                           <div className="d-flex align-items-center">
+                           <div className="d-flex align-items-center justify-content-between">
                               <span className="me-2 fs-6">Entreprise : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</span>
                               <span className={averageCompany > 2.5 ? "Btn Success" : "Btn Error"}>{averageCompany}</span>
                            </div>
@@ -540,7 +540,7 @@ const ListSurvey = () => {
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               <div className="d-flex">
+               <div className="d-lg-flex d-sm-block">
                   <Button onClick={() => surveyUpdateModal(oneData.id, oneData.name)} className="Btn Send me-2" title="Modifier l'enquête">
                      <RemixIcons.RiPenNibLine />
                      Modifier l'enquête
@@ -557,7 +557,7 @@ const ListSurvey = () => {
                   </Button>
                </div>
                <div>
-                  <Button onClick={hideModal} className="Btn Error"><RemixIcons.RiCloseLine /></Button>
+                  <Button onClick={hideModal} className="Btn Error"><RemixIcons.RiCloseLine />Fermer</Button>
                </div>
             </Modal.Footer>
          </Modal >

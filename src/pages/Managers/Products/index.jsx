@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom"
 import Access from "../../../utils/utilsAccess"
 import useHandleError from "../../../hooks/useHandleError"
 import ToggleButton from "../../../components/ToggleButton"
+import config from "../../../config"
 
 const Products = () => {
    const Navigate = useNavigate()
@@ -178,7 +179,7 @@ const Products = () => {
       let imageToShow = logoPlaceholder
 
       if (getImage === '' && oneData.picture) {
-         imageToShow = 'http://localhost:8000' + oneData.picture
+         imageToShow = config.serverUrl + oneData.picture
       } else if (getImage === '' && oneData.picture === '') {
          imageToShow = logoPlaceholder
       } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
@@ -407,7 +408,7 @@ const Products = () => {
                   }
                </div>
                <div>
-                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
+                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine />Fermer</Button>
                </div>
             </Modal.Footer>
          </Modal >

@@ -10,9 +10,10 @@ import admin from '../../assets/img/avatar/admin.jpg'
 import server from '../../assets/img/avatar/server.jpg'
 import { Account } from '../../services/accountService'
 import { User } from '../../services/userService'
+import config from '../../config'
 import './sidebar.scss'
 
-const Sidebar = ({ profil, setProfil, sidebar }) => {
+const Sidebar = ({ profil, setProfil, sidebar, setSidebar }) => {
     const access = Access()
     const Navigate = useNavigate()
     const idUser = localStorage.getItem('id')
@@ -44,12 +45,12 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
 
             if (access === 23) {
                 if (user.Company && user.Company.Organization && user.Company.Organization.picture) {
-                    imageToShow = 'http://localhost:8000' + user.Company.Organization.picture
+                    imageToShow = config.serverUrl + user.Company.Organization.picture
                 }
             }
             else if (access === 22) {
                 if (user.Company && user.Company.picture) {
-                    imageToShow = 'http://localhost:8000' + user.Company.picture
+                    imageToShow = config.serverUrl + user.Company.picture
                 }
             }
             else if (access === 20) {
@@ -96,7 +97,7 @@ const Sidebar = ({ profil, setProfil, sidebar }) => {
                 {profil ? <RemixIcons.RiArrowDropDownLine className='IconText' /> : <RemixIcons.RiArrowDropRightLine className='IconText' />}
             </div>
 
-            <div className="Navigation">
+            <div className="Navigation" onClick={() => setSidebar(false)}>
                 {
                     access === 11 ? ItemsInternalUser.map((item, index) => {
                         return <SubMenu item={item} key={index} />

@@ -14,6 +14,7 @@ import useHandleError from "../../hooks/useHandleError"
 import { Orders } from "../../services/orderService"
 import { User } from "../../services/userService"
 import EventOrder from "../../components/EventOrder"
+import config from "../../config"
 
 const Order = () => {
    const Navigate = useNavigate()
@@ -312,7 +313,7 @@ const Order = () => {
                            <div className="mb-3 sm-cart">
                               {oneData.Orders_Products.map((item, index) => (
                                  <div className="d-flex align-items-center mb-2 border border-1 p-1" key={index}>
-                                    <img src={'http://localhost:8000' + item.Product.picture} alt="" style={{ width: "60px", height: "60px", objectFit: "cover", marginRight: "10px", borderRadius: "5px" }} />
+                                    <img src={config.serverUrl + item.Product.picture} alt="" style={{ width: "60px", height: "60px", objectFit: "cover", marginRight: "10px", borderRadius: "5px" }} />
                                     <div className="d-flex flex-column">
                                        <span>Produit: {item.Product.name}</span>
                                        <span>Prix: {item.Product.price}</span>

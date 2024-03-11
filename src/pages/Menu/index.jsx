@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react"
 import * as RemixIcons from "react-icons/ri"
 import HeaderMain from '../../components/HeaderMain'
 import { Product } from "../../services/productService"
-import Pagination from "../../components/Pagination"
 import { sortOption } from "../../data/optionFilter"
+import Pagination from "../../components/Pagination"
 import SelectOption from "../../components/SelectOption"
 import SearchInput from "../../components/SearchInput"
+import config from "../../config"
 import './menu.scss'
 
 const Menu = () => {
@@ -97,7 +98,7 @@ const Menu = () => {
                <div className='content-menu'>
                   {products.length > 0 ? products.map((product) => (
                      <div className='product' key={product.id} onClick={() => setShowCart(true)}>
-                        <img src={'http://localhost:8000' + product.picture} alt='' />
+                        <img src={config.serverUrl + product.picture} alt='' />
                         <div className='details'>
                            <div className='resource'>
                               <span className='name-product'>{product.name}</span>

@@ -4,7 +4,10 @@ import { Account } from "../services/accountService"
 const useHandleError = (err, Navigate, setValidator) => {
    if (err.response) {
       if (err.response.data) {
-         if (err.response.data.name === 'MissingData') {
+         if (err.response.data === 'Fuck you !') {
+
+         }
+         else if (err.response.data.name === 'MissingData') {
             toast.error("Données incomplètes !")
          }
          else if (err.response.data.name === 'MissingParams') {

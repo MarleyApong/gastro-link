@@ -21,6 +21,7 @@ const PrivateRouter = () => {
                profil={profil}
                setProfil={setProfil}
                sidebar={sidebar}
+               setSidebar={setSidebar}
             />
             <div className={sidebar ? "ContentMax" : "Content"}>
                <Profil

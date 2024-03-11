@@ -29,7 +29,6 @@
     "react-select": "^5.8.0",
     "recharts": "^2.10.3",
     "sass": "^1.69.5",
-    "socket.io-client": "^4.7.4",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

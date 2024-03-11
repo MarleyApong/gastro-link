@@ -43,6 +43,7 @@ const CreateOrganization = () => {
 	// ADD ORGANIZATION
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		setIsSubmitting(true)
 		if (
 			organization.name === "" ||
 			organization.description === "" ||
@@ -63,7 +64,6 @@ const CreateOrganization = () => {
 				formData.append('picture', file)
 			}
 			Organization.add(formData)
-			setIsSubmitting(true)
 				.then((res) => {
 					toast.success("organization ajoutée avec succès !")
 					Navigate('/organizations/')

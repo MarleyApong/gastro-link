@@ -35,7 +35,7 @@ const customStyles = {
       ...provided,
       backgroundColor: state.isFocused ? 'var(--user-color)' : 'white',
       color: state.isFocused ? 'white' : 'black',
-      padding: '0px',
+      padding: '5px',
       fontSize: '13px',
    }),
    singleValue: (provided) => ({

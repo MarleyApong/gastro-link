@@ -1,8 +1,9 @@
 import axios from "axios"
 import { Account } from "./accountService"
+import config from "../config"
 
 const Axios = axios.create({
-    baseURL: 'https://magical-galileo.212-227-211-20.plesk.page',
+    baseURL: config.serverUrl,
     headers: {
         'Access-Control-Allow-Origin': '*'
     }

@@ -7,7 +7,7 @@ import { Orders } from '../../../services/orderService'
 import { useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import useHandleError from "../../../hooks/useHandleError"
-
+import config from '../../../config'
 
 const Order = () => {
    const Navigate = useNavigate()
@@ -171,7 +171,7 @@ const Order = () => {
                <div className='content-menu'>
                   {products.length > 0 ? products.map((product) => (
                      <div className='product' key={product.id} onClick={() => setShowCart(true)}>
-                        <img src={'http://localhost:8000' + product.picture} alt='' />
+                        <img src={config.serverUrl + product.picture} alt='' />
                         <div className='details'>
                            <div className='resource'>
                               <span className='name-product'>{product.name}</span>
@@ -242,7 +242,7 @@ const Order = () => {
                <div className="sm-cart">
                   {cart.map((item, index) => (
                      <div className="cart" key={index}>
-                        <img src={'http://localhost:8000' + item.picture} alt="" />
+                        <img src={config.serverUrl + item.picture} alt="" />
                         <div className="details">
                            <span>{item.name}</span>
                            <span>{item.price}</span>
