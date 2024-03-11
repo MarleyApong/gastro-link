@@ -363,7 +363,7 @@ const ListUser = () => {
                <div className="container">
                   <div className="row ">
                      <div className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" crossorigin="anonymous" src={logoPlaceholder} alt="" width="100%" height="400px" />
+                        <img className="object-fit-cover" crossOrigin='Anonymous' src={logoPlaceholder} alt="" width="100%" height="400px" />
                      </div>
 
                      <div className="col-md-6 infoDetail ml-4">

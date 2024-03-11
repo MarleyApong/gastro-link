@@ -159,7 +159,7 @@ const ListCompany = () => {
       let imageToShow = logoPlaceholder
 
       if (getImage === '' && oneData.picture) {
-         imageToShow = config.serverUrl + oneData.picture
+         imageToShow = config.serverUrl + oneData.picture + "?not-from-cache-please"
       } else if (getImage === '' && oneData.picture === '') {
          imageToShow = logoPlaceholder
       } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
@@ -297,11 +297,11 @@ const ListCompany = () => {
 
    if (access === 11 || access === 12 || access === 13) {
       columns.splice(2, 0, {
-         name: 'Organisation',
-         selector: row => row.Organization.name,
-         wrap: true,
-      })
-   }
+          name: 'Organisation',
+          selector: row => row.Organization ? row.Organization.name : '',
+          wrap: true,
+      });
+  }
 
    // FILTER SELECT TAG DATA
    const filterOptions = [

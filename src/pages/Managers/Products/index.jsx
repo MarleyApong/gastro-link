@@ -179,7 +179,7 @@ const Products = () => {
       let imageToShow = logoPlaceholder
 
       if (getImage === '' && oneData.picture) {
-         imageToShow = config.serverUrl + oneData.picture
+         imageToShow = config.serverUrl + oneData.picture + "?not-from-cache-please"
       } else if (getImage === '' && oneData.picture === '') {
          imageToShow = logoPlaceholder
       } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
@@ -372,7 +372,7 @@ const Products = () => {
                <div className="container">
                   <div className="row ">
                      <div onClick={() => imageRef.current.click()} title="cliquez pour choisir une autre image" className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" crossorigin="anonymous" src={imageToShow} alt="" width="100%" height="400px" />
+                        <img className="object-fit-cover" crossOrigin='Anonymous' src={imageToShow} alt="" width="100%" height="400px" />
                         <input type="file" id="Profil" hidden ref={imageRef} accept=".jpg, .jpeg, .png" onChange={(e) => setGetImage(e.target.files[0])} />
                      </div>
                      {oneData.id && (
@@ -397,7 +397,7 @@ const Products = () => {
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               <div className="d-flex">
+               <div className="d-lg-flex d-sm-block">
                   <Button onClick={buttonAction} className={buttonClass} title={buttonLabel}>
                      <RemixIcons.RiPictureInPictureLine />
                      {buttonLabel}

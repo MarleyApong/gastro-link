@@ -266,7 +266,7 @@ const ListCustomer = () => {
                )}
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap">
-               <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
+               <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine />Fermer</Button>
             </Modal.Footer>
          </Modal >
       </>

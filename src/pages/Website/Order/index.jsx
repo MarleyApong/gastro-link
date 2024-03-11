@@ -171,7 +171,7 @@ const Order = () => {
                <div className='content-menu'>
                   {products.length > 0 ? products.map((product) => (
                      <div className='product' key={product.id} onClick={() => setShowCart(true)}>
-                        <img src={config.serverUrl + product.picture} alt='' />
+                        <img crossOrigin='Anonymous' src={config.serverUrl + product.picture + "?not-from-cache-please"} alt='' />
                         <div className='details'>
                            <div className='resource'>
                               <span className='name-product'>{product.name}</span>
@@ -242,7 +242,7 @@ const Order = () => {
                <div className="sm-cart">
                   {cart.map((item, index) => (
                      <div className="cart" key={index}>
-                        <img src={config.serverUrl + item.picture} alt="" />
+                        <img crossOrigin='Anonymous' src={config.serverUrl + item.picture + "?not-from-cache-please"} alt="" />
                         <div className="details">
                            <span>{item.name}</span>
                            <span>{item.price}</span>

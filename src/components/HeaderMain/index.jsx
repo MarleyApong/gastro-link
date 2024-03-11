@@ -51,7 +51,7 @@ const HeaderMain = ({ total }) => {
             return "paramètres"
         }
         else if (urlLink.includes('managers') && !urlLink.includes('products') && !urlLink.includes('tables')) {
-            return "liste produit"
+            return "gestion"
         }
         else if (urlLink.includes('managers') && urlLink.includes('products')) {
             return "liste produits"

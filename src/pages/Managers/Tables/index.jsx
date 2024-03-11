@@ -15,6 +15,8 @@ import Access from "../../../utils/utilsAccess"
 import { Table } from "../../../services/tableService"
 import useHandleError from "../../../hooks/useHandleError"
 import Qrcode from 'qrcode'
+import config from "../../../config"
+
 
 const Tables = () => {
    const Navigate = useNavigate()
@@ -111,7 +113,7 @@ const Tables = () => {
    useEffect(() => {
       Table.getOne(id).then((res) => {
          setOneData(res.data.content)
-         const webPage = "http://localhost:5173/page/" + res.data.content.webPage
+         const webPage = `${config.serverUrl}/page/${res.data.content.webPage}`
          generateQRCode(webPage)
       }).catch((err) => {
          useHandleError(err, Navigate)
@@ -187,7 +189,7 @@ const Tables = () => {
    if (access === 13 || access === 23) {
       columns.splice(2, 0, {
          name: 'Entreprise',
-         selector: row => row.id && row.Company.name,
+         selector: row => row.Company ? row.Company.name : '',
          wrap: true,
       })
    }
@@ -195,7 +197,7 @@ const Tables = () => {
    if (access === 13) {
       columns.splice(3, 0, {
          name: 'Organisation',
-         selector: row => row.id && row.Company.Organization.name,
+         selector: row => row.Company ? row.Company.Organization.name : '',
          wrap: true,
       })
    }
@@ -260,7 +262,7 @@ const Tables = () => {
                <div className="container">
                   <div className="row ">
                      <div className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" crossorigin="anonymous" src={logoPlaceholder} alt="" width="100%" height="400px" />
+                        <img className="object-fit-cover" crossOrigin='Anonymous' src={logoPlaceholder} alt="" width="100%" height="400px" />
                      </div>
                      {oneData.id && (
                         <div className="col-md-6 infoDetail ml-4 ">
@@ -270,7 +272,7 @@ const Tables = () => {
                            {qr && (
                               <div className="qr-code d-flex flex-column" style={{ width: '100px' }}>
                                  < img src={qr} />
-                                 <a className="Btn" style={{textDecoration: "none"}} href={qr} download={"Table: " + oneData.tableNumber + '.png'}>Télécharger</a>
+                                 <a className="Btn" style={{ textDecoration: "none" }} href={qr} download={"Table: " + oneData.tableNumber + '.png'}>Télécharger</a>
                               </div>
                            )}
                            <>
@@ -286,11 +288,11 @@ const Tables = () => {
                </div>
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
-               <div className="d-flex">
+               <div className="d-lg-flex d-sm-block">
                   <Button onClick={() => Navigate(`/managers/tables/update/${oneData.id}`)} className="Btn Send  me-2" title="Modifier infos"><RemixIcons.RiPenNibLine />Modifier le prod.</Button>
                </div>
                <div>
-                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine /></Button>
+                  <Button onClick={hideModal} className="Btn Error" title="Fermer"><RemixIcons.RiCloseLine />Fermer</Button>
                </div>
             </Modal.Footer>
          </Modal >

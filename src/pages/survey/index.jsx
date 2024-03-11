@@ -377,7 +377,7 @@ const ListSurvey = () => {
    if (access === 11 || access === 12 || access === 13) {
       columns.splice(5, 0, {
          name: 'Organisation',
-         selector: row => row.Company.Organization.name,
+         selector: row => row.Company ? row.Company.Organization.name : '',
          wrap: true,
       })
    }
@@ -390,7 +390,7 @@ const ListSurvey = () => {
    if (access === 11 || access === 12 || access === 13 || access === 23) {
       columns.splice(4, 0, {
          name: 'Entreprise',
-         selector: row => row.Company.name,
+         selector: row => row.Company ? row.Company.name : '',
          wrap: true,
       })
    }
