@@ -104,6 +104,7 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
             formData.append('picture', file)
          }
 
+         console.log("formData", formData);
          Product.add(formData)
             .then((res) => {
                toast.success("Produit ajouté avec succès !")

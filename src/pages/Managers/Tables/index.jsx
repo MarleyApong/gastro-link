@@ -113,7 +113,7 @@ const Tables = () => {
    useEffect(() => {
       Table.getOne(id).then((res) => {
          setOneData(res.data.content)
-         const webPage = `${config.serverUrl}/page/${res.data.content.webPage}`
+         const webPage = `${config.frontUrl}/page/${res.data.content.webPage}`
          generateQRCode(webPage)
       }).catch((err) => {
          useHandleError(err, Navigate)
@@ -262,7 +262,7 @@ const Tables = () => {
                <div className="container">
                   <div className="row ">
                      <div className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" crossOrigin='Anonymous' src={logoPlaceholder} alt="" width="100%" height="400px" />
+                        <img className="object-fit-cover" src={logoPlaceholder} alt="" width="100%" height="400px" />
                      </div>
                      {oneData.id && (
                         <div className="col-md-6 infoDetail ml-4 ">

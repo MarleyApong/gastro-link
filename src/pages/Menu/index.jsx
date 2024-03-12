@@ -6,7 +6,6 @@ import { sortOption } from "../../data/optionFilter"
 import Pagination from "../../components/Pagination"
 import SelectOption from "../../components/SelectOption"
 import SearchInput from "../../components/SearchInput"
-import config from "../../config"
 import './menu.scss'
 
 const Menu = () => {
@@ -98,7 +97,7 @@ const Menu = () => {
                <div className='content-menu'>
                   {products.length > 0 ? products.map((product) => (
                      <div className='product' key={product.id} onClick={() => setShowCart(true)}>
-                        <img src={config.serverUrl + product.picture} alt='' />
+                        <img src={product.picture} alt='' />
                         <div className='details'>
                            <div className='resource'>
                               <span className='name-product'>{product.name}</span>

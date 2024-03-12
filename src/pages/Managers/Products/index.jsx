@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom"
 import Access from "../../../utils/utilsAccess"
 import useHandleError from "../../../hooks/useHandleError"
 import ToggleButton from "../../../components/ToggleButton"
-import config from "../../../config"
 
 const Products = () => {
    const Navigate = useNavigate()
@@ -179,7 +178,7 @@ const Products = () => {
       let imageToShow = logoPlaceholder
 
       if (getImage === '' && oneData.picture) {
-         imageToShow = config.serverUrl + oneData.picture + "?not-from-cache-please"
+         imageToShow = oneData.picture
       } else if (getImage === '' && oneData.picture === '') {
          imageToShow = logoPlaceholder
       } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
@@ -372,7 +371,7 @@ const Products = () => {
                <div className="container">
                   <div className="row ">
                      <div onClick={() => imageRef.current.click()} title="cliquez pour choisir une autre image" className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" crossOrigin='Anonymous' src={imageToShow} alt="" width="100%" height="400px" />
+                        <img className="object-fit-cover" src={imageToShow} alt="" width="100%" height="400px" />
                         <input type="file" id="Profil" hidden ref={imageRef} accept=".jpg, .jpeg, .png" onChange={(e) => setGetImage(e.target.files[0])} />
                      </div>
                      {oneData.id && (

@@ -18,7 +18,6 @@ import { sortOption, StatusOption } from "../../data/optionFilter"
 import Access from "../../utils/utilsAccess"
 import { Account } from "../../services/accountService"
 import useHandleError from "../../hooks/useHandleError"
-import config from "../../config"
 
 const ListCompany = () => {
    const Navigate = useNavigate()
@@ -159,7 +158,7 @@ const ListCompany = () => {
       let imageToShow = logoPlaceholder
 
       if (getImage === '' && oneData.picture) {
-         imageToShow = config.serverUrl + oneData.picture + "?not-from-cache-please"
+         imageToShow = oneData.picture
       } else if (getImage === '' && oneData.picture === '') {
          imageToShow = logoPlaceholder
       } else if (getImage !== '' && imageTypes.includes(getImage.type)) {
@@ -384,7 +383,7 @@ const ListCompany = () => {
                <div className="container">
                   <div className="row ">
                      <div onClick={() => imageRef.current.click()} title="cliquez pour choisir une autre image" className="col-md-6 d-flex shadow align-items-center justify-content-center overflow-hidden p-2">
-                        <img className="object-fit-cover" crossorigin="anonymous" src={imageToShow} alt="" width="100%" height="400px" />
+                        <img className="object-fit-cover" src={imageToShow} alt="" width="100%" height="400px" />
                         <input type="file" id="Profil" hidden ref={imageRef} accept=".jpg, .jpeg, .png" onChange={(e) => setGetImage(e.target.files[0])} />
                      </div>
 

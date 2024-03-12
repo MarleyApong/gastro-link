@@ -61,8 +61,12 @@ const CreateOrganization = () => {
 				formData.append(key, organization[key])
 			})
 			if (file) {
+				alert()
 				formData.append('picture', file)
 			}
+			for (let pair of formData.entries()) {
+				console.log(pair[0]+ ', ' + pair[1]); 
+		  }
 			Organization.add(formData)
 				.then((res) => {
 					toast.success("organization ajoutée avec succès !")
@@ -86,7 +90,7 @@ const CreateOrganization = () => {
 					<h5>Entrez les informations concernant votre organisation.</h5>
 					<PleaseNote />
 					<blockquote className="blockquote mb-0">
-						<form onSubmit={handleSubmit} className="row g-2 form">
+						<form onSubmit={handleSubmit} enctype="multipart/form-data" className="row g-2 form">
 							<div className="col-md-6">
 								<label htmlFor="name" className="form-label">
 									Nom de l'organisation :
