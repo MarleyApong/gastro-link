@@ -19,7 +19,6 @@ const getOrganizationByUser = (id) => {
 }
 
 const add = (data) => {
-   console.log("data", data)
    return Axios.put(`/${route}`, data)
 }
 

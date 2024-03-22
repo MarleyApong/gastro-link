@@ -61,12 +61,8 @@ const CreateOrganization = () => {
 				formData.append(key, organization[key])
 			})
 			if (file) {
-				alert()
 				formData.append('picture', file)
 			}
-			for (let pair of formData.entries()) {
-				console.log(pair[0]+ ', ' + pair[1]); 
-		  }
 			Organization.add(formData)
 				.then((res) => {
 					toast.success("organization ajoutée avec succès !")
@@ -200,10 +196,14 @@ const CreateOrganization = () => {
 								/>
 							</div>
 
-							<div className="col-md-12 d-flex gap-2">
+							<div className="col-md-12 d-flex gap-2 justify-content-between">
 								<button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
 									{isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
 									{isSubmitting ? 'Ajout en cours' : 'Ajouter'}
+								</button>
+
+								<button onClick={() => Navigate('/organizations')} className="Btn Error">
+									Annuler / Retour
 								</button>
 							</div>
 						</form>

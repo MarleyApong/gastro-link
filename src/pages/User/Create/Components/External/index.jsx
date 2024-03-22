@@ -217,11 +217,15 @@ const External = ({ Navigate, CustomSelect }) => {
                   </label>
                   <CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
                </div>
-               <div className="col-md-12 d-flex gap-2">
+               <div className="col-md-12 d-flex gap-2  justify-content-between">
                   <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
                      <RemixIcons.RiSendPlaneLine />
                      {isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
                      {isSubmitting ? 'Ajout en cours' : 'Ajouter'}
+                  </button>
+
+                  <button onClick={() => Navigate('/users')} className="Btn Error">
+                     Annuler / Retour
                   </button>
                </div>
             </form>

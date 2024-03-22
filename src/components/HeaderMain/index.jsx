@@ -53,11 +53,17 @@ const HeaderMain = ({ total }) => {
         else if (urlLink.includes('managers') && !urlLink.includes('products') && !urlLink.includes('tables')) {
             return "gestion"
         }
-        else if (urlLink.includes('managers') && urlLink.includes('products')) {
+        else if (urlLink.includes('managers') && urlLink.includes('products') && !urlLink.includes('new')) {
             return "liste produits"
         }
-        else if (urlLink.includes('managers') && urlLink.includes('tables')) {
-            return "liste Tables"
+        else if (urlLink.includes('managers') && urlLink.includes('products') && urlLink.includes('new')) {
+            return "ajout produit"
+        }
+        else if (urlLink.includes('managers') && urlLink.includes('tables') && !urlLink.includes('new')) {
+            return "liste tables"
+        }
+        else if (urlLink.includes('managers') && urlLink.includes('tables') && urlLink.includes('new')) {
+            return "ajout table"
         }
         else if (urlLink.includes('orders')) {
             return "liste commandes"

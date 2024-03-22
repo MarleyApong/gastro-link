@@ -139,7 +139,7 @@ export const SecondGroupExternal = ({ idUser, chart }) => {
    const filter = 'createdAt'
    const status = ''
    const search = ''
-   const limit = 5
+   const limit = 1
    const page = 0
 
    useEffect(() => {
@@ -222,7 +222,7 @@ export const SecondGroupExternal = ({ idUser, chart }) => {
                            <tr key={index}>
                               <td>{index + 1}</td>
                               <td>{item.name}</td>
-                              <td>{item.Company.name}</td>
+                              <td>{item.Company ? item.Company.name : ''}</td>
                               <td>{dateFormat(new Date(item.createdAt), 'dd-mm-yyyy HH:MM:ss')}</td>
                               <td>
                                  <span className={item.Status.name === 'actif' ? 'Success p-1 rounded-3 text-white' : 'Error p-1 rounded-3 text-white'}>{item.Status.name === 'actif' ? 'actif' : 'inactif'}</span>
