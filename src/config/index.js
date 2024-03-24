@@ -10,7 +10,7 @@ if (ENV === 'dev') {
 else {
    config = {
       serverUrl: "https://magical-galileo.212-227-211-20.plesk.page/",
-      frontUrl: ""
+      frontUrl: "https://customer-space-client.vercel.app/"
    }
 }
 
