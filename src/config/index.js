@@ -9,8 +9,8 @@ if (ENV === 'dev') {
 }
 else {
    config = {
-      serverUrl: "https://magical-galileo.212-227-211-20.plesk.page/",
-      frontUrl: "https://marleyapong.github.io/customer-space-client/"
+      serverUrl: "http://localhost:5500",
+      frontUrl: "http://localhost:3000",
    }
 }
 
