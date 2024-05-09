@@ -76,15 +76,15 @@ const Login = () => {
       <div className="Login">
          <div className="Container">
             <div className="Left">
-               <h4>Bienvenue sur customer space</h4>
+               <h1>Bienvenue sur gastro link</h1>
                <span>Connectez-vous pour continuer</span>
-               <span>Copyright &#xa9;customer-space 2024 | <a target='_blank' href="https://www.allhcorp.com" rel="noreferrer">made by allhcorp</a> </span>
+               <span>Copyright &#xa9;gastro link 2024 | <a target='_blank' href="https://www.ccntechnologies.com/" rel="noreferrer">made by CCN&Technologies</a> </span>
             </div>
             <div className="Right">
                <form onSubmit={handleLogin} method='post' className="Form">
                   <div className="Logo">
                      <img src={logo} alt="" />
-                     <span>customer <strong>space</strong></span>
+                     <span>Gastro <strong>Link</strong></span>
                   </div>
                   <h2>Connexion</h2>
                   <div className="InputBox">

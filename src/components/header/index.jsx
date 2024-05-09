@@ -150,7 +150,7 @@ const Header = ({ sidebar, setSidebar }) => {
             <div className="Left" onClick={() => Navigate('/dashboard')}>
                 <div className="Company">
                     <img src={logo} alt="" />
-                    <span>CUSTOMER SPACE</span>
+                    <span>Gastro Link</span>
                 </div>
             </div>
             {/* <div className="Middle">

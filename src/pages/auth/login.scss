@@ -25,17 +25,15 @@
          width: 60%;
          overflow: hidden;
          // background: var(--color-primary);
-         background-image: url('../../assets/img/login/note.jpg');
-         color: var(--color-3);
+         background-image: linear-gradient(#00000081, rgba(48, 44, 38, 0.5)), url('../../assets/img/login/note.jpg');
+         color: var(--color-1);
          background-size: cover;
          background-position: center;
          padding: 0 10px;
          text-align: center;
 
-         h4 {
+         h1 {
             text-transform: capitalize;
-            margin-top: 80px;
-            font-size: 18px;
          }
 
          span {

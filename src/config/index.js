@@ -1,5 +1,5 @@
 let config = {}
-const ENV = 'prod'
+const ENV = 'dev'
 
 if (ENV === 'dev') {
    config = {
