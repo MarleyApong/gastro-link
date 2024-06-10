@@ -1,5 +1,5 @@
 let config = {}
-const ENV = 'dev'
+const ENV = 'prod'
 
 if (ENV === 'dev') {
    config = {
@@ -10,7 +10,7 @@ if (ENV === 'dev') {
 else {
    config = {
       serverUrl: "http://localhost:5500",
-      frontUrl: "http://localhost:3000",
+      frontUrl: "http://gastrolink-resto.com/",
    }
 }
 
