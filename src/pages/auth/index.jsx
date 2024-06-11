@@ -78,7 +78,10 @@ const Login = () => {
             <div className="Left">
                <h1>Bienvenue sur gastro link</h1>
                <span>Connectez-vous pour continuer</span>
-               <span>Copyright &#xa9;gastro link 2024 | <a target='_blank' href="https://www.ccntechnologies.com/" rel="noreferrer">made by CCN&Technologies</a> </span>
+               <span>
+                  Copyright &#xa9;gastro link 2024
+                  {/* | <a target='_blank' href="https://www.ccntechnologies.com/" rel="noreferrer">made by CCN&Technologies</a> */}
+               </span>
             </div>
             <div className="Right">
                <form onSubmit={handleLogin} method='post' className="Form">
@@ -95,7 +98,7 @@ const Login = () => {
                   </div>
                   <div className="InputBox">
                      <div className="Icon">
-                        <RemixIcons.RiKeyLine size={18}/>
+                        <RemixIcons.RiKeyLine size={18} />
                      </div>
                      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Mot de passe' autoComplete='off' />
                   </div>
