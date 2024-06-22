@@ -15,9 +15,9 @@ const Header = ({ sidebar, setSidebar }) => {
     const location = useLocation()
     const access = Access()
     const eventOrder = EventOrder()
-    const idUser = localStorage.getItem('id')
+    const idUser = sessionStorage.getItem('id')
 
-    const id = localStorage.getItem("id")
+    const id = sessionStorage.getItem("id")
     const order = 'asc'
     const filter = 'name'
     const status = ''
@@ -27,7 +27,7 @@ const Header = ({ sidebar, setSidebar }) => {
 
     const [allCount, setAllCount] = useState(0)
     const [company, setCompany] = useState('')
-    // const [theme, setTheme] = useState(localStorage.getItem('theme'))
+    // const [theme, setTheme] = useState(sessionStorage.getItem('theme'))
 
     // REDIRECTION
     const newOrganization = () => Navigate('/organizations/new')
@@ -141,7 +141,7 @@ const Header = ({ sidebar, setSidebar }) => {
     //         root.style.setProperty('--order-color', '#c01d20')
     //     }
 
-    //     localStorage.setItem('theme', theme)
+    //     sessionStorage.setItem('theme', theme)
     // }, [theme])
 
 

@@ -265,7 +265,6 @@ const ListSurvey = () => {
    // UPDATE SURVEY
    const handleUpdateSurvey = (e) => {
       e.preventDefault()
-      alert(idSurveyUpdate)
       const data = { name: surveyUpdade }
       if (surveyUpdade === "") {
          toast.error("L'enquête ne peut être vide !")

@@ -14,23 +14,23 @@ const isValidToken = (token) => {
 }
 
 const saveToken = (token, id, role, env, status) => {
-    localStorage.setItem('lkiy-', token)
-    localStorage.setItem('id', id)
-    localStorage.setItem('lero', role)
-    localStorage.setItem('env', env)
-    localStorage.setItem('status', status)
+    sessionStorage.setItem('lkiy-', token)
+    sessionStorage.setItem('id', id)
+    sessionStorage.setItem('lero', role)
+    sessionStorage.setItem('env', env)
+    sessionStorage.setItem('status', status)
 }
 
 const logout = () => {
-    localStorage.removeItem('lkiy-')
-    localStorage.removeItem('id')
-    localStorage.removeItem('status')
-    localStorage.removeItem('env')
-    localStorage.removeItem('lero')
+    sessionStorage.removeItem('lkiy-')
+    sessionStorage.removeItem('id')
+    sessionStorage.removeItem('status')
+    sessionStorage.removeItem('env')
+    sessionStorage.removeItem('lero')
 }
 
 const isLogged = () => {
-    const token = localStorage.getItem('lkiy-')
+    const token = sessionStorage.getItem('lkiy-')
     if (token) {
         const tokenValidity = isValidToken(token)
         if (tokenValidity.isValid) {
@@ -44,7 +44,7 @@ const isLogged = () => {
 }
 
 const getToken = () => {
-    const token = localStorage.getItem('lkiy-')
+    const token = sessionStorage.getItem('lkiy-')
     return token
 }
 

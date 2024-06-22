@@ -19,7 +19,7 @@ import useHandleError from "../../hooks/useHandleError"
 const ListCustomer = () => {
    const Navigate = useNavigate()
    const access = Access()
-   const idUser = localStorage.getItem('id')
+   const idUser = sessionStorage.getItem('id')
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])

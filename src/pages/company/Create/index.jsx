@@ -17,7 +17,7 @@ const CreateCompany = () => {
 	const Navigate = useNavigate()
 	const statusOption = StatusOption()
 	const access = Access()
-	const idUser = localStorage.getItem('id')
+	const idUser = sessionStorage.getItem('id')
 
 	const order = 'asc'
 	const filter = 'name'
