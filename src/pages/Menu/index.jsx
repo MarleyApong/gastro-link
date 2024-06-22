@@ -9,7 +9,7 @@ import SearchInput from "../../components/SearchInput"
 import './menu.scss'
 
 const Menu = () => {
-   const idUser = localStorage.getItem('id')
+   const idUser = sessionStorage.getItem('id')
 
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('name')

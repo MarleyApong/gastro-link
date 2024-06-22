@@ -21,7 +21,7 @@ import config from "../../../config"
 const Tables = () => {
    const Navigate = useNavigate()
    const access = Access()
-   const idUser = localStorage.getItem('id')
+   const idUser = sessionStorage.getItem('id')
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])

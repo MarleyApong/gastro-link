@@ -17,7 +17,7 @@ const Dashboard = () => {
    const access = Access()
    const Navigate = useNavigate()
    const eventOrder = EventOrder()
-   const idUser = localStorage.getItem('id')
+   const idUser = sessionStorage.getItem('id')
 
    const [companies, setCompanies] = useState([])
    const [allCount, setAllCount] = useState([])

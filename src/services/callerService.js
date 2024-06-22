@@ -12,7 +12,7 @@ const Axios = axios.create({
 // INTERCEPTOR OF TOKEN
 Axios.interceptors.request.use(request => {
     if (Account.isLogged()) {
-        const token = localStorage.getItem('lkiy-')
+        const token = sessionStorage.getItem('lkiy-')
         request.headers.Authorization = 'Bearer ' + token
     }
     return request

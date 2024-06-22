@@ -31,7 +31,7 @@ const Settings = () => {
 	const [validator, setValidator] = useState(0)
 
 
-	const id = localStorage.getItem('id')
+	const id = sessionStorage.getItem('id')
 
 	// SET ALL VALUE
 	const handleUpdate = (e) => {

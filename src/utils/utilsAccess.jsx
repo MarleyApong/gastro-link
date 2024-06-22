@@ -9,11 +9,11 @@ const Access = () => {
    const Navigate = useNavigate()
 
    const [userData, setUserData] = useState({
-      role: localStorage.getItem('lero') || '',
-      env: localStorage.getItem('env') || '',
-      status: localStorage.getItem('status') || '',
-      token: localStorage.getItem('lkiy-') || '',
-      id: localStorage.getItem('id') || ''
+      role: sessionStorage.getItem('lero') || '',
+      env: sessionStorage.getItem('env') || '',
+      status: sessionStorage.getItem('status') || '',
+      token: sessionStorage.getItem('lkiy-') || '',
+      id: sessionStorage.getItem('id') || ''
    })
 
    const [data, setData] = useState(0)
@@ -101,23 +101,23 @@ const Access = () => {
    }, [userData])
 
    useEffect(() => {
-      const handleLocalStorageChange = () => {
+      const handleSessionStorageChange = () => {
          toast.error("Les données de connexion ont été corrompues.")
          toast.error("Déconnexion !")
    
          Navigate('/auth/login')
    
-         localStorage.removeItem('lkiy-')
-         localStorage.removeItem('id')
-         localStorage.removeItem('status')
-         localStorage.removeItem('env')
-         localStorage.removeItem('lero')
+         sessionStorage.removeItem('lkiy-')
+         sessionStorage.removeItem('id')
+         sessionStorage.removeItem('status')
+         sessionStorage.removeItem('env')
+         sessionStorage.removeItem('lero')
       }
    
-      window.addEventListener('storage', handleLocalStorageChange, { once: true })
+      window.addEventListener('storage', handleSessionStorageChange, { once: true })
    
       return () => {
-         window.removeEventListener('storage', handleLocalStorageChange)
+         window.removeEventListener('storage', handleSessionStorageChange)
       }
    }, [])
    

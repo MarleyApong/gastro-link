@@ -19,7 +19,7 @@ import config from "../../config"
 const Order = () => {
    const Navigate = useNavigate()
    const access = Access()
-   const idUser = localStorage.getItem('id')
+   const idUser = sessionStorage.getItem('id')
    const eventOrder = EventOrder()
    const statusOption = StatusOption()
 
@@ -28,7 +28,7 @@ const Order = () => {
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])
-   const [currentIdOrder, setCurrentIdOrder] = useState(localStorage.getItem('currentIdOrder'))
+   const [currentIdOrder, setCurrentIdOrder] = useState(sessionStorage.getItem('currentIdOrder'))
    const [company, setCompany] = useState('')
    const [loading, setLoading] = useState(true)
    const [order, setOrder] = useState('asc')
@@ -196,7 +196,7 @@ const Order = () => {
             // FINISH ORDER
             await Orders.finalizeOrder(idOrder, idUser)
             setCurrentIdOrder(null)
-            localStorage.removeItem('currentIdOrder')
+            sessionStorage.removeItem('currentIdOrder')
             toast.success("Commande terminée avec succès !")
             hideModal()
          }
@@ -204,7 +204,7 @@ const Order = () => {
             // TAKE ORDER
             await Orders.underTreatment(idOrder, idUser)
             setCurrentIdOrder(idOrder)
-            localStorage.setItem('currentIdOrder', idOrder)
+            sessionStorage.setItem('currentIdOrder', idOrder)
             toast.success("Commande prise en charge avec succès !")
             hideModal()
          }

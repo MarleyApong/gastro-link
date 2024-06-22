@@ -12,7 +12,7 @@ const CreateTable = () => {
 	const Navigate = useNavigate()
 	const access = Access()
 	const statusOption = StatusOption()
-	const idUser = localStorage.getItem('id')
+	const idUser = sessionStorage.getItem('id')
 
 	let idStatus = ''
 

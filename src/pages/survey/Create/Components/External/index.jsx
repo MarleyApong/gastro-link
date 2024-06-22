@@ -8,7 +8,7 @@ import { Company } from "../../../../../services/companyService"
 import useHandleError from "../../../../../hooks/useHandleError"
 
 const External = ({ Navigate, idStatus, access, CustomSelect }) => {
-   const idUser = localStorage.getItem('id')
+   const idUser = sessionStorage.getItem('id')
 
    const [isSubmitting, setIsSubmitting] = useState(false)
    const [idOrganization, setOrganization] = useState('')

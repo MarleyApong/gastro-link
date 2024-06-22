@@ -11,7 +11,7 @@ import useHandleError from "../../../../../hooks/useHandleError"
 const External = ({ Navigate, CustomSelect }) => {
    const statusOption = StatusOption()
    const roleOption = RoleOption()
-   const idUser = localStorage.getItem('id')
+   const idUser = sessionStorage.getItem('id')
 
    const [isSubmitting, setIsSubmitting] = useState(false)
    const [validator, setValidator] = useState(0)
