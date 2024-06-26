@@ -40,7 +40,7 @@ const Order = () => {
       loadProducts()
    }, [company, page])
 
-   // ADD TO CARD
+   // ADD TO CART
    const handleAddToCart = (product) => {
       const existingItem = cart.find(item => item.id === product.id)
 
@@ -59,12 +59,10 @@ const Order = () => {
 
       // UPDATE PRODUCT QUANTITY
       const updatedProducts = products.map(item =>
-         item.id === product.id ? { ...item, quantity: 1 } : item
+         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
       )
       setProducts(updatedProducts)
    }
-
-
 
    // REMOVE PRODUCT FROM CART
    const handleRemoveFromCart = (product) => {
@@ -179,7 +177,7 @@ const Order = () => {
                               <div className='control-btn'>
                                  <button onClick={() => updateProductQuantity(product.id, product.quantity - 1)}>-</button>
                                  <span>{product.quantity}</span>
-                                 <button onClick={() => updateProductQuantity(product.id, product.quantity + 1)}>+</button>
+                                 <button onClick={() => handleAddToCart(product)}>+</button>
                               </div>
                               <span>{product.price} fcfa</span>
                            </div>
@@ -194,20 +192,22 @@ const Order = () => {
                <div className='content-list'>
                   <table>
                      <thead>
-                        <th>Produit</th>
-                        <th className='text-center'>Qté</th>
-                        <th className='text-center'>P.U</th>
-                        <th className='text-end'>Détails</th>
+                        <tr>
+                           <th>Produit</th>
+                           <th className='text-center'>Qté</th>
+                           <th className='text-center'>P.U</th>
+                           <th className='text-end'>Détails</th>
+                        </tr>
                      </thead>
                      <tbody>
                         {products.length > 0 ? products.map((product) => (
                            <tr key={product.id} onClick={() => setShowCart(true)}>
-                              <td >{product.name}</td>
+                              <td>{product.name}</td>
                               <td className='text-center'>
                                  <div className='control-btn'>
                                     <button onClick={() => updateProductQuantity(product.id, product.quantity - 1)}>-</button>
                                     <span>{product.quantity}</span>
-                                    <button onClick={() => updateProductQuantity(product.id, product.quantity + 1)}>+</button>
+                                    <button onClick={() => handleAddToCart(product)}>+</button>
                                  </div>
                               </td>
                               <td className='text-center'>{product.price} fcfa</td>
@@ -218,7 +218,7 @@ const Order = () => {
                                  </button>
                               </td>
                            </tr>
-                        )) : <div> Aucun produit disponible !</div>}
+                        )) : <tr><td colSpan="4">Aucun produit disponible !</td></tr>}
                      </tbody>
                   </table>
                </div>
@@ -244,12 +244,12 @@ const Order = () => {
                         <img src={item.picture} alt="" />
                         <div className="details">
                            <span>{item.name}</span>
-                           <span>{item.price}</span>
+                           <span>{item.price} fcfa</span>
                            <div className="control">
                               <div className='control-btn'>
                                  <button onClick={() => updateProductQuantity(item.id, item.quantity - 1)}>-</button>
                                  <span>{item.quantity}</span>
-                                 <button onClick={() => updateProductQuantity(item.id, item.quantity + 1)}>+</button>
+                                 <button onClick={() => handleAddToCart(item)}>+</button>
                               </div>
                               <RemixIcons.RiCloseLine onClick={() => handleRemoveFromCart(item)} />
                            </div>
@@ -269,7 +269,7 @@ const Order = () => {
                </div>
             </div>
          </div>
-      </div >
+      </div>
    )
 }
 

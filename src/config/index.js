@@ -3,7 +3,7 @@ const ENV = 'prod'
 
 if (ENV === 'dev') {
    config = {
-      serverUrl: "http://localhost:8000",
+      serverUrl: "https://api-v1.gastrolink-resto.com",
       frontUrl: "http://localhost:5174"
    }
 }
