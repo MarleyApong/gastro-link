@@ -6,10 +6,11 @@ import { sortOption } from "../../data/optionFilter"
 import Pagination from "../../components/Pagination"
 import SelectOption from "../../components/SelectOption"
 import SearchInput from "../../components/SearchInput"
+import { Account } from "../../services/accountService"
 import './menu.scss'
 
 const Menu = () => {
-   const idUser = sessionStorage.getItem('id')
+   const idUser = Account.getUserId()
 
    const [order, setOrder] = useState('asc')
    const [filter, setFilter] = useState('name')

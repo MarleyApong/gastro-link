@@ -12,12 +12,13 @@ import useHandleError from '../../hooks/useHandleError'
 import { Orders } from '../../services/orderService'
 import { useNavigate } from 'react-router-dom'
 import EventOrder from '../../components/EventOrder'
+import { Account } from '../../services/accountService'
 
 const Dashboard = () => {
    const access = Access()
    const Navigate = useNavigate()
    const eventOrder = EventOrder()
-   const idUser = sessionStorage.getItem('id')
+   const idUser = Account.getUserId()
 
    const [companies, setCompanies] = useState([])
    const [allCount, setAllCount] = useState([])

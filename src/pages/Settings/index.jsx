@@ -31,7 +31,7 @@ const Settings = () => {
 	const [validator, setValidator] = useState(0)
 
 
-	const id = sessionStorage.getItem('id')
+	const idUser = Account.getUserId()
 
 	// SET ALL VALUE
 	const handleUpdate = (e) => {
@@ -44,7 +44,7 @@ const Settings = () => {
 
 	// GET ONE DATA API
 	useEffect(() => {
-		User.getOne(id).then((res) => {
+		User.getOne(idUser).then((res) => {
 			setUser({
 				firstName: res.data.content.firstName,
 				lastName: res.data.content.lastName,
@@ -59,7 +59,7 @@ const Settings = () => {
 		}).catch((err) => {
 			useHandleError(err, Navigate)
 		})
-	}, [id, refresh])
+	}, [idUser, refresh])
 
 	// UPDATE INFO USER
 	const handleUDP = (e) => {
@@ -78,7 +78,7 @@ const Settings = () => {
 			toast.error("Modifiez une valeur pour continuer !")
 		}
 		else {
-			User.update(id, user).then((res) => {
+			User.update(idUser, user).then((res) => {
 				toast.success("Informations modifiées !")
 				setRefresh((current) => current + 1)
 			}).catch((err) => {
@@ -109,7 +109,7 @@ const Settings = () => {
 				confirmPassword: confirmPassword
 			}
 
-			User.changePassword(id, data).then((res) => {
+			User.changePassword(idUser, data).then((res) => {
 				toast.success("Mot de passe modifié avec succès !")
 				setRefresh((current) => current + 1)
 				setValidator(0)

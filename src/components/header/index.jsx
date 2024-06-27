@@ -9,15 +9,15 @@ import EventOrder from '../EventOrder'
 import songOfNewOrder from '../../assets/audio/newOrder.wav'
 import { Orders } from '../../services/orderService'
 import { User } from '../../services/userService'
+import { Account } from '../../services/accountService'
 
 const Header = ({ sidebar, setSidebar }) => {
     const Navigate = useNavigate()
     const location = useLocation()
     const access = Access()
     const eventOrder = EventOrder()
-    const idUser = sessionStorage.getItem('id')
+    const idUser = Account.getUserId()
 
-    const id = sessionStorage.getItem("id")
     const order = 'asc'
     const filter = 'name'
     const status = ''

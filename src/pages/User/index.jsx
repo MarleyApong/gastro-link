@@ -15,6 +15,7 @@ import { EnvOption, sortOption, StatusOption, RoleOption } from "../../data/opti
 import SearchInput from "../../components/SearchInput"
 import Access from "../../utils/utilsAccess"
 import useHandleError from "../../hooks/useHandleError"
+import { Account } from "../../services/accountService"
 
 const ListUser = () => {
    const Navigate = useNavigate()
@@ -255,6 +256,7 @@ const ListUser = () => {
       columns.splice(4, 0, {
          name: 'Status',
          cell: (row) => (
+            row.id !== Account.getUserId() &&
             <ToggleButton
                checked={row.Status.name === 'actif' ? true : false}
                onChange={(id) => handleToggle(id)}

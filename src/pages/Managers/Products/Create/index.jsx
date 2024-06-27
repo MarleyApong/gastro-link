@@ -8,12 +8,13 @@ import Access from "../../../../utils/utilsAccess"
 import Internal from "./Components/Internal"
 import External from "./Components/External"
 import { StatusOption } from "../../../../data/optionFilter"
+import { Account } from "../../../../services/accountService"
 
 const CreateProduct = () => {
 	const Navigate = useNavigate()
 	const access = Access()
 	const statusOption = StatusOption()
-	const idUser = sessionStorage.getItem('id')
+	const idUser = Account.getUserId()
 
 	let idStatus = ''
 

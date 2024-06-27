@@ -16,7 +16,7 @@ const UpdateUser = () => {
 	const statusOption = StatusOption()
 	const access = Access()
 	const { id } = useParams()
-	const idUser = sessionStorage.getItem('id')
+	const idUser = Account.getUserId()
 
 	const [isSubmitting, setIsSubmitting] = useState(false)
 

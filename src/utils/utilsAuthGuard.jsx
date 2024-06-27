@@ -3,13 +3,6 @@ import { Account } from '../services/accountService'
 import { Navigate } from 'react-router-dom'
 
 const AuthGuard = ({ children }) => {
-   const token = sessionStorage.getItem('lkiy-')
-
-   if (!token) {
-      // IF TOKEN IS NOT PRESENT IN sessionStorage
-      return <Navigate to="/auth/login" />
-   }
-
    const tokenValidity = Account.isLogged()
 
    if (!tokenValidity.isValid) {

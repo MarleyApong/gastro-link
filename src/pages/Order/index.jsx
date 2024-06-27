@@ -15,11 +15,12 @@ import { Orders } from "../../services/orderService"
 import { User } from "../../services/userService"
 import EventOrder from "../../components/EventOrder"
 import config from "../../config"
+import { Account } from "../../services/accountService"
 
 const Order = () => {
    const Navigate = useNavigate()
    const access = Access()
-   const idUser = sessionStorage.getItem('id')
+   const idUser = Account.getUserId()
    const eventOrder = EventOrder()
    const statusOption = StatusOption()
 

@@ -28,6 +28,7 @@ const Login = () => {
             const role = res.data.user.Role.id
             const env = res.data.user.Env.id
             const idStatus = res.data.user.Status.id
+         
             setWait(true)
             if (res.data.user.Status.name !== 'actif') {
                toast.error("Accès non authorisé !")
@@ -65,8 +66,7 @@ const Login = () => {
                }
             }
             else {
-               console.log('err', err)
-               toast.error("Connexion au serveur a échoué !")
+               toast.error("Vérifiez votre connexion !")
             }
          }
       }

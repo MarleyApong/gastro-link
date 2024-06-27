@@ -9,11 +9,11 @@ const Access = () => {
    const Navigate = useNavigate()
 
    const [userData, setUserData] = useState({
-      role: sessionStorage.getItem('lero') || '',
-      env: sessionStorage.getItem('env') || '',
-      status: sessionStorage.getItem('status') || '',
-      token: sessionStorage.getItem('lkiy-') || '',
-      id: sessionStorage.getItem('id') || ''
+      role: Account.getUserRole() || '',
+      env: Account.getUserEnv() || '',
+      status: Account.getUserStatus() || '',
+      token: Account.getUserToken() || '',
+      id: Account.getUserId() || ''
    })
 
    const [data, setData] = useState(0)
@@ -97,7 +97,6 @@ const Access = () => {
       }
    
       loadUserData()
-   
    }, [userData])
 
    useEffect(() => {
@@ -106,12 +105,7 @@ const Access = () => {
          toast.error("Déconnexion !")
    
          Navigate('/auth/login')
-   
-         sessionStorage.removeItem('lkiy-')
-         sessionStorage.removeItem('id')
-         sessionStorage.removeItem('status')
-         sessionStorage.removeItem('env')
-         sessionStorage.removeItem('lero')
+         Account.logout()
       }
    
       window.addEventListener('storage', handleSessionStorageChange, { once: true })

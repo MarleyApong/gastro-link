@@ -7,11 +7,12 @@ import RequirePassword from "../../../../../components/RequirePassword"
 import { EnvOption, RoleOption, StatusOption } from "../../../../../data/optionFilter"
 import { Company } from "../../../../../services/companyService"
 import useHandleError from "../../../../../hooks/useHandleError"
+import { Account } from "../../../../../services/accountService"
 
 const External = ({ Navigate, CustomSelect }) => {
    const statusOption = StatusOption()
    const roleOption = RoleOption()
-   const idUser = sessionStorage.getItem('id')
+   const idUser = Account.getUserId()
 
    const [isSubmitting, setIsSubmitting] = useState(false)
    const [validator, setValidator] = useState(0)

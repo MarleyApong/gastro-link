@@ -16,12 +16,13 @@ import { Table } from "../../../services/tableService"
 import useHandleError from "../../../hooks/useHandleError"
 import Qrcode from 'qrcode'
 import config from "../../../config"
+import { Account } from "../../../services/accountService"
 
 
 const Tables = () => {
    const Navigate = useNavigate()
    const access = Access()
-   const idUser = sessionStorage.getItem('id')
+   const idUser = Account.getUserId()
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])

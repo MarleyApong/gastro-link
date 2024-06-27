@@ -23,7 +23,7 @@ const ListCompany = () => {
    const Navigate = useNavigate()
    const access = Access()
    const statusOption = StatusOption()
-   const idUser = sessionStorage.getItem('id')
+   const idUser = Account.getUserId()
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])

@@ -15,12 +15,13 @@ import { useNavigate } from "react-router-dom"
 import Access from "../../../utils/utilsAccess"
 import useHandleError from "../../../hooks/useHandleError"
 import ToggleButton from "../../../components/ToggleButton"
+import { Account } from "../../../services/accountService"
 
 const Products = () => {
    const Navigate = useNavigate()
    const access = Access()
    const statusOption = StatusOption()
-   const idUser = sessionStorage.getItem('id')
+   const idUser = Account.getUserId()
 
    const [data, setData] = useState([])
    const [oneData, setOneData] = useState([])

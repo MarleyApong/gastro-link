@@ -244,7 +244,7 @@ const useHandleError = (err, Navigate, setValidator) => {
       }
    }
    else {
-      toast.error("Connexion au serveur a échoué !")
+      toast.error("Vérifiez votre connexion !")
    }
 }
 

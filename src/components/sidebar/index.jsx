@@ -16,7 +16,7 @@ import './sidebar.scss'
 const Sidebar = ({ profil, setProfil, sidebar, setSidebar }) => {
     const access = Access()
     const Navigate = useNavigate()
-    const idUser = sessionStorage.getItem('id')
+    const idUser = Account.getUserId()
 
     const [user, setUser] = useState([])
     const [imageToShow, setImageToShow] = useState('')
