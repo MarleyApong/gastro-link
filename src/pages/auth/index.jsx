@@ -25,9 +25,9 @@ const Login = () => {
             const res = await Authentification.login(email, password)
             const token = res.data.token
             const idUser = res.data.user.id
-            const role = res.data.user.Role.id
-            const env = res.data.user.Env.id
-            const idStatus = res.data.user.Status.id
+            const role = res.data.user.role.id
+            const env = res.data.user.env.id
+            const idStatus = res.data.user.status.id
          
             setWait(true)
             if (res.data.user.Status.name !== 'actif') {

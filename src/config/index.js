@@ -1,10 +1,10 @@
 let config = {}
-const ENV = 'prod'
+const ENV = 'dev'
 
 if (ENV === 'dev') {
    config = {
-      serverUrl: "https://api-v1.gastrolink-resto.com",
-      frontUrl: "http://localhost:5174"
+      serverUrl: "http://localhost:5000",
+      frontUrl: "http://localhost:5173"
    }
 }
 else {
