@@ -8,6 +8,7 @@ import { EnvOption, RoleOption, StatusOption } from "../../../../../data/optionF
 import { Company } from "../../../../../services/companyService"
 import useHandleError from "../../../../../hooks/useHandleError"
 import { Account } from "../../../../../services/accountService"
+import { generateStrongPassword } from "../../../../../utils"
 
 const External = ({ Navigate, CustomSelect }) => {
    const statusOption = StatusOption()
@@ -24,7 +25,7 @@ const External = ({ Navigate, CustomSelect }) => {
       lastName: "",
       phone: "",
       email: "",
-      password: "",
+      temporaryPassword: "",
       env: "external",
       idRole: "",
       idStatus: "",
@@ -42,7 +43,7 @@ const External = ({ Navigate, CustomSelect }) => {
    // PUSH SELECTED ID OF ORGANIZATION, COMPANY AND PASSWORD
    user.idOrganization = idOrganization
    user.idCompany = selectedCompanyValue.value
-   user.password = user.firstName.substring(0, 3) + user.phone.substring(0, 4) + user.firstName.substring(1, 2).toUpperCase() + '@'
+   user.temporaryPassword = generateStrongPassword()
 
    // SET ALL VALUE
    const handleAdd = (e) => {
@@ -169,16 +170,16 @@ const External = ({ Navigate, CustomSelect }) => {
                   />
                </div>
                <div className="col-md-6 ">
-                  <label htmlFor="password" className="form-label">
+                  <label htmlFor="temporaryPassword" className="form-label">
                      Mot de passe :
                      <span className="text-danger taille_etoile">*</span>
                   </label>
                   <input
                      type="text"
                      className="form-control no-focus-outline"
-                     id="password"
-                     name="password"
-                     value={user.password}
+                     id="temporaryPassword"
+                     name="temporaryPassword"
+                     value={user.temporaryPassword}
                      onChange={handleAdd}
                      autoComplete='off'
                      required

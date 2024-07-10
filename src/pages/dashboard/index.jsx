@@ -5,7 +5,7 @@ import { FirstGroupInternal, FirstGroupExternal, FirstGroupExternalServer } from
 import { SecondGroupExternal, SecondGroupExternalServer, SecondGroupInternal } from '../../components/Dashboard/SecondGroup'
 import { Company } from '../../services/companyService'
 import { Survey } from '../../services/surveyService'
-import Access from '../../utils/utilsAccess'
+import Access from '../../guard/AccessGuard'
 import './dashboard.scss'
 import { Answer } from '../../services/answersService'
 import useHandleError from '../../hooks/useHandleError'

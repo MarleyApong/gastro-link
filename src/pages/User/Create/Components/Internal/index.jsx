@@ -8,6 +8,7 @@ import { EnvOption, RoleOption, StatusOption } from "../../../../../data/optionF
 import { Company } from "../../../../../services/companyService"
 import { Organization } from "../../../../../services/organizationService"
 import useHandleError from "../../../../../hooks/useHandleError"
+import { generateStrongPassword } from "../../../../../utils"
 
 const Internal = ({ Navigate, CustomSelect, access }) => {
    const statusOption = StatusOption()
@@ -32,7 +33,7 @@ const Internal = ({ Navigate, CustomSelect, access }) => {
       lastName: "",
       phone: "",
       email: "",
-      password: "",
+      temporaryPassword: "",
       env: "",
       idRole: "",
       idStatus: "",
@@ -54,7 +55,7 @@ const Internal = ({ Navigate, CustomSelect, access }) => {
    let idOrganization = selectedOrganizationValue.value
    user.idOrganization = selectedOrganizationValue.value
    user.idCompany = selectedCompanyValue.value
-   user.password = user.firstName.substring(0, 3) + user.phone.substring(0, 4) + user.firstName.substring(1, 2).toUpperCase() + '@'
+   user.temporaryPassword = generateStrongPassword()
 
    // SET ALL VALUE
    const handleAdd = (e) => {
@@ -167,20 +168,21 @@ const Internal = ({ Navigate, CustomSelect, access }) => {
                      required
                   />
                </div>
-               <div className="col-md-6 ">
-                  <label htmlFor="password" className="form-label">
+               <div className="col-md-6 " hidden>
+                  <label htmlFor="temporaryPassword" className="form-label">
                      Mot de passe :
                      <span className="text-danger taille_etoile">*</span>
                   </label>
                   <input
                      type="text"
                      className="form-control no-focus-outline"
-                     id="password"
-                     name="password"
-                     value={user.password}
+                     id="temporaryPassword"
+                     name="temporaryPassword"
+                     value={user.temporaryPassword}
                      onChange={handleAdd}
                      autoComplete='off'
                      required
+                     hidden
                   />
                </div>
 

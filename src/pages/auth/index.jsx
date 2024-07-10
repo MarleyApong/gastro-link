@@ -7,6 +7,7 @@ import { Authentification } from '../../services/authentificationService'
 import { Account } from '../../services/accountService'
 import logo from '../../assets/img/logo/cs-logo-red.png'
 import './login.scss'
+import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
    const Navigate = useNavigate()
@@ -23,22 +24,27 @@ const Login = () => {
          setWait(false)
          try {
             const res = await Authentification.login(email, password)
-            const token = res.data.token
-            const idUser = res.data.user.id
-            const role = res.data.user.role.id
-            const env = res.data.user.env.id
-            const idStatus = res.data.user.status.id
-         
-            setWait(true)
-            if (res.data.user.Status.name !== 'actif') {
-               toast.error("Accès non authorisé !")
+            if (res.data?.initialPasswordRequired === true) {
+               Navigate('')
             }
             else {
-               Account.saveToken(token, idUser, role, env, idStatus)
-               Navigate("/dashboard")
+               if (res.data?.user?.status?.name !== 'actif') {
+                  toast.error("Accès non authorisé !")
+               }
+               else {
+                  const token = res.data.token
+                  const decoded = jwtDecode(token)
+                  const idUser = decoded.id
+                  const role = res.data.user.role.id
+                  const env = res.data.user.env.id
+                  const idStatus = res.data.user.status.id
+                  Account.saveToken(token, idUser, role, env, idStatus)
+                  Navigate("/dashboard")
+               }
             }
-
-         } catch (err) {
+            setWait(true)
+         }
+         catch (err) {
             setWait(true)
             if (err.response) {
                if (err.response.data.name === 'UserAutNotFound') {

@@ -1,11 +1,12 @@
 import { jwtDecode } from "jwt-decode"
 import { KEY_TOKEN, KEY_USER_ENV, KEY_USER_ID, KEY_USER_ROLE, KEY_USER_STATUS } from "../constants"
-import { decryptData, encryptData } from "../utils/utilsCrypto"
+import { cryptoData } from "../utils"
+// import { decryptData, encryptData } from "../utils"
 
 const isValidToken = () => {
     const token = sessionStorage.getItem(KEY_TOKEN)
     try {
-        const decoded = jwtDecode(decryptData(token))
+        const decoded = jwtDecode(cryptoData.decryptData(token))
         const currentTimestamp = Math.floor(Date.now() / 1000)
         if (decoded.exp && decoded.exp < currentTimestamp) {
             return { isValid: false, errorCode: "TOKEN_EXPIRED" }
@@ -17,11 +18,11 @@ const isValidToken = () => {
 }
 
 const saveToken = (token, id, role, env, status) => {
-    sessionStorage.setItem(KEY_TOKEN, encryptData(token))
-    sessionStorage.setItem(KEY_USER_ID, encryptData(id))
-    sessionStorage.setItem(KEY_USER_ROLE, encryptData(role))
-    sessionStorage.setItem(KEY_USER_ENV, encryptData(env))
-    sessionStorage.setItem(KEY_USER_STATUS, encryptData(status))
+    sessionStorage.setItem(KEY_TOKEN, cryptoData.encryptData(token))
+    sessionStorage.setItem(KEY_USER_ID, cryptoData.encryptData(id))
+    sessionStorage.setItem(KEY_USER_ROLE, cryptoData.encryptData(role))
+    sessionStorage.setItem(KEY_USER_ENV, cryptoData.encryptData(env))
+    sessionStorage.setItem(KEY_USER_STATUS, cryptoData.encryptData(status))
 }
 
 const logout = () => {
@@ -35,7 +36,7 @@ const logout = () => {
 const isLogged = () => {
     const token = sessionStorage.getItem(KEY_TOKEN)
     if (token) {
-        const tokenValidity = isValidToken(decryptData(token))
+        const tokenValidity = isValidToken(cryptoData.decryptData(token))
         if (tokenValidity.isValid) {
             return { isValid: true }
         }
@@ -48,27 +49,27 @@ const isLogged = () => {
 
 const getUserToken = () => {
     const token = sessionStorage.getItem(KEY_TOKEN)
-    return token ? decryptData(token) : null
+    return token ? cryptoData.decryptData(token) : null
 }
 
 const getUserRole = () => {
     const role = sessionStorage.getItem(KEY_USER_ROLE)
-    return role ? decryptData(role) : null
+    return role ? cryptoData.decryptData(role) : null
 }
 
 const getUserEnv = () => {
     const env = sessionStorage.getItem(KEY_USER_ENV)
-    return env ? decryptData(env) : null
+    return env ? cryptoData.decryptData(env) : null
 }
 
 const getUserStatus = () => {
     const status = sessionStorage.getItem(KEY_USER_STATUS)
-    return status ? decryptData(status) : null
+    return status ? cryptoData.decryptData(status) : null
 }
 
 const getUserId = () => {
     const userId = sessionStorage.getItem(KEY_USER_ID)
-    return userId ? decryptData(userId) : null
+    return userId ? cryptoData.decryptData(userId) : null
 }
 export const Account = {
     saveToken,

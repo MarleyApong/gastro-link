@@ -1,6 +1,6 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
-import Access from '../../utils/utilsAccess'
+import Access from '../../guard/AccessGuard'
 import './headerMain.scss'
 
 const HeaderMain = ({ total }) => {

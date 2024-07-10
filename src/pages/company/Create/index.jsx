@@ -9,7 +9,7 @@ import { Organization } from "../../../services/organizationService"
 import CustomSelect from "../../../components/CustomSelect"
 import PleaseNote from "../../../components/PleaseNote"
 import { StatusOption } from "../../../data/optionFilter"
-import Access from "../../../utils/utilsAccess"
+import Access from "../../../guard/AccessGuard"
 import { Account } from "../../../services/accountService"
 import useHandleError from "../../../hooks/useHandleError"
 

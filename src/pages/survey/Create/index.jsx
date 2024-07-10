@@ -5,7 +5,7 @@ import { StatusOption } from "../../../data/optionFilter"
 import CustomSelect from "../../../components/CustomSelect"
 import HeaderMain from "../../../components/HeaderMain"
 import PleaseNote from "../../../components/PleaseNote"
-import Access from "../../../utils/utilsAccess"
+import Access from "../../../guard/AccessGuard"
 import Internal from "./Components/Internal"
 import External from "./Components/External"
 

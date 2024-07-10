@@ -13,7 +13,7 @@ import { User } from "../../services/userService"
 import SelectOption from "../../components/SelectOption"
 import { EnvOption, sortOption, StatusOption, RoleOption } from "../../data/optionFilter"
 import SearchInput from "../../components/SearchInput"
-import Access from "../../utils/utilsAccess"
+import Access from "../../guard/AccessGuard"
 import useHandleError from "../../hooks/useHandleError"
 import { Account } from "../../services/accountService"
 

@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import * as RemixIcons from "react-icons/ri"
 import SubMenu from './SubMenu'
 import { ItemsExternalAdmin, ItemsExternalServer, ItemsExternalSuperAdmin, ItemsExternalUser, ItemsInternalAdmin, ItemsInternalUser } from '../../data/itemsNav'
-import Access from '../../utils/utilsAccess'
+import Access from '../../guard/AccessGuard'
 import logoPlaceholder from '../../assets/img/avatar/user.jpg'
 import superAdmin from '../../assets/img/avatar/super admin.jpg'
 import admin from '../../assets/img/avatar/admin.jpg'

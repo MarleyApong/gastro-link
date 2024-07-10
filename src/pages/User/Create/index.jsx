@@ -5,7 +5,7 @@ import CustomSelect from "../../../components/CustomSelect"
 import PleaseNote from "../../../components/PleaseNote"
 import Internal from "./Components/Internal"
 import External from "./Components/External"
-import Access from "../../../utils/utilsAccess"
+import Access from "../../../guard/AccessGuard"
 
 const CreateUser = () => {
 	const Navigate = useNavigate()

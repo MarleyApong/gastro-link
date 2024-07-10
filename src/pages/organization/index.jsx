@@ -14,7 +14,7 @@ import { Organization } from "../../services/organizationService"
 import CustomDataTable from "../../components/CustomDataTable"
 import SelectOption from "../../components/SelectOption"
 import SearchInput from "../../components/SearchInput"
-import Access from "../../utils/utilsAccess"
+import Access from "../../guard/AccessGuard"
 import { sortOption, StatusOption } from "../../data/optionFilter"
 import useHandleError from "../../hooks/useHandleError"
 

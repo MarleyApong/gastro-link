@@ -14,7 +14,7 @@ import { Question } from "../../services/questionService"
 import SelectOption from "../../components/SelectOption"
 import { sortOption, StatusOption } from "../../data/optionFilter"
 import SearchInput from "../../components/SearchInput"
-import Access from "../../utils/utilsAccess"
+import Access from "../../guard/AccessGuard"
 import { Average } from "../../services/average"
 import useHandleError from "../../hooks/useHandleError"
 

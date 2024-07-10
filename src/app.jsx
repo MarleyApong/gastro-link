@@ -1,5 +1,5 @@
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import AuthGuard from './utils/utilsAuthGuard'
+import AuthGuard from './guard/AuthGuard'
 import PrivateRouter from './routers/PrivateRouter'
 import AuthRouter from './routers/AuthRouter'
 import './styles/modalFromReactBootstrap.scss'

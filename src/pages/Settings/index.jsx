@@ -7,6 +7,7 @@ import { User } from "../../services/userService"
 import PleaseNote from "../../components/PleaseNote"
 import RequirePassword from "../../components/RequirePassword"
 import useHandleError from "../../hooks/useHandleError"
+import { Account } from "../../services/accountService"
 const Settings = () => {
 	const Navigate = useNavigate()
 

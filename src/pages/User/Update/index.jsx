@@ -9,7 +9,7 @@ import { Account } from "../../../services/accountService"
 import { Role } from "../../../services/roleService"
 import { StatusOption } from "../../../data/optionFilter"
 import useHandleError from "../../../hooks/useHandleError"
-import Access from "../../../utils/utilsAccess"
+import Access from "../../../guard/AccessGuard"
 
 const UpdateUser = () => {
 	const Navigate = useNavigate()

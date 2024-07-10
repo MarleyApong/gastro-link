@@ -15,7 +15,7 @@ import CustomDataTable from "../../components/CustomDataTable"
 import SearchInput from "../../components/SearchInput"
 import SelectOption from "../../components/SelectOption"
 import { sortOption, StatusOption } from "../../data/optionFilter"
-import Access from "../../utils/utilsAccess"
+import Access from "../../guard/AccessGuard"
 import { Account } from "../../services/accountService"
 import useHandleError from "../../hooks/useHandleError"
 

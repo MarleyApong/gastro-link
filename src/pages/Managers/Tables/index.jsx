@@ -11,7 +11,7 @@ import CustomDataTable from "../../../components/CustomDataTable"
 import dateFormat from "dateformat"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
-import Access from "../../../utils/utilsAccess"
+import Access from "../../../guard/AccessGuard"
 import { Table } from "../../../services/tableService"
 import useHandleError from "../../../hooks/useHandleError"
 import Qrcode from 'qrcode'

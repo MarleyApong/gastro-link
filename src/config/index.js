@@ -3,7 +3,7 @@ const ENV = 'dev'
 
 if (ENV === 'dev') {
    config = {
-      serverUrl: "http://localhost:5000",
+      serverUrl: "http://localhost:8000",
       frontUrl: "http://localhost:5173"
    }
 }
