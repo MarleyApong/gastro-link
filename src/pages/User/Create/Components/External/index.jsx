@@ -43,7 +43,6 @@ const External = ({ Navigate, CustomSelect }) => {
    // PUSH SELECTED ID OF ORGANIZATION, COMPANY AND PASSWORD
    user.idOrganization = idOrganization
    user.idCompany = selectedCompanyValue.value
-   user.temporaryPassword = generateStrongPassword()
 
    // SET ALL VALUE
    const handleAdd = (e) => {

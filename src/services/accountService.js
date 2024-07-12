@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode"
-import { KEY_TOKEN, KEY_USER_ENV, KEY_USER_ID, KEY_USER_ROLE, KEY_USER_STATUS } from "../constants"
+import { KEY_EMAIL_SEND, KEY_INITIATE_PASSWORD_REQUIRE, KEY_TEMPORARY_PASSWORD, KEY_TOKEN, KEY_USER_ENV, KEY_USER_ID, KEY_USER_ROLE, KEY_USER_STATUS } from "../constants"
 import { cryptoData } from "../utils"
 // import { decryptData, encryptData } from "../utils"
 
@@ -26,11 +26,7 @@ const saveToken = (token, id, role, env, status) => {
 }
 
 const logout = () => {
-    sessionStorage.removeItem(KEY_TOKEN)
-    sessionStorage.removeItem(KEY_USER_ID)
-    sessionStorage.removeItem(KEY_USER_ROLE)
-    sessionStorage.removeItem(KEY_USER_ENV)
-    sessionStorage.removeItem(KEY_USER_STATUS)
+    sessionStorage.clear()
 }
 
 const isLogged = () => {
@@ -71,6 +67,30 @@ const getUserId = () => {
     const userId = sessionStorage.getItem(KEY_USER_ID)
     return userId ? cryptoData.decryptData(userId) : null
 }
+
+const saveInitiatePassword = (email, temporaryPassword, state) => {
+    sessionStorage.setItem(KEY_EMAIL_SEND, cryptoData.encryptData(email))
+    sessionStorage.setItem(KEY_TEMPORARY_PASSWORD, cryptoData.encryptData(temporaryPassword))
+    sessionStorage.setItem(KEY_INITIATE_PASSWORD_REQUIRE, cryptoData.encryptData(state))
+    console.log(' cryptoData.encryptData(state)',  cryptoData.encryptData(state));
+}
+
+const getInitiateEmail = () => {
+    const initiateEmail = sessionStorage.getItem(KEY_EMAIL_SEND)
+    return initiateEmail ? cryptoData.decryptData(initiateEmail) : null
+}
+
+const getTemporaryPassword = () => {
+    const temporaryPassword = sessionStorage.getItem(KEY_TEMPORARY_PASSWORD)
+    return temporaryPassword ? cryptoData.decryptData(temporaryPassword) : null
+}
+
+const getInitiatePassword = () => {
+    const initialPasswordRequired = sessionStorage.getItem(KEY_INITIATE_PASSWORD_REQUIRE)
+    return initialPasswordRequired ? cryptoData.decryptData(initialPasswordRequired) : null
+}
+
+
 export const Account = {
     saveToken,
     logout,
@@ -79,5 +99,9 @@ export const Account = {
     getUserRole,
     getUserEnv,
     getUserStatus,
-    getUserId
+    getUserId,
+    saveInitiatePassword,
+    getInitiateEmail,
+    getTemporaryPassword,
+    getInitiatePassword
 }

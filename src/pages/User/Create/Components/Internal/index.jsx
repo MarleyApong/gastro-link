@@ -55,7 +55,6 @@ const Internal = ({ Navigate, CustomSelect, access }) => {
    let idOrganization = selectedOrganizationValue.value
    user.idOrganization = selectedOrganizationValue.value
    user.idCompany = selectedCompanyValue.value
-   user.temporaryPassword = generateStrongPassword()
 
    // SET ALL VALUE
    const handleAdd = (e) => {

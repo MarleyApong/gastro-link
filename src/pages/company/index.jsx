@@ -370,7 +370,7 @@ const ListCompany = () => {
          <Modal
             show={showDetailCompanyModal}
             onHide={hideModal}
-            size="lg"
+            size="xl"
             aria-labelledby="contained-modal-title-vcenter"
             centered
             className="modal-react-bootstrap">
@@ -389,17 +389,16 @@ const ListCompany = () => {
 
                      <div className="col-md-6 infoDetail ml-4 ">
                         <div className="shadow p-2 mb-2">
-                           <div className="nomEntr fw-bold fs-2">{oneData.name ? oneData.name.toUpperCase() : '---'}</div>
-                           <div>Secteur: {oneData.category ? oneData.category : '---'}</div>
+                           <div className="fw-bold fs-2 text-center">{oneData.name ? oneData.name.toUpperCase() : '---'}</div>
                         </div>
-                        <div className="secteurAc mb-4 ">
-                           <p className="fw-bold me-1 text-center">Description </p>
+                        <div className="mt-4">
+                           <p className="fw-bold me-1">Description </p>
                            {oneData.description ? oneData.description : '---'}
                         </div>
-                        <div className="immatriculation mb-3"><RemixIcons.RiCalendar2Line className="icon" />{oneData.createdAt ? dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss') : '---'}</div>
-                        <div className="email mb-3"><AiOutlineMail className="icon" />{oneData.email ? oneData.email : '---'}</div>
-                        <div className="telephone mb-3"><AiOutlinePhone className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
-                        <div className="ville mb-3"><FaCity className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
+                        <div className="mb-3"><RemixIcons.RiCalendar2Line className="icon" />{oneData.createdAt ? dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss') : '---'}</div>
+                        <div className="mb-3"><AiOutlineMail className="icon" />{oneData.email ? oneData.email : '---'}</div>
+                        <div className="mb-3"><AiOutlinePhone className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
+                        <div className="mb-3"><FaCity className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
                         {/* <span className="site">
                            <RemixIcons.RiGlobalLine className="icon" />
                            <a href={`http://localhost:5173/page/${oneData.webpage}`} target="_blank" rel="noopener noreferrer">

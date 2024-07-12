@@ -7,6 +7,7 @@ import PublicRouter from './routers/PublicRouter'
 
 const App = () => {
    const Navigate = useNavigate()
+   
    return (
       <Routes>
          <Route path="/auth/*" element={<AuthRouter />} />

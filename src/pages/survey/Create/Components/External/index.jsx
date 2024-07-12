@@ -115,6 +115,7 @@ const External = ({ Navigate, idStatus, access, CustomSelect }) => {
                   value={survey.name}
                   onChange={handleAdd}
                   autoComplete='off'
+                  maxLength={25}
                   required
                />
             </div>

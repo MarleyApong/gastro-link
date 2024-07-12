@@ -181,14 +181,15 @@ const ListSurvey = () => {
             setOneData(res.data.content)
             const idCompany = res.data.content.Company ? res.data.content.Company.id : null
 
-            res = await Average.averageQuestion()
-            setAverageQuestion(res.data.average)
+            if (res.data.content > 0) {
+               res = await Average.averageQuestion()
+               setAverageQuestion(res.data.average)
+               res = await Average.averageSurvey(id)
+               setAverageSurvey(res.data.average)
 
-            res = await Average.averageSurvey(id)
-            setAverageSurvey(res.data.average)
-
-            res = await Average.averageCompany(idCompany)
-            setAverageCompany(res.data.average)
+               res = await Average.averageCompany(idCompany)
+               setAverageCompany(res.data.average)
+            }
          }
          catch (err) {
             useHandleError(err, Navigate)
@@ -457,7 +458,7 @@ const ListSurvey = () => {
          <Modal
             show={showDetailCompanyModal}
             onHide={hideModal}
-            size="lg"
+            size="xl"
             aria-labelledby="contained-modal-title-vcenter"
             centered
             className="modal-react-bootstrap"
@@ -481,7 +482,7 @@ const ListSurvey = () => {
                               <span className={averageCompany > 2.5 ? "Btn Success" : "Btn Error"}>{averageCompany}</span>
                            </div>
                         </div>
-                        <div className="card-question">
+                        <div className="card-question shadow">
                            <form onSubmit={handleSubmit} className={stateQuestion ? "question transition-add-question p-2 shadow" : "question p-2 shadow"}>
                               <label htmlFor="question" className="fw-bold">Nom de la question: </label>
                               <textarea name="question" onChange={(e) => setQuestion(e.target.value)} value={question} placeholder="Entrez la question"></textarea>
@@ -500,7 +501,7 @@ const ListSurvey = () => {
                               </div>
                            </form>
                            <div className="question-content-details">
-                              <div className="mb-2 fw-bold">Questions</div>
+                              <div className="mb-2 ps-2 fw-bold">Questions</div>
                               <form onSubmit={handleUpdateQuestion} className={stateQuestionUpdade ? "question-update transition-update-question" : "question-update"}>
                                  <textarea name="area-question" onChange={(e) => setQuestionUpdade(e.target.value)} value={questionUpdade} placeholder="Modifiez la question"></textarea>
                                  <div className="d-flex justify-content-between">

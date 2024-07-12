@@ -341,7 +341,7 @@ const ListOrganization = () => {
          <Modal
             show={showDetailCompanyModal}
             onHide={hideModal}
-            size="lg"
+            size="xl"
             aria-labelledby="contained-modal-title-vcenter"
             centered
             className="modal-react-bootstrap">
@@ -358,16 +358,16 @@ const ListOrganization = () => {
                         <input type="file" id="Profil" hidden ref={imageRef} accept=".jpg, .jpeg, .png" onChange={(e) => setGetImage(e.target.files[0])} />
                      </div>
                      <div className="col-md-6 infoDetail ml-4 ">
-                        <div className="nomEntr fw-bold fs-2 shadow p-2 mb-2">{oneData.name ? oneData.name.toUpperCase() : '---'}</div>
+                        <div className="nomEntr fw-bold fs-2 shadow p-2 mb-3 text-center">{oneData.name ? oneData.name.toUpperCase() : '---'}</div>
                         <div className="secteurAc mb-4 ">
-                           <p className="fw-bold me-1 text-center">Description </p>
+                           <p className="fw-bold me-1 text-cnter">Description </p>
                            {oneData.description ? oneData.description : '---'}
                         </div>
                         {/* <div className="NumIden mb-3"><AiOutlineFieldNumber className="icon" size={18} />{oneData.id ? oneData.id : '---'}</div> */}
-                        <div className="immatriculation mb-3"><RemixIcons.RiCalendar2Line className="icon" />{oneData.createdAt ? dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss') : '---'}</div>
-                        <div className="telephone mb-3"><AiOutlinePhone className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
-                        <div className="ville mb-3"><FaCity className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
-                        <div className="ville mb-3 d-flex align-items-center">
+                        <div className="mb-3"><RemixIcons.RiCalendar2Line className="icon" />{oneData.createdAt ? dateFormat(oneData.createdAt, 'dd-mm-yyyy HH:MM:ss') : '---'}</div>
+                        <div className="mb-3"><AiOutlinePhone className="icon" /> {oneData.phone ? oneData.phone : '---'} </div>
+                        <div className="mb-3"><FaCity className="icon" /> {oneData.city ? oneData.city : '---'} , {oneData.neighborhood ? oneData.neighborhood : '---'}</div>
+                        <div className="mb-3 d-flex align-items-center">
                            <RemixIcons.RiUserSharedLine className="icon" />
                            {oneData.Status && oneData.Status.name === 'actif' ? 'actif' : 'inactif'}
                         </div>

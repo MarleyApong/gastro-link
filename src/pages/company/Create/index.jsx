@@ -12,6 +12,7 @@ import { StatusOption } from "../../../data/optionFilter"
 import Access from "../../../guard/AccessGuard"
 import { Account } from "../../../services/accountService"
 import useHandleError from "../../../hooks/useHandleError"
+import { citiesInCameroon } from "../../../data/city"
 
 const CreateCompany = () => {
 	const Navigate = useNavigate()
@@ -155,7 +156,7 @@ const CreateCompany = () => {
 							)}
 							<div className="col-md-6">
 								<label htmlFor="name" className="form-label">
-									Nom de l'entreprise :
+									Nom du restaurant :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input
@@ -166,6 +167,7 @@ const CreateCompany = () => {
 									value={company.name}
 									onChange={handleAdd}
 									autoComplete='off'
+									maxLength={20}
 									required
 								/>
 							</div>
@@ -182,6 +184,7 @@ const CreateCompany = () => {
 									value={company.email}
 									onChange={handleAdd}
 									autoComplete='off'
+									maxLength={30}
 									required
 								/>
 							</div>
@@ -198,9 +201,9 @@ const CreateCompany = () => {
 									value={company.description}
 									onChange={handleAdd}
 									autoComplete='off'
+									maxLength={180}
 									required
 								>
-
 								</textarea>
 							</div>
 							<div className="col-md-6">
@@ -216,6 +219,7 @@ const CreateCompany = () => {
 									value={company.category}
 									onChange={handleAdd}
 									autoComplete='off'
+									maxLength={15}
 									required
 								/>
 							</div>
@@ -232,27 +236,30 @@ const CreateCompany = () => {
 									value={company.phone}
 									onChange={handleAdd}
 									autoComplete='off'
+									maxLength={9}
 									required
 								/>
 							</div>
-
 							<div className="col-md-6">
 								<label htmlFor="city" className="form-label">
 									Ville :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
-								<input
-									type="text"
-									className="form-control no-focus-outline"
+								<select
+									className="form-control no-focus-outline p-2 custom-select"
 									id="city"
 									name="city"
 									value={company.city}
 									onChange={handleAdd}
 									autoComplete='off'
 									required
-								/>
+								>
+									<option value="" disabled>---</option>
+									{citiesInCameroon.map((city, index) => (
+										<option key={index} value={city.value}>{city.label}</option>
+									))}
+								</select>
 							</div>
-
 							<div className="col-md-6 ">
 								<label htmlFor="idStatus" className="form-label">
 									Status :
@@ -266,7 +273,6 @@ const CreateCompany = () => {
 									))}
 								</select>
 							</div>
-
 							<div className="col-md-6 ">
 								<label htmlFor="neighborhood" className="form-label">
 									Quartier :
@@ -283,7 +289,6 @@ const CreateCompany = () => {
 									required
 								/>
 							</div>
-
 							<div className="col-md-6 ">
 								<label htmlFor="picture" className="form-label">Logo :</label>
 								<input
@@ -294,13 +299,11 @@ const CreateCompany = () => {
 									onChange={handleFileChange}
 								/>
 							</div>
-
 							<div className="col-md-12 d-flex gap-2 justify-content-between">
 								<button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
 									{isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
 									{isSubmitting ? 'Ajout en cours' : 'Ajouter'}
 								</button>
-
 								<button onClick={() => Navigate('/companies')} className="Btn Error">
 									Annuler / Retour
 								</button>
