@@ -10,6 +10,7 @@ import '@fontsource/poppins/500.css'
 import '@fontsource/poppins/600.css'
 import '@fontsource/poppins/700.css'
 import { BrowserRouter } from 'react-router-dom'
+import InactivityHandler from './guard/InactivityHandlerGuard.jsx'
 
 // if ('serviceWorker' in navigator) {
 //    window.addEventListener('load', () => {
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             position="top-center"
             reverseOrder={false}
          />
+         <InactivityHandler />
          <App />
       </BrowserRouter>
    </React.StrictMode>,

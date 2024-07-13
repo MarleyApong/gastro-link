@@ -11,22 +11,34 @@ import server from '../../assets/img/avatar/server.jpg'
 import { Account } from '../../services/accountService'
 import { User } from '../../services/userService'
 import config from '../../config'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import './sidebar.scss'
 
 const Sidebar = ({ profil, setProfil, sidebar, setSidebar }) => {
     const access = Access()
-    const Navigate = useNavigate()
+    const navigate = useNavigate()
     const idUser = Account.getUserId()
+    const MySwal = withReactContent(Swal)
 
     const [user, setUser] = useState([])
     const [imageToShow, setImageToShow] = useState('')
 
     const logout = (e) => {
         e.preventDefault()
-        if (window.confirm("Attention, vous êtes sur le point de vous déconnecter !") === true) {
-            Account.logout()
-            Navigate('/auth/login')
-        }
+        MySwal.fire({
+            title: 'Attention',
+            text: 'Vous êtes sur le point de vous déconnecter !',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Se déconnecter',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Account.logout()
+                navigate('/auth/login')
+            }
+        })
     }
 
     useEffect(() => {
@@ -38,7 +50,6 @@ const Sidebar = ({ profil, setProfil, sidebar, setSidebar }) => {
         loadUser()
     }, [idUser])
 
-    // START PROCESSING IMAGE RENDERING =======================================================
     useEffect(() => {
         const getImageToShow = (access, user, logoPlaceholder) => {
             let imageToShow = logoPlaceholder
@@ -68,12 +79,9 @@ const Sidebar = ({ profil, setProfil, sidebar, setSidebar }) => {
             return imageToShow
         }
 
-        // SIMPLIFICATION OF THE FUNCTION FOR DISPLAY
         setImageToShow(getImageToShow(access, user, logoPlaceholder))
     }, [access, user, logoPlaceholder])
-    // END PROCESSING IMAGE RENDERING =======================================================
 
-    // SUBTRING NAME IF IS LONGEST
     const substringName = (user) => {
         if (user.User) {
             const name = `${user.User.firstName} ${user.User.lastName}`
@@ -88,7 +96,7 @@ const Sidebar = ({ profil, setProfil, sidebar, setSidebar }) => {
         <aside className={sidebar ? "SidebarMin" : "Sidebar"}>
             <div className="User" onClick={() => setProfil(!profil)}>
                 <div className="Avatar">
-                    <img src={imageToShow} alt="" />
+                    <img src={imageToShow} alt=""/>
                 </div>
                 <div className="InfoUser">
                     <span>{substringName(user)}</span>
@@ -127,7 +135,6 @@ const Sidebar = ({ profil, setProfil, sidebar, setSidebar }) => {
                     <span>Se déconnecter</span>
                 </NavLink>
             </div>
-
         </aside>
     )
 }

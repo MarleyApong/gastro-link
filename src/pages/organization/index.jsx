@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react"
 import * as RemixIcons from "react-icons/ri"
-import { AiOutlinePhone, AiOutlineFieldNumber } from 'react-icons/ai'
+import { AiOutlinePhone } from 'react-icons/ai'
 import { FaCity } from 'react-icons/fa'
 import dateFormat from 'dateformat'
 import { useNavigate } from "react-router-dom"
@@ -17,6 +17,7 @@ import SearchInput from "../../components/SearchInput"
 import Access from "../../guard/AccessGuard"
 import { sortOption, StatusOption } from "../../data/optionFilter"
 import useHandleError from "../../hooks/useHandleError"
+import Swal from 'sweetalert2'
 
 const ListOrganization = () => {
    const Navigate = useNavigate()
@@ -183,15 +184,24 @@ const ListOrganization = () => {
 
    // DELETED ORGANIZATION
    const deleteOrganization = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Organization.deleted(id).then((res) => {
-            toast.success("Organization supprimée avec succès !")
-            setRefresh((current) => current + 1)
-         }).catch((err) => {
-            useHandleError(err, Navigate)
-         })
-      }
+      Swal.fire({
+         title: 'Êtes-vous sûr(e) ?',
+         text: "Vous ne pourrez pas revenir en arrière !",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Oui, supprimer !'
+      }).then((result) => {
+         if (result.isConfirmed) {
+            Organization.deleted(id).then((res) => {
+               toast.success("Organisation supprimée avec succès !")
+               setRefresh((current) => current + 1)
+            }).catch((err) => {
+               useHandleError(err, Navigate)
+            });
+         }
+      });
    }
 
    // SYSTEM PAGINATION

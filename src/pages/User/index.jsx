@@ -16,6 +16,7 @@ import SearchInput from "../../components/SearchInput"
 import Access from "../../guard/AccessGuard"
 import useHandleError from "../../hooks/useHandleError"
 import { Account } from "../../services/accountService"
+import Swal from 'sweetalert2'
 
 const ListUser = () => {
    const Navigate = useNavigate()
@@ -166,17 +167,25 @@ const ListUser = () => {
 
    // DELETED USER
    const deleteUser = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         User.deleted(id).then((res) => {
-            toast.success("Utilisateur supprimé avec succès !")
-            setRefresh((current) => current + 1)
-         }).catch((err) => {
-            useHandleError(err, Navigate)
-         })
-      }
+      Swal.fire({
+         title: 'Êtes-vous sûr ?',
+         text: 'Vous ne pourrez pas revenir en arrière !',
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Oui, supprimer !'
+      }).then((result) => {
+         if (result.isConfirmed) {
+            User.deleted(id).then((res) => {
+               toast.success("Utilisateur supprimé avec succès !")
+               setRefresh((current) => current + 1)
+            }).catch((err) => {
+               useHandleError(err, Navigate)
+            })
+         }
+      })
    }
-
    // SYSTEM PAGINATION
    const handlePageChange = (newPage) => {
       setPage(newPage)
@@ -376,8 +385,12 @@ const ListUser = () => {
                               <p className="mb-2"><span className="fw-bold">Prénom :</span> {oneData.lastName}</p>
                               <p className="mb-2"><span className="fw-bold">Email :</span> {oneData.email}</p>
                               <p className="mb-2"><span className="fw-bold">Téléphone :</span> {oneData.phone}</p>
-                              <p className="mb-2"><span className="fw-bold">Environnement :</span> {oneData.Env && oneData.Env.name === 'internal' ? "interne" : "externe"}</p>
-                              <p className="mb-2"><span className="fw-bold">Rôle :</span> {oneData.Role && oneData.Role.name}</p>
+                              {access.toString().startsWith('1') && (
+                                 <p className="mb-2">
+                                    <span className="fw-bold">Environnement :</span>
+                                    {oneData.Env && oneData.Env.name === 'internal' ? "interne" : "externe"}
+                                 </p>
+                              )}                              <p className="mb-2"><span className="fw-bold">Rôle :</span> {oneData.Role && oneData.Role.name}</p>
                               <p className="mb-2"><span className="fw-bold">Statut :</span> {oneData.Status && oneData.Status.name}</p>
                               <p className="mb-2"><span className="fw-bold">Date de création :</span> {oneData.id && dateFormat(new Date(oneData.createdAt), 'dd-mm-yyyy HH:MM:ss')}</p>
                               <p className="mb-2"><span className="fw-bold">Date de modif :</span> {oneData.id && dateFormat(new Date(oneData.updatedAt), 'dd-mm-yyyy HH:MM:ss')}</p>
@@ -397,7 +410,10 @@ const ListUser = () => {
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
                <div className="d-flex">
                   <Button onClick={() => Navigate(`/users/update/${oneData.id}`)} className="Btn Send btn-sm me-2"><RemixIcons.RiPenNibLine />Modifier</Button>
-                  <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.Status && oneData.Status.name === 'actif' ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}><RemixIcons.RiExchangeBoxLine />{oneData.Status && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}</Button>
+                  {oneData.id !== Account.getUserId() &&
+                     <Button onClick={() => detailsStatusChange(oneData.id)} className={oneData.Status && oneData.Status.name === 'actif' ? ' Btn Error btn-sm me-2' : 'Btn Send btn-sm me-2'}>
+                        <RemixIcons.RiExchangeBoxLine />{oneData.Status && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}
+                     </Button>}
                </div>
                <div>
                   <Button onClick={hideModal} className="Btn Error btn-sm"><RemixIcons.RiCloseLine />Fermer</Button>

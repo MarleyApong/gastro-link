@@ -21,13 +21,14 @@
         cursor: pointer;
         transition: 1s all;
         overflow: hidden;
-        box-shadow: 5px 5px 10px var(--shadow-color);
+        box-shadow: var( --shadow-1);
+        border-radius: var(--radius-1);
 
         .Avatar {
             display: flex;
             width: 60px;
             height: 60px;
-            border-radius: 50%;
+            border-radius: 10%;
             background: var(--color-1);
             transition: 1s all;
             overflow: hidden;
@@ -64,9 +65,9 @@
         flex-direction: column;
         gap: 2px;
         height: calc(100vh - 10.5rem);
-        // border-radius: 5px;
+        border-radius: var(--radius-1);
         background: var(--aside-color);
-        box-shadow: 5px 5px 10px var(--shadow-color);
+        box-shadow: var( --shadow-1);
         overflow-x: hidden;
         overflow-y: scroll;
 
@@ -78,6 +79,7 @@
             display: flex;
             gap: 5px;
             align-items: center;
+            box-shadow: var( --shadow-1);
             // width: 200px;
             min-height: 50px;
             transition: .3s;
@@ -148,6 +150,9 @@
             }
         }
     }
+}
+.Navigation::-webkit-scrollbar {
+    display: none;
 }
 
 .SidebarMin {

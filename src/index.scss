@@ -12,9 +12,9 @@
   --color-1: #fff;
   --color-2: #f1f1f1e1;
   --color-3: #000;
-  --color-modal-head: #000;
+  --color-modal-head: #8a8a8a;
   --bg-modal-head: #fefefe;
-  --shadow-color: #7777773b;
+  --shadow-color: #aca8a83b;
   --color-err: #5d0606;
   --color-err-hv: #f35d07;
   --color-notification: #f35d07;
@@ -23,6 +23,9 @@
 
   --website-color: #f35d07;
   --order-color: #c01d20;
+
+  --radius-1: 2px;
+  --shadow-1: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 * {
@@ -78,7 +81,8 @@ body::-webkit-scrollbar-thumb {
   padding: 8px;
   outline: none;
   border: none;
-  // border-radius: 5px;
+  box-shadow: var(--shadow-1);
+  border-radius: var(--radius-1) !important;
   background: #abababe1;
   color: var(--color-1);
   font-size: 12px;

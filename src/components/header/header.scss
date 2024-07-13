@@ -8,7 +8,8 @@ header {
     height: 4rem;
     background: var(--header-color);
     color: var(--logo-color);
-    box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
+    // box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
+    box-shadow: var( --shadow-1);
     z-index: 200;
 
     .Left {
@@ -74,7 +75,7 @@ header {
         .NotificationIcon {
             position: relative;
             background: var(--color-notification);
-            box-shadow: 5px 5px 20px var(--shadow-color);
+            box-shadow: var( --shadow-1);
             width: 30px;
             height: 30px;
             display: flex;

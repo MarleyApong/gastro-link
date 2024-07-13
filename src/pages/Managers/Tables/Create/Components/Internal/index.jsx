@@ -6,6 +6,7 @@ import { Organization } from "../../../../../../services/organizationService"
 import { Company } from "../../../../../../services/companyService"
 import { Table } from "../../../../../../services/tableService"
 import useHandleError from "../../../../../../hooks/useHandleError"
+import ToggleButton from "../../../../../../components/ToggleButton"
 
 const Internal = ({ Navigate, access, CustomSelect }) => {
    const order = 'asc'
@@ -24,8 +25,12 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
    const [company, setCompany] = useState([])
    const [table, setTable] = useState({
       idCompany: "",
-      tableNumber: ""
+      tableNumber: "",
+      prefix: "",
+      numberOfTables: "",
+      baseNumber: ""
    })
+   const [toggleChecked, setToggleChecked] = useState(false)
 
    // RETURN THE SELECTED VALUE FROM THE CUSTOMSELECT COMPONENT
    const handleOrganizationValue = useCallback((value) => {
@@ -77,15 +82,29 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
       if (
          selectedOrganizationValue === false
          || table.idCompany === ""
-         || table.tableNumber === ""
+         || (!toggleChecked && table.tableNumber === "")
+         || (toggleChecked && (table.prefix === "" || table.numberOfTables === "" || table.baseNumber === ""))
       ) {
          setIsSubmitting(false)
-         toast.error("Les champs marqués par une etoile sont obligations !")
-      }
-      else {
-         Table.add(table)
+         toast.error("Les champs marqués par une étoile sont obligatoires !")
+      } else {
+         const tableData = toggleChecked
+            ? {
+               idCompany: table.idCompany,
+               prefix: table.prefix,
+               numberOfTables: table.numberOfTables,
+               baseNumber: table.baseNumber,
+               option: "auto"
+            }
+            : {
+               idCompany: table.idCompany,
+               tableNumber: table.tableNumber,
+               option: "manual"
+            }
+
+         Table.add(tableData)
             .then((res) => {
-               toast.success("Table ajouté avec succès !")
+               toast.success("Table ajoutée avec succès !")
                Navigate('/managers/tables')
             })
             .catch((err) => {
@@ -97,11 +116,15 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
       }
    }
 
+   const handleChange = () => {
+      setToggleChecked(!toggleChecked)
+   }
+
    return (
       <blockquote className="blockquote mb-0">
-         <form onSubmit={handleSubmit} className="row g-2 form">
+         <form className="row g-2 form">
 
-            <div className="col-md-6">
+            {!toggleChecked && <div className="col-md-6">
                <label htmlFor="tableNumber" className="form-label">
                   Nom/numéro de la table :
                   <span className="text-danger taille_etoile">*</span>
@@ -116,7 +139,58 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
                   autoComplete='off'
                   required
                />
-            </div>
+            </div>}
+            {toggleChecked && <>
+               <div className="col-md-6">
+                  <label htmlFor="prefix" className="form-label">
+                     Entrez un préfixe:
+                     <span className="text-danger taille_etoile">*</span>
+                  </label>
+                  <input
+                     type="text"
+                     className="form-control no-focus-outline"
+                     id="prefix"
+                     name="prefix"
+                     placeholder="Par exemple: T-"
+                     value={table.prefix}
+                     onChange={handleAdd}
+                     autoComplete='off'
+                     required
+                  />
+               </div>
+               <div className="col-md-6">
+                  <label htmlFor="numberOfTables" className="form-label">
+                     Nombre de table:
+                     <span className="text-danger taille_etoile">*</span>
+                  </label>
+                  <input
+                     type="number"
+                     className="form-control no-focus-outline"
+                     id="numberOfTables"
+                     name="numberOfTables"
+                     value={table.numberOfTables}
+                     onChange={handleAdd}
+                     autoComplete='off'
+                     required
+                  />
+               </div>
+               <div className="col-md-6">
+                  <label htmlFor="baseNumber" className="form-label">
+                     Numéro de base:
+                     <span className="text-danger taille_etoile">*</span>
+                  </label>
+                  <input
+                     type="number"
+                     className="form-control no-focus-outline"
+                     id="baseNumber"
+                     name="baseNumber"
+                     value={table.baseNumber}
+                     onChange={handleAdd}
+                     autoComplete='off'
+                     required
+                  />
+               </div>
+            </>}
             <div className="col-md-6">
                <label htmlFor="" className="form-label">
                   Nom de l'organisation:
@@ -131,11 +205,15 @@ const Internal = ({ Navigate, access, CustomSelect }) => {
                </label>
                <CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
             </div>
-            <div className="col-md-12 d-flex gap-2 justify-content-between">
-               <button type="submit" className="Btn Send btn-sm" disabled={isSubmitting}>
-                  {isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
-                  {isSubmitting ? 'Ajout en cours' : 'Ajouter'}
-               </button>
+            <div className="col-md-12 d-flex justify-content-between align-items-center">
+               <div className="d-flex gap-2 justify-content-between align-items-center">
+                  <button type="submit" onClick={handleSubmit} className="Btn Send btn-sm" disabled={isSubmitting}>
+                     {isSubmitting ? <Spinners.TailSpin height="18" width="18" ariaLabel="tail-spin-loading" radius="5" color="#fff" /> : <RemixIcons.RiSendPlaneLine />}
+                     {isSubmitting ? 'Ajout en cours' : 'Ajouter'}
+                  </button>
+                  <button type='button' className={`d-flex align-items-center gap-2 ms-3 Btn ${toggleChecked && 'Update'}`} onClick={handleChange}>Option avancée{toggleChecked ? <RemixIcons.RiArrowUpFill /> : <RemixIcons.RiArrowDownFill />}</button>
+               </div>
+
                <button onClick={() => Navigate('/managers/tables')} className="Btn Error">
                   Annuler / Retour
                </button>

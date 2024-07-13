@@ -17,6 +17,7 @@ import SearchInput from "../../components/SearchInput"
 import Access from "../../guard/AccessGuard"
 import { Average } from "../../services/average"
 import useHandleError from "../../hooks/useHandleError"
+import Swal from 'sweetalert2'
 
 const ListSurvey = () => {
    const Navigate = useNavigate()
@@ -282,28 +283,46 @@ const ListSurvey = () => {
 
    // DELETE QUESTION
    const deleteQuestion = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Question.deleted(id).then((res) => {
-            toast.success("Question supprimée avec succès !")
-            setRefresh((current) => current + 1)
-         }).catch((err) => {
-            useHandleError(err, Navigate)
-         })
-      }
+      Swal.fire({
+         title: 'Êtes-vous sûr(e) ?',
+         text: "Vous ne pourrez pas revenir en arrière !",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Oui, supprimer !'
+      }).then((result) => {
+         if (result.isConfirmed) {
+            Question.deleted(id).then((res) => {
+               toast.success("Question supprimée avec succès !")
+               setRefresh((current) => current + 1)
+            }).catch((err) => {
+               useHandleError(err, Navigate)
+            })
+         }
+      })
    }
 
    // DELETE SURVEY
    const deleteSurvey = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Survey.deleted(id).then((res) => {
-            toast.success("Enquête supprimée avec succès !")
-            setRefresh((current) => current + 1)
-         }).catch((err) => {
-            useHandleError(err, Navigate)
-         })
-      }
+      Swal.fire({
+         title: 'Êtes-vous sûr(e) ?',
+         text: "Vous ne pourrez pas revenir en arrière !",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Oui, supprimer !'
+      }).then((result) => {
+         if (result.isConfirmed) {
+            Survey.deleted(id).then((res) => {
+               toast.success("Enquête supprimée avec succès !");
+               setRefresh((current) => current + 1);
+            }).catch((err) => {
+               useHandleError(err, Navigate)
+            })
+         }
+      })
    }
 
    // SYSTEM PAGINATION

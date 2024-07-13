@@ -17,7 +17,7 @@ import useHandleError from "../../../hooks/useHandleError"
 import Qrcode from 'qrcode'
 import config from "../../../config"
 import { Account } from "../../../services/accountService"
-
+import Swal from 'sweetalert2'
 
 const Tables = () => {
    const Navigate = useNavigate()
@@ -112,26 +112,37 @@ const Tables = () => {
 
    // FETCH ONE DATA
    useEffect(() => {
-      Table.getOne(id).then((res) => {
-         setOneData(res.data.content)
-         const webPage = `${config.frontUrl}/page/${res.data.content.webPage}`
-         generateQRCode(webPage)
-      }).catch((err) => {
-         useHandleError(err, Navigate)
-      })
+      Table.getOne(id)
+         .then((res) => {
+            setOneData(res.data.content)
+            const webPage = `${config.frontUrl}/page/${res.data.content.webPage}`
+            generateQRCode(webPage)
+         })
+         .catch((err) => {
+            useHandleError(err, Navigate)
+         })
    }, [id, refresh])
 
    // DELETED TABLE
    const deleteTable = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Table.deleted(id).then((res) => {
-            toast.success("Produit supprimé avec succès !")
-            setRefresh((current) => current + 1)
-         }).catch((err) => {
-            useHandleError(err, Navigate)
-         })
-      }
+      Swal.fire({
+         title: 'Êtes-vous sûr(e) ?',
+         text: "Vous ne pourrez pas revenir en arrière !",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Oui, supprimer !'
+      }).then((result) => {
+         if (result.isConfirmed) {
+            Table.deleted(id).then((res) => {
+               toast.success("Table supprimée avec succès !")
+               setRefresh((current) => current + 1)
+            }).catch((err) => {
+               useHandleError(err, Navigate)
+            })
+         }
+      })
    }
 
    // FILTER SELECT TAG DATA

@@ -18,6 +18,7 @@ import { sortOption, StatusOption } from "../../data/optionFilter"
 import Access from "../../guard/AccessGuard"
 import { Account } from "../../services/accountService"
 import useHandleError from "../../hooks/useHandleError"
+import Swal from 'sweetalert2'
 
 const ListCompany = () => {
    const Navigate = useNavigate()
@@ -199,19 +200,28 @@ const ListCompany = () => {
 
    // DELETED ORGANIZATION
    const deleteCompany = (id) => {
-      const confirm = window.confirm("Voulez-vous vraiment effectuer cette action ?")
-      if (confirm) {
-         Company.deleted(id)
-            .then((res) => {
-               toast.success("Entreprise supprimée avec succès !")
-               setRefresh((current) => current + 1)
-            })
-            .catch((err) => {
-               useHandleError(err, Navigate)
-            })
-      }
+      Swal.fire({
+         title: 'Êtes-vous sûr ?',
+         text: 'Vous ne pourrez pas revenir en arrière !',
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Oui, supprimer !'
+      }).then((result) => {
+         if (result.isConfirmed) {
+            Company.deleted(id)
+               .then((res) => {
+                  toast.success("Entreprise supprimée avec succès !")
+                  setRefresh((current) => current + 1)
+               })
+               .catch((err) => {
+                  useHandleError(err, Navigate)
+               })
+         }
+      })
    }
-
+   
    // SYSTEM PAGINATION
    const handlePageChange = (newPage) => {
       setPage(newPage)
