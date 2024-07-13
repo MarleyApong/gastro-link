@@ -9,15 +9,17 @@ const CustomDataTable = ({ loading, columns, data, ExpandedComponent, pagination
             backgroundColor: 'var(--bg-modal-head)',
             fontWeight: 'bold',
             color: "var(--color-modal-head)",
-            boxShadow: 'var( --shadow-1)'
+            boxShadow: 'var(--shadow-1)',
+            borderTopLeftRadius: 'var(--radius-2)',
+            borderTopRightRadius: 'var(--radius-2)'
          },
       },
       rows: {
          style: {
             backgroundColor: 'var(--bg-modal-head)',
             color: "var(--color-modal-head)",
-            minHeight: '45px',
-            // boxShadow: 'var( --shadow-1)'
+            minHeight: '42px',
+            boxShadow: 'var(--shadow-1)'
          },
       },
       headCells: {

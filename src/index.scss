@@ -12,7 +12,7 @@
   --color-1: #fff;
   --color-2: #f1f1f1e1;
   --color-3: #000;
-  --color-modal-head: #8a8a8a;
+  --color-modal-head: #242424;
   --bg-modal-head: #fefefe;
   --shadow-color: #aca8a83b;
   --color-err: #5d0606;
@@ -20,11 +20,13 @@
   --color-notification: #f35d07;
   --color-scroll: #f35d07;
   --color-body-content: #fff;
+  --color-neutral: #a29898;
 
   --website-color: #f35d07;
-  --order-color: #c01d20;
+  --order-color: #f35d07;
 
-  --radius-1: 2px;
+  --radius-1: 5px;
+  --radius-2: 5px;
   --shadow-1: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
@@ -35,7 +37,7 @@
   box-sizing: border-box;
 }
 
-body{
+body {
   background: var(--color-primary);
 }
 
@@ -45,6 +47,7 @@ body{
 .Survey-Cont::-webkit-scrollbar,
 .CustomerData::-webkit-scrollbar,
 .container-carts-show::-webkit-scrollbar,
+.container-carts::-webkit-scrollbar,
 body::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -58,6 +61,7 @@ body::-webkit-scrollbar {
 .Survey-Cont::-webkit-scrollbar-track,
 .CustomerData::-webkit-scrollbar-track,
 .container-carts-show::-webkit-scrollbar-track,
+.container-carts::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track {
   border-radius: 10px;
   background: var(--color-2);
@@ -69,6 +73,7 @@ body::-webkit-scrollbar-track {
 .Survey-Cont::-webkit-scrollbar-thumb,
 .CustomerData::-webkit-scrollbar-thumb,
 .container-carts-show::-webkit-scrollbar-thumb,
+.container-carts::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
   border: 3px solid var(--color-scroll);
   border-radius: 10px;
@@ -88,6 +93,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 12px;
   transition: .5s;
   cursor: pointer;
+  margin-left: 2px;
 }
 
 .Success {
@@ -122,13 +128,22 @@ body::-webkit-scrollbar-thumb {
   }
 }
 
+.Neutral {
+  background: #a29898;
+
+  &:hover {
+    background: #686565;
+  }
+}
+
 .site {
   color: var(--color-1);
   background: var(--color-modal-head);
   padding: 5px;
-  border-radius: 5px;
+  border-radius: var(--radius-1);
   width: auto;
   animation: slide 2s linear infinite;
+
   a {
     text-decoration: none;
     font-size: 13px;
@@ -169,12 +184,6 @@ td {
   min-width: 100px !important;
 }
 
-.rdt_TableCell {
-  div {
-    min-width: 100px;
-  }
-}
-
 small {
   font-size: 12px;
 }
@@ -183,15 +192,19 @@ label {
   font-size: 13px;
 }
 
+div, span, ul , li, a {
+  border-radius: var(--radius-1) !important;
+}
+
 select,
 input,
 button,
 textarea {
   padding: 2px;
   font-size: 13px !important;
-  border-radius: 0px !important;
   border-color: var(--color-2);
   outline: none;
+  border-radius: var(--radius-1);
 }
 
 textarea {
@@ -219,7 +232,6 @@ textarea {
   left: 230px;
   padding: 0 .5rem;
   padding-right: 0;
-  // border-radius: 5px;
   transition: 1s all;
 }
 
@@ -236,20 +248,20 @@ textarea {
   margin-bottom: 10px;
   box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
   background: var(--color-body-content);
-  border-radius: 2px;
   padding: 5px;
 
   .AllOptionBox {
     display: flex;
     align-items: center;
     gap: 10px;
-    // background: var(--active-color);
-    border: 1px solid;
-    border-style: dashed;
+    background: var(--active-color);
+    border: none;
+    border-radius: var(--radius-1);
+    overflow: hidden;
 
     label {
       font-size: 13px;
-      // color: var(--active-color);
+      color: var(--color-1);
       font-weight: 600;
       width: 75px;
       padding-left: 3px;
@@ -262,8 +274,8 @@ textarea {
       padding: 5px;
       background: var(--color-2);
       // color: var(--active-color);
-      border-radius: 2px;
       width: 200px;
+      overflow: hidden;
     }
 
     input {
@@ -276,6 +288,15 @@ textarea {
   box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color), 2px -2px 3px var(--shadow-color), -2px 2px 3px var(--shadow-color) !important;
   background: var(--color-body-content);
   min-height: calc(100vh - 14rem) !important;
+  border-top-left-radius: var(--radius-2) !important;
+  border-top-right-radius: var(--radius-2) !important;
+}
+
+// CustomerData FOOTER
+.gGNCxU {
+  border-radius: var(--radius-2) !important;
+  margin-top: 10px;
+  min-height: 46px !important;
 }
 
 .CardBody {
@@ -288,6 +309,19 @@ textarea {
   }
 }
 
+.rdt_TableCell {
+  div {
+    min-width: 100px;
+  }
+}
+
+// // REACT BOOTSTRAP
+// .modal-react-bootstrap {
+//   .header-react-bootstrap {
+//     border-radius: var(--radius-2) !important;
+
+//   }
+// }
 
 // Responsive================================================== 
 @media screen and (max-width: 1240px) {
@@ -369,19 +403,19 @@ textarea {
     font-size: 10px;
   }
 
-  .OptionFilter {  
+  .OptionFilter {
     .AllOptionBox {
 
       label {
         width: 100%;
         padding-left: 3px;
       }
-  
+
       input,
       select {
         width: 100%;
       }
-  
+
       input {
         width: 100%;
       }
@@ -390,6 +424,7 @@ textarea {
 }
 
 @media screen and (max-width: 545px) {
+
   .Content,
   .ContentMax {
     width: 100%;

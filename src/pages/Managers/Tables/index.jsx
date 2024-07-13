@@ -194,7 +194,8 @@ const Tables = () => {
                   <RemixIcons.RiDeleteBin2Line fontSize={15} />
                </button>}
             </div>
-         )
+         ),
+          maxWidth: '130px'
       },
    ]
 

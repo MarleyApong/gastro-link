@@ -22,6 +22,18 @@
          // overflow: hidden;
       }
 
+      .no-product {
+         position: absolute;
+         position: absolute;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         text-align: center;
+      }
+
       // .title {
       //    position: relative;
       //    text-transform: uppercase;
@@ -60,12 +72,20 @@
 
          table {
             border-collapse: separate;
-
+            
             thead {
                background: var(--color-1);
-
+               
                th {
                   padding: 10px;
+                  &:first-child {
+                     border-top-left-radius: var(--radius-2);
+                     border-bottom-left-radius: var(--radius-2);
+                  }
+                  &:last-child {
+                     border-top-right-radius: var(--radius-2);
+                     border-bottom-right-radius: var(--radius-2);
+                  }
                }
             }
 
@@ -197,15 +217,21 @@
       }
    }
 
+   .container-carts-show::-webkit-scrollbar,
+   .container-carts::-webkit-scrollbar {
+      display: none;
+   }
+
    .container-carts,
    .container-carts-show {
       position: fixed;
-      right: 0;
+      right: .5%;
+      top: 2%;
       width: 400px;
-      height: 100%;
-      transform: translateX(100%);
+      height: 96%;
+      transform: translateX(110%);
       background-color: var(--color-1);
-      box-shadow: 20px 2px 40px #4d4949b4, -1px -1px 1px #b4b2b215;
+      box-shadow: var(--shadow-1);
       overflow: hidden;
       overflow-y: scroll;
       transition: 1s ease-in-out;
@@ -214,14 +240,14 @@
          display: flex;
          justify-content: space-between;
          align-items: center;
-         margin: 20px 0;
+         padding: 10px;
+         background: var(--order-color);
+         color: var(--color-1);
       }
 
       .title {
          text-transform: uppercase;
-         background: var(--order-color);
          font-weight: 600;
-         color: var(--color-1);
          padding: 10px;
          border-radius: 3px;
          border-top-left-radius: 0;
@@ -232,7 +258,6 @@
          width: 20px;
          height: 20px;
          margin-right: 20px;
-         color: var(--order-color);
          border: 1px solid;
          display: flex;
          justify-content: center;
@@ -309,9 +334,13 @@
          }
 
          .submit-order {
+            position: absolute;
+            bottom: 10px;
             display: flex;
-            justify-content: space-between !important;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            width: 95%;
+            // margin-bottom: 20px;
+            z-index: 100;
 
             button {
                display: flex;
@@ -325,10 +354,23 @@
                margin-top: 50px;
                box-shadow: 2px 2px 4px #b4b2b223, -1px -1px 1px #b4b2b215;
                color: var(--color-1);
-               background-color: var(--order-color);
+               // background-color: var(--order-color);
                font-size: 12px !important;
                font-weight: 600;
                text-transform: uppercase;
+
+               &:first-child {
+                  background-color: #Ed1f24;
+                  &:hover {
+                     background-color: #b60505;
+                  }
+               }
+               &:last-child {
+                  background-color: #025215;
+                  &:hover {
+                     background-color: #03851f;
+                  }
+               }
             }
          }
       }
@@ -390,6 +432,7 @@
          width: 30px;
          height: 30px;
       }
+
       .btn-text {
          display: none;
       }
@@ -406,6 +449,7 @@
                   th {
                      font-size: 12px;
                      padding: 5px 0;
+
                      &:first-child {
                         text-align: center;
                      }
@@ -426,12 +470,14 @@
                      td {
                         padding: 0;
 
-                        &:first-child , &:last-child {
+                        &:first-child,
+                        &:last-child {
                            text-align: center !important;
                         }
 
                         &:nth-child(2) {
                            min-width: 70px !important;
+
                            button {
                               display: flex;
                               justify-content: center;
@@ -447,6 +493,7 @@
                            display: flex;
                            justify-content: center;
                            margin-top: 2.5px;
+
                            button {
                               display: flex;
                               justify-content: center;

@@ -1,7 +1,7 @@
 .modal-content {
    background: var(--user-color);
    border: none !important;
-   border-radius: 0 !important;
+   border-radius: var(--radius-2) !important;
 }
 
 .modal-react-bootstrap {
@@ -9,7 +9,7 @@
       background: var(--user-color);
       height: 0px;
       padding: 20px;
-      border-radius: 0 !important;
+      border-radius: var(--radius-2) !important;
 
       .title-react-bootstrap {
          color: var(--color-1);
@@ -18,6 +18,15 @@
 
       .btn-close {
          font-size: 13px;
+      }
+   }
+
+   .body-react-bootstrap {
+      .container {
+         div {
+            border-radius: var(--radius-2) !important;
+         }
+
       }
    }
 
@@ -63,33 +72,6 @@
 .cardTitle {
    background-color: #463e3e;
 }
-
-//   icon 
-// .password-icon1 {
-//    position: relative;
-//    float: right;
-//    cursor: pointer;
-//    bottom: 16px;
-//    transform: translateY(-50%);
-//    display: inline-block;
-//    margin-right: 5px;
-
-// }
-
-// .password-confirm1 {
-//    position: relative;
-//    float: right;
-//    cursor: pointer;
-//    bottom: 16px;
-//    transform: translateY(-50%);
-//    display: inline-block;
-//    margin-right: 5px;
-// }
-
-// .border_detail {
-//    // margin-top: 30px;
-//    border: 0.5px solid #9c3b3b;
-// }
 
 .logo {
    margin-top: 20%;
@@ -171,17 +153,19 @@
          cursor: pointer;
 
          &:hover {
-            background: var(--color-modal-head);
-            color: var(--color-1);
+            background: var(--shadow-color);
+            // color: var(--color-1);
          }
       }
 
       .question-update {
          gap: 10px;
          z-index: 9;
+         padding: 8px;
 
          textarea {
             height: 200px;
+            margin-bottom: 40px;
          }
 
       }

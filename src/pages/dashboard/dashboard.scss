@@ -12,7 +12,7 @@
         background: var(--color-1);
         box-shadow: var( --shadow-1);
         color: var(--color-3);
-        // border-radius: 5px;
+        border-radius: var(--radius-2);
 
         &:first-child {
             background: var(--user-color);
@@ -56,7 +56,7 @@
         grid-row: span 3;
         padding: .5rem;
         color: var(--color-3);
-        // border-radius: 5px;
+        border-radius: var(--radius-2);
         background: var(--color-1);
         box-shadow: 5px 5px 10px var(--shadow-color);
 
@@ -83,6 +83,7 @@
                     border: 1px solid;
                     margin-top: 10px;
                     padding: 5px;
+                    border-radius: var(--radius-2);
                 }
 
                 .ReturnContent {
@@ -101,7 +102,7 @@
                     border: 1px solid #28a745;
                     width: 120px;
                     height: 90px;
-                    // border-radius: 10%;
+                    border-radius: var(--radius-2) !important;
                 }
             }
 
@@ -119,6 +120,7 @@
 
                 .Return {
                     border-color: var(--user-color);
+                    border-radius: var(--radius-2);
                 }
             }
         }
@@ -139,19 +141,27 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 5px;
 
             td {
-                padding: 8px;
+                padding: 7px;
                 text-align: center;
             }
-
+            
             thead {
                 font-weight: 600;
                 background: var(--user-color);
                 color: var(--color-1);
-
+                
                 tr {
-                    border-radius: 5px !important;
+                    td:first-child {
+                        border-top-left-radius: var(--radius-2) !important;
+                        border-bottom-left-radius: var(--radius-2) !important;
+                    }
+                    td:last-child {
+                        border-top-right-radius: var(--radius-2) !important;
+                        border-bottom-right-radius: var(--radius-2) !important;
+                    }
                 }
             }
 

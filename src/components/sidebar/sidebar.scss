@@ -22,7 +22,7 @@
         transition: 1s all;
         overflow: hidden;
         box-shadow: var( --shadow-1);
-        border-radius: var(--radius-1);
+        border-radius: var(--radius-2);
 
         .Avatar {
             display: flex;
@@ -65,7 +65,7 @@
         flex-direction: column;
         gap: 2px;
         height: calc(100vh - 10.5rem);
-        border-radius: var(--radius-1);
+        border-radius: var(--radius-2);
         background: var(--aside-color);
         box-shadow: var( --shadow-1);
         overflow-x: hidden;
@@ -130,7 +130,7 @@
             margin: 0 40px;
             color: var(--aside-text-color);
             font-weight: 400;
-            width: 100%;
+            width: 80%;
             min-height: 40px;
             transition: .3s;
 

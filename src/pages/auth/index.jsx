@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 import * as Spinners from 'react-loader-spinner'
 import { AuthService } from '../../services/authService'
 import { Account } from '../../services/accountService'
-import logo from '../../assets/img/logo/cs-logo-red.png'
+import logo from '../../assets/img/logo/logo.png'
 import './login.scss'
 import { jwtDecode } from 'jwt-decode'
 

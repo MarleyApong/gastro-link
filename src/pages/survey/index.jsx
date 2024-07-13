@@ -494,11 +494,11 @@ const ListSurvey = () => {
                         <div className="mb-2 fw-bold p-2 shadow d-lg-flex d-sm-block justify-content-between align-items-center">
                            <div className="d-flex align-items-center justify-content-between">
                               <span className="me-2 fs-6">Enquête: {oneData.name ? oneData.name : '---'}</span>
-                              <span className={averageSurvey > 2.5 ? "Btn Success" : "Btn Error"}>{averageSurvey}</span>
+                              <span className={averageSurvey > 2.5 ? "Btn Success" : "Btn"}>{averageSurvey}</span>
                            </div>
                            <div className="d-flex align-items-center justify-content-between">
                               <span className="me-2 fs-6">Entreprise : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</span>
-                              <span className={averageCompany > 2.5 ? "Btn Success" : "Btn Error"}>{averageCompany}</span>
+                              <span className={averageCompany > 2.5 ? "Btn Success" : "Btn"}>{averageCompany}</span>
                            </div>
                         </div>
                         <div className="card-question shadow">
@@ -507,7 +507,7 @@ const ListSurvey = () => {
                               <textarea name="question" onChange={(e) => setQuestion(e.target.value)} value={question} placeholder="Entrez la question"></textarea>
                               <div className="d-flex justify-content-between">
                                  <Button onClick={() => setStateQuestion(true)} type="submit" className='Btn Success  me-2' title="Ajouter"><RemixIcons.RiAddLine /></Button>
-                                 <Button onClick={() => setStateQuestion(false)} className="Btn Error " title="Retour"><RemixIcons.RiArrowRightLine /></Button>
+                                 <Button onClick={() => setStateQuestion(false)} className="Btn Error" title="Retour"><RemixIcons.RiArrowRightLine /></Button>
                               </div>
                            </form>
 
@@ -537,7 +537,7 @@ const ListSurvey = () => {
                                                 {index + 1}. {item.name}
                                              </span>
                                              <div className="d-flex align-items-center">
-                                                <span className={item.average > 2.5 ? "Btn Success me-3" : "Btn Error me-3"}>{item.average}</span>
+                                                <span className={item.average > 2.5 ? "Btn Success me-3" : "Btn me-3"}>{item.average}</span>
 
                                                 <button className="Btn Update" onClick={() => Navigate(`/surveys/questions/${item.id}`)} title="détails" >
                                                    <RemixIcons.RiEyeLine />
@@ -560,23 +560,23 @@ const ListSurvey = () => {
             </Modal.Body>
             <Modal.Footer className="footer-react-bootstrap d-flex justify-content-between">
                <div className="d-lg-flex d-sm-block">
-                  <Button onClick={() => surveyUpdateModal(oneData.id, oneData.name)} className="Btn Send me-2" title="Modifier l'enquête">
+                  <button onClick={() => surveyUpdateModal(oneData.id, oneData.name)} className="Btn Send me-2" title="Modifier l'enquête">
                      <RemixIcons.RiPenNibLine />
                      Modifier l'enquête
-                  </Button>
+                  </button>
                   {access === 12 || access === 13 &&
                      <Button onClick={() => detailsStatusChange(oneData.id, oneData.idCompany)} className={oneData.id && oneData.Status.name === 'actif' ? ' Btn Error me-2' : 'Btn Send me-2'}>
                         <RemixIcons.RiExchangeBoxLine />
                         {oneData.id && oneData.Status.name === 'actif' ? 'Désactiver ?' : 'Activer ?'}
                      </Button>
                   }
-                  <Button onClick={() => addQuestion(oneData.Questions.length)} className={oneData.id && oneData.Questions.length >= 5 ? 'Btn Error me-2' : 'Btn Success me-2'} title="Nouvelle question">
+                  <button onClick={() => addQuestion(oneData.Questions.length)} className={oneData.id && oneData.Questions.length >= 5 ? 'Btn me-2' : 'Btn Success me-2'} title="Nouvelle question">
                      <RemixIcons.RiAddLine />
                      Nouvelle question
-                  </Button>
+                  </button>
                </div>
                <div>
-                  <Button onClick={hideModal} className="Btn Error"><RemixIcons.RiCloseLine />Fermer</Button>
+                  <button onClick={hideModal} className="Btn Error"><RemixIcons.RiCloseLine />Fermer</button>
                </div>
             </Modal.Footer>
          </Modal >

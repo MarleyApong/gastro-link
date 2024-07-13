@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import * as RemixIcons from "react-icons/ri"
 import { useLocation, useNavigate } from 'react-router-dom'
-import logo from '../../assets/img/logo/cs-logo-red.png'
+import logo from '../../assets/img/logo/logo.png'
 import Access from '../../guard/AccessGuard'
 import './header.scss'
 import toast from 'react-hot-toast'

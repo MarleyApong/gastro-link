@@ -186,7 +186,7 @@ const Order = () => {
                            </div>
                         </div>
                      </div>
-                  )) : <div> Aucun produit disponible !</div>}
+                  )) : <div className='no-product'> Aucun produit disponible !</div>}
                </div>
                :
                <div className='content-list'>
@@ -200,7 +200,7 @@ const Order = () => {
                         </tr>
                      </thead>
                      <tbody>
-                        {products.length > 0 ? products.map((product) => (
+                        {products.length > 0 && products.map((product) => (
                            <tr key={product.id} onClick={() => setShowCart(true)}>
                               <td>{product.name}</td>
                               <td className='text-center'>
@@ -218,17 +218,18 @@ const Order = () => {
                                  </button>
                               </td>
                            </tr>
-                        )) : <tr><td colSpan="4">Aucun produit disponible !</td></tr>}
+                        ))}
                      </tbody>
-                  </table>
+                  </table>{products.length <= 0 && <div className='no-product'> Aucun produit disponible !</div>}
                </div>
             }
-            <div className='d-flex justify-content-center align-items-center'>
+            {products.length > 0 && <div className='d-flex justify-content-center align-items-center'>
                <Pagination
                   pageable={pageable}
                   setPage={setPage}
                />
             </div>
+            }
          </div>
 
          <div className={showCart ? 'container-carts-show' : 'container-carts'}>
@@ -264,7 +265,7 @@ const Order = () => {
                </div>
 
                <div className='submit-order'>
-                  <button onClick={() => setShowCart(false)}><RemixIcons.RiArrowLeftLine size={16} /></button>
+                  <button onClick={() => setShowCart(false)}><RemixIcons.RiArrowLeftLine size={16} />Fermer</button>
                   <button onClick={handleSubmitOrder}><RemixIcons.RiTimerLine size={16} />Commander</button>
                </div>
             </div>
