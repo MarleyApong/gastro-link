@@ -9,6 +9,9 @@ import '@fontsource/poppins/400.css'
 import '@fontsource/poppins/500.css'
 import '@fontsource/poppins/600.css'
 import '@fontsource/poppins/700.css'
+import 'survey-core/defaultV2.min.css'
+import "survey-core/defaultV2.min.css"
+import "survey-creator-core/survey-creator-core.min.css"
 import { BrowserRouter } from 'react-router-dom'
 import InactivityHandler from './guard/InactivityHandlerGuard.jsx'
 

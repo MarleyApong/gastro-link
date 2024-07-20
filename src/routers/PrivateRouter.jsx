@@ -4,6 +4,7 @@ import { Dashboard, Layout, ListCompany, ListOrganization, ListSurvey, CreateCom
 import Profil from '../components/Profil'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
+import { SurveyCreatorWidget } from '../pages/SurveyCreatorWidget'
 // import Erreur404 from '../_util/Erreur404'
 
 const PrivateRouter = () => {
@@ -60,6 +61,7 @@ const PrivateRouter = () => {
                      <Route path='/managers/tables' element={<Table />} />
                      <Route path='/orders' element={<Order />} />
                      <Route path='/menu' element={<Menu />} />
+                     <Route path='/survey/creator' element={<SurveyCreatorWidget />} />
                      {/* <Route path='*' element={<Website/>} /> */}
                   </Route>
                </Routes>

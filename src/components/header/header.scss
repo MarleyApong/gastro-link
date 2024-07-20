@@ -42,8 +42,9 @@ header {
         position: relative;
         display: flex;
         align-items: center;
-        background: var(--color-1);
-        border-radius: 20px;
+        background: var(--color-2);
+        border-radius: var(--radius-1);
+        box-shadow: inset var(--shadow-1);
         padding: 8px 15px;
         width: calc(100% - 60%);
         color: var(--z-color-2);

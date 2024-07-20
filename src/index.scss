@@ -166,6 +166,7 @@ body::-webkit-scrollbar-thumb {
   background: #fcdad9;
 } */
 
+
 h2 {
   font-size: 40px;
 }
@@ -192,7 +193,11 @@ label {
   font-size: 13px;
 }
 
-div, span, ul , li, a {
+// div,
+// span,
+ul,
+li,
+a {
   border-radius: var(--radius-1) !important;
 }
 
@@ -249,6 +254,7 @@ textarea {
   box-shadow: 2px 2px 3px var(--shadow-color), -2px -2px 3px var(--shadow-color);
   background: var(--color-body-content);
   padding: 5px;
+  border-radius: var(--radius-1);
 
   .AllOptionBox {
     display: flex;
@@ -314,6 +320,44 @@ textarea {
     min-width: 100px;
   }
 }
+
+// SERVER UI
+.svc-creator__non-commercial-text {
+  display: none;
+}
+
+// .sv-string-viewer {
+//   &:last-child {
+//     font-size: 10px;
+//   }
+// }
+
+.sv-header__title .sv-string-viewer {
+  font-size: 50px;
+}
+
+.sv-header__description .sd-description span {
+  font-size: 20px;
+}
+
+.sd-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px !important
+  ; 
+  outline: none;
+  border: none;
+  box-shadow: var(--shadow-1);
+  border-radius: var(--radius-1) !important;
+  // background: #abababe1;
+  color: var(--color-1);
+  font-size: 12px !important;
+  transition: .5s;
+  cursor: pointer;
+  margin-left: 2px;
+}
+
 
 // // REACT BOOTSTRAP
 // .modal-react-bootstrap {

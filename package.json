@@ -32,6 +32,9 @@
     "react-select": "^5.8.0",
     "recharts": "^2.10.3",
     "sass": "^1.69.5",
+    "survey-creator-react": "^1.11.6",
+    "survey-pdf": "^1.11.6",
+    "survey-react-ui": "^1.11.6",
     "sweetalert2": "^11.12.2",
     "sweetalert2-react-content": "^5.0.7",
     "uuid": "^9.0.1"

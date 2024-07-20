@@ -17,10 +17,10 @@ const InactivityHandler = () => {
 
   useEffect(() => {
     // CHECK IF THE USER IS ON AN AUTHENTICATED ROUTE
-    if (!location.pathname.startsWith('/auth') || !location.pathname.startsWith('/page')) {
-      setIsUserActive(true)
-    } else {
+    if (location.pathname.startsWith('/auth') || location.pathname.startsWith('/page')) {
       setIsUserActive(false)
+    } else {
+      setIsUserActive(true)
     }
   }, [location.pathname])
 
