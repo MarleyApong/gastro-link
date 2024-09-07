@@ -50,37 +50,37 @@ const useHandleError = (err, Navigate, setValidator) => {
             toast.error("Erreur, enquête non ajoutée !")
          }
          else if (err.response.data.name === 'AddCompanyError') {
-            toast.error("Erreur, entreprise non ajoutée !")
+            toast.error("Erreur, restaurant non ajoutée !")
          }
          else if (err.response.data.name === 'AddStatusError') {
             toast.error("Erreur, statut non ajouté !")
          }
          else if (err.response.data.name === 'CompanyUpdateError') {
-            toast.error("Erreur, entreprise non modifiée !")
+            toast.error("Erreur, restaurant non modifiée !")
          }
          else if (err.response.data.name === 'StatusUpdateError') {
             toast.error("Erreur, statut non modifié !")
          }
          else if (err.response.data.name === 'PictureCompanyUpdateError') {
-            toast.error("Erreur, l'importation du profil de l'entreprise a échoué !")
+            toast.error("Erreur, l'importation du profil du restaurant a échoué !")
          }
          else if (err.response.data.name === 'PictureOrganizationUpdateError') {
             toast.error("Erreur, l'importation du profil de l'organisation a échoué !")
          }
          else if (err.response.data.name === 'StatusCompanyUpdateError') {
-            toast.error("Erreur, le statut de l'entreprise n'a pas été modifié !")
+            toast.error("Erreur, le statut du restaurant n'a pas été modifié !")
          }
          else if (err.response.data.name === 'StatusOrganizationUpdateError') {
             toast.error("Erreur, le statut de l'organisation n'a pas été modifié !")
          }
          else if (err.response.data.name === 'CompanyAlreadyDeleted') {
-            toast.error("Erreur, cette entreprise a déjà été suprimée !")
+            toast.error("Erreur, ce restaurant a déjà été suprimé !")
          }
          else if (err.response.data.name === 'OrganizationAlreadyDeleted') {
             toast.error("Erreur, cette organisation a déjà été suprimée !")
          }
          else if (err.response.data.name === 'CompanyAlreadyRestored') {
-            toast.error("Erreur, cette entreprise a déjà été restaurée !")
+            toast.error("Erreur, ce restaurant a déjà été restauré !")
          }
          else if (err.response.data.name === 'OrganizationAlreadyRestored') {
             toast.error("Erreur, cette organisation a déjà été restaurée !")
@@ -192,10 +192,10 @@ const useHandleError = (err, Navigate, setValidator) => {
             toast.error("Erreur, réponse non trouvée !")
          }
          else if (err.response.data.name === 'CompaniesNotFound') {
-            toast.error("Erreur, aucune entreprise trouvée !")
+            toast.error("Erreur, aucun restaurant trouvée !")
          }
          else if (err.response.data.name === 'CompanyNotFound') {
-            toast.error("Erreur, entreprise non trouvée !")
+            toast.error("Erreur, restaurant non trouvé !")
          }
          else if (err.response.data.name === 'CustomersNotFound') {
             toast.error("Erreur, aucun client trouvé !")

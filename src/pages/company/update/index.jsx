@@ -104,7 +104,7 @@ const UpdateCompany = () => {
 		else {
 			Company.update(id, company)
 				.then((res) => {
-					toast.success("Entreprise modifiée avec succès !")
+					toast.success("Restaurant modifié avec succès !")
 					Navigate('/companies/')
 				})
 				.catch((err) => {
@@ -122,12 +122,12 @@ const UpdateCompany = () => {
 				<HeaderMain />
 
 				<div className="card-body CardBody card">
-					<h5>Modifiez les informations concernant votre entreprise.</h5>
+					<h5>Modifiez les informations concernant votre restaurant.</h5>
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form">
 							<div className="col-md-6">
 								<label htmlFor="name" className="form-label">
-									Nom de l'entreprise :
+									Nom du restaurant :
 									<span className="text-danger taille_etoile">*</span>
 								</label>
 								<input

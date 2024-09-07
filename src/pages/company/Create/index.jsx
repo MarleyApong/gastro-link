@@ -123,7 +123,7 @@ const CreateCompany = () => {
 
 			Company.add(formData)
 				.then((res) => {
-					toast.success("Entreprise ajoutée avec succès !")
+					toast.success("Restaurant ajouté avec succès !")
 					Navigate('/companies/')
 				})
 				.catch((err) => {
@@ -141,7 +141,7 @@ const CreateCompany = () => {
 				<HeaderMain />
 
 				<div className="card-body CardBody card">
-					<h5>Entrez les informations concernant votre entreprise.</h5>
+					<h5>Entrez les informations concernant votre restaurant.</h5>
 					<PleaseNote />
 					<blockquote className="blockquote mb-0">
 						<form onSubmit={handleSubmit} className="row g-2 form">

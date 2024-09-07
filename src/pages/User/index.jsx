@@ -400,7 +400,7 @@ const ListUser = () => {
                            <h5 className="mb-3 mt-3 p-2 shadow">Affiliation</h5>
                            <div className="ps-4">
                               <p className="mb-2"><span className="fw-bold">Organisation :</span> {affiliation.organization || 'Aucune'}</p>
-                              <p className="mb-2"><span className="fw-bold">Entreprise :</span> {affiliation.company || 'Aucune'}</p>
+                              <p className="mb-2"><span className="fw-bold">Restaurant :</span> {affiliation.company || 'Aucune'}</p>
                            </div>
                         </>
                      </div>

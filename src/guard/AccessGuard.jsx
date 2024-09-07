@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { Account } from '../services/accountService'
 import { User } from '../services/userService'
 import { Status } from '../services/statusService'
-import toast from 'react-hot-toast'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 const Access = () => {
    const Navigate = useNavigate()
+   const MySwal = withReactContent(Swal)
 
    const [userData, setUserData] = useState({
       role: Account.getUserRole() || '',
@@ -22,21 +24,22 @@ const Access = () => {
          try {
             const userDataResponse = await User.getOne(userData.id)
             const user = userDataResponse.data.content
-   
+
             const statusDataResponse = await Status.getAll()
             const statusData = statusDataResponse.data.content
-   
+
             filterStatusData(user, statusData)
          } catch (err) {
+            // Gestion de l'erreur
          }
       }
-   
+
       // PROCESSING OF ACCESS
       const filterStatusData = (user, statusData) => {
          try {
             const statusActif = statusData.find(obj => obj.name === 'actif')
             const idStatusActif = statusActif ? statusActif.id : null
-   
+
             if (userData.status !== idStatusActif || !userData.token || !userData.id) {
                setData(0)
                setTimeout(() => {
@@ -44,7 +47,7 @@ const Access = () => {
                }, 1000)
                return
             }
-   
+
             let newData = 0
             switch (user.Env.name) {
                case 'internal':
@@ -91,30 +94,33 @@ const Access = () => {
             // Gestion de l'erreur
          }
       }
-   
+
       const handleUnknownUserRole = () => {
          Account.logout()
       }
-   
+
       loadUserData()
    }, [userData])
 
    useEffect(() => {
       const handleSessionStorageChange = () => {
-         toast.error("Les données de connexion ont été corrompues.")
-         toast.error("Déconnexion !")
-   
-         Navigate('/auth/login')
-         Account.logout()
+         MySwal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: 'Les données de connexion ont été corrompues.'
+         }).then(() => {
+            Navigate('/auth/login')
+            Account.logout()
+         })
       }
-   
+
       window.addEventListener('storage', handleSessionStorageChange, { once: true })
-   
+
       return () => {
          window.removeEventListener('storage', handleSessionStorageChange)
       }
-   }, [])
-   
+   }, [Navigate, MySwal])
+
 
    return data
 }

@@ -168,7 +168,7 @@ const Header = ({ sidebar, setSidebar }) => {
                             location.pathname.includes('companies') && !location.pathname.includes('new') ?
                                 <button className='Btn Success' onClick={newCompany}>
                                     <RemixIcons.RiAddLine />
-                                    <small>Nouvelle Entreprise</small>
+                                    <small>Nouveau Restaurant</small>
                                 </button> :
                                 location.pathname.includes('surveys') && !location.pathname.includes('new') ?
                                     <button className='Btn Success' onClick={newSurvey}>

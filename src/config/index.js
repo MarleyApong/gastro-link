@@ -1,5 +1,5 @@
 let config = {}
-const ENV = 'prod'
+const ENV = 'dev'
 
 if (ENV === 'dev') {
    config = {
@@ -9,7 +9,7 @@ if (ENV === 'dev') {
 }
 else {
    config = {
-      serverUrl: "https://api-v1.gastrolink-resto.com",
+      serverUrl: "https://api-v2.gastrolink-resto.com",
       frontUrl: "https://gastrolink-resto.com",
    }
 }

@@ -33,10 +33,10 @@ const HeaderMain = ({ total }) => {
             return "notes"
         }
         else if (urlLink.includes('companies') && !urlLink.includes('new')) {
-            return "liste entreprises"
+            return "liste resto"
         }
         else if (urlLink.includes('companies/new')) {
-            return "ajout entreprise"
+            return "ajout resto"
         }
         else if (urlLink.includes('customers')) {
             return "liste clients"

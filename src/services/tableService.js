@@ -2,6 +2,10 @@ import Axios from "./callerService"
 
 const route = 'tables'
 
+const getCount = () => {
+   return Axios.get(`/${route}`)
+}
+
 const getAll = (order, filter, search, limit, page) => {
    return Axios.get(`/${route}?limit=${limit}&page=${page}&sort=${order}&filter=${filter}&k=${search}`)
 }
@@ -27,6 +31,7 @@ const deleted = (id) => {
 }
 
 export const Table = {
+   getCount,
    getAll,
    getTablesByUser,
    getOne,

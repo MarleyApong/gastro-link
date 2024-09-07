@@ -7,7 +7,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 80px;
+        min-height: 80px;
         padding: 0 .8rem;
         background: var(--color-1);
         box-shadow: var( --shadow-1);
@@ -17,6 +17,21 @@
         &:first-child {
             background: var(--user-color);
             color: var(--color-1);
+        }
+
+        &:nth-child(4) {
+            grid-row: span 2;
+            flex-direction: column;
+
+            .TBox-x {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                min-height: 80px;
+                width: 100%;
+                background: var(--color-1);
+                color: var(--color-3);
+            }
         }
 
         .Element {
@@ -41,7 +56,8 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(6, 1fr);
-    height: calc(100vh - 4rem - 77px - 1.7rem);
+    height: auto;
+    // min-height: calc(100vh - 4rem - 77px - 1.7rem);
     gap: .5rem;
     margin-top: .5rem;
 
@@ -59,6 +75,8 @@
         border-radius: var(--radius-2);
         background: var(--color-1);
         box-shadow: 5px 5px 10px var(--shadow-color);
+        // height: auto;
+        height: 330px;
 
         h3 {
             font-size: 17px;

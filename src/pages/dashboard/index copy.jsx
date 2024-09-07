@@ -13,10 +13,6 @@ import { Orders } from '../../services/orderService'
 import { useNavigate } from 'react-router-dom'
 import EventOrder from '../../components/EventOrder'
 import { Account } from '../../services/accountService'
-import { Organization } from '../../services/organizationService'
-import { Table } from '../../services/tableService'
-import { Product } from '../../services/productService'
-import { Average } from '../../services/average'
 
 const Dashboard = () => {
    const access = Access()
@@ -24,10 +20,7 @@ const Dashboard = () => {
    const eventOrder = EventOrder()
    const idUser = Account.getUserId()
 
-   const [organizations, setOrganizations] = useState([])
    const [companies, setCompanies] = useState([])
-   const [tables, setTables] = useState([])
-   const [products, setProducts] = useState([])
    const [allCount, setAllCount] = useState([])
    const [surveys, setSurveys] = useState([])
    const [answers, setAnswers] = useState([])
@@ -37,56 +30,22 @@ const Dashboard = () => {
    const [chartAnswers, setChartAnswers] = useState([])
    const [chartStatisticServer, setChartStatisticServer] = useState([])
    const [orderInProgressData, setOrderInProgressData] = useState([])
-   const [statisticsCompanies, setStatisticsCompanies] = useState([])
    const [orderState, setOrderState] = useState({})
-   const [detailsBusinessWeek, setDetailsBusinessWeek] = useState(getCurrentWeek())
+   const [detailsBusinessWeek, setDetailsBusinessWeek ] = useState('')
 
-   // FUNCTION TO GET THE WEEK NUMBER OF A DATE
-   function getWeekNumber(date) {
-      const firstDayOfYear = new Date(date.getFullYear(), 0, 1)
-      const pastDaysOfYear = (date - firstDayOfYear) / 86400000
-
-      return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7)
-   }
-
-   // FUNCTION TO GET THE CURRENT WEEK IN THE FORMAT 'YYYY-Www'
-   function getCurrentWeek() {
-      const currentDate = new Date()
-      const year = currentDate.getFullYear()
-      const week = getWeekNumber(currentDate)
-      return `${year}-W${week.toString().padStart(2, '0')}`
-   }
-
-   // FUNCTION TO FETCH INTERNAL DATA FOR THE FIRST GROUP
    const firstGroupDataInternal = async () => {
       try {
-         let res = await Organization.getCount()
-         setOrganizations(res.data.content)
-
-         res = await Company.getCount()
+         let res = await Company.getCount()
          setAllCount(res.data.content)
          setCompanies(res.data.content.data)
 
          res = await Survey.getCount()
          setSurveys(res.data.content)
-
-         res = await Table.getCount()
-         setTables(res.data.content)
-
-         res = await Product.getCount()
-         setProducts(res.data.content)
-
-         res = await Answer.getCount()
-         setAnswers(res.data.content)
-
-         res = await Average.companiesStats()
-         setStatisticsCompanies(res.data)
       } catch (err) {
          useHandleError(err, Navigate)
       }
    }
 
-   // FUNCTION TO FETCH EXTERNAL DATA FOR THE FIRST GROUP
    const firstGroupDataExternal = async () => {
       try {
          let res = await User.getOrganizationCompany(idUser)
@@ -94,13 +53,12 @@ const Dashboard = () => {
 
          res = await Answer.getAnswersByOrganization(organization)
          setAnswers(res.data.content)
-      }
+      } 
       catch (err) {
-         // HANDLE ERROR
+         
       }
    }
-
-   // FUNCTION TO LOAD ORDERS FOR A GIVEN COMPANY
+   
    const loadOrder = async (company) => {
       const order = 'desc'
       const filter = 'createdAt'
@@ -112,23 +70,21 @@ const Dashboard = () => {
          let res = await Orders.getOrderByCompany(company, order, filter, search, status, limit, page)
          setOrderInProgressData(res.data.content.data)
          setOrderState(res.data.content)
-
+         
          res = await Orders.getOrderByUser(company, idUser, status, limit, page)
          setStatisticServer(res.data.content.data)
          setStatisticServer2(res.data.content)
       }
       catch (err) {
-         // HANDLE ERROR
       }
    }
-
-   // FETCH DATA FOR THE FIRST GROUP ON COMPONENT MOUNT
+   
    useEffect(() => {
       firstGroupDataInternal()
       firstGroupDataExternal()
    }, [])
-
-   // FETCH COMPANY DATA FOR THE USER ON COMPONENT MOUNT AND WHEN eventOrder CHANGES
+   
+   // GET COMPANY BY USER
    useEffect(() => {
       const loadCompany = async () => {
          try {
@@ -137,27 +93,27 @@ const Dashboard = () => {
             loadOrder(idCompany)
          }
          catch (err) {
-            // HANDLE ERROR
+
          }
       }
 
       loadCompany()
    }, [eventOrder])
 
-   // FETCH AND PROCESS STATISTIC DATA FOR COMPANIES
+   // STATISTIC COMPANY
    useEffect(() => {
       const secondGroupData = async () => {
          const companiesByDay = {
-            MON: 0,
-            TUE: 0,
-            WED: 0,
-            THU: 0,
-            FRI: 0,
-            SAT: 0,
-            SUN: 0,
+            lun: 0,
+            mar: 0,
+            mer: 0,
+            jeu: 0,
+            ven: 0,
+            sam: 0,
+            dim: 0,
          }
 
-         // EXTRACT THE WEEK FROM detailsBusinessWeek
+         // Extraire la semaine à partir de detailsBusinessWeek
          const [year, week] = detailsBusinessWeek.split('-W')
 
          companies.forEach(company => {
@@ -165,9 +121,9 @@ const Dashboard = () => {
             const companyYear = createdAt.getFullYear()
             const companyWeek = getWeekNumber(createdAt)
 
-            // CHECK IF THE COMPANY BELONGS TO THE SELECTED WEEK
+            // Vérifier si le restaurant appartient à la semaine sélectionnée
             if (companyYear === parseInt(year) && companyWeek === parseInt(week)) {
-               const dayOfWeek = createdAt.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()
+               const dayOfWeek = createdAt.toLocaleDateString('fr-FR', { weekday: 'short' }).slice(0, -1)
                companiesByDay[dayOfWeek] += 1
             }
          })
@@ -176,22 +132,30 @@ const Dashboard = () => {
       secondGroupData()
    }, [companies, detailsBusinessWeek])
 
-   // FETCH AND PROCESS STATISTIC DATA FOR ANSWERS
+   // Fonction pour obtenir le numéro de semaine d'une date
+   const getWeekNumber = (date) => {
+      const firstDayOfYear = new Date(date.getFullYear(), 0, 1)
+      const pastDaysOfYear = (date - firstDayOfYear) / 86400000
+
+      return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7)
+   }
+
+   // STATISTIC ANSWERS
    useEffect(() => {
       const secondGroupDataExterne = async () => {
          const answersByDay = {
-            MON: 0,
-            TUE: 0,
-            WED: 0,
-            THU: 0,
-            FRI: 0,
-            SAT: 0,
-            SUN: 0,
+            lun: 0,
+            mar: 0,
+            mer: 0,
+            jeu: 0,
+            ven: 0,
+            sam: 0,
+            dim: 0,
          }
 
          answers.forEach(answer => {
             const createdAt = new Date(answer.createdAt)
-            const dayOfWeek = createdAt.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()
+            const dayOfWeek = createdAt.toLocaleDateString('fr-FR', { weekday: 'short' }).slice(0, -1)
 
             answersByDay[dayOfWeek] += 1
          })
@@ -201,22 +165,22 @@ const Dashboard = () => {
    }, [answers])
 
 
-   // FETCH AND PROCESS STATISTIC DATA FOR SERVER ORDERS
+   // STATISTIC SERVER 
    useEffect(() => {
       const secondGroupDataExterneServer = async () => {
          const orderByDay = {
-            MON: 0,
-            TUE: 0,
-            WED: 0,
-            THU: 0,
-            FRI: 0,
-            SAT: 0,
-            SUN: 0,
+            lun: 0,
+            mar: 0,
+            mer: 0,
+            jeu: 0,
+            ven: 0,
+            sam: 0,
+            dim: 0,
          }
 
          statisticServer.forEach(order => {
             const createdAt = new Date(order.createdAt)
-            const dayOfWeek = createdAt.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()
+            const dayOfWeek = createdAt.toLocaleDateString('fr-FR', { weekday: 'short' }).slice(0, -1)
 
             orderByDay[dayOfWeek] += 1
          })
@@ -232,12 +196,8 @@ const Dashboard = () => {
                {
                   access === 11 || access === 12 || access === 13 ?
                      <FirstGroupInternal
-                        organizations={organizations}
                         companies={allCount}
                         surveys={surveys}
-                        products={products}
-                        tables={tables}
-                        answers={answers}
                      /> :
                      access === 21 || access === 22 || access === 23 ?
                         <FirstGroupExternal
@@ -260,7 +220,6 @@ const Dashboard = () => {
                         chart={chart}
                         detailsBusinessWeek={detailsBusinessWeek}
                         setDetailsBusinessWeek={setDetailsBusinessWeek}
-                        statisticsCompanies={statisticsCompanies}
                      /> :
                      access === 21 || access === 22 || access === 23 ?
                         <SecondGroupExternal

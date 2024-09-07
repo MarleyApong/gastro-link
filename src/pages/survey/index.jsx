@@ -401,14 +401,14 @@ const ListSurvey = () => {
       })
    }
 
-   // ADD 'Entreprise' COLUMNS IF USER HAVE ACCESS
+   // ADD 'Restaurant' COLUMNS IF USER HAVE ACCESS
    /*
       4 -> the position at which elements will be added or removed
       0 -> existing items to deleted
    */
    if (access === 11 || access === 12 || access === 13 || access === 23) {
       columns.splice(4, 0, {
-         name: 'Entreprise',
+         name: 'Restaurant',
          selector: row => row.Company ? row.Company.name : '',
          wrap: true,
       })
@@ -497,7 +497,7 @@ const ListSurvey = () => {
                               <span className={averageSurvey > 2.5 ? "Btn Success" : "Btn"}>{averageSurvey}</span>
                            </div>
                            <div className="d-flex align-items-center justify-content-between">
-                              <span className="me-2 fs-6">Entreprise : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</span>
+                              <span className="me-2 fs-6">Restaurant : {oneData.Company ? oneData.Company.name.toUpperCase() : '---'}</span>
                               <span className={averageCompany > 2.5 ? "Btn Success" : "Btn"}>{averageCompany}</span>
                            </div>
                         </div>

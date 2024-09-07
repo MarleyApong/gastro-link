@@ -24,18 +24,18 @@ export const ItemsInternalAdmin = [
         ]
     },
     {
-        Icon: RemixIcons.RiBuildingLine,
-        Display: "Entreprises",
+        Icon: RemixIcons.RiStoreLine,
+        Display: "Restaurants",
         Link: "/companies",
         subNav: [
             {
                 Icon: RemixIcons.RiAddLine,
-                Display: "Nouvelle entreprise",
+                Display: "Nouveau restaurant",
                 Link: "/companies/new",
             },
             {
                 Icon: RemixIcons.RiListRadio,
-                Display: "Liste des entreprises",
+                Display: "Liste des restaurants",
                 Link: "/companies/list",
             }
         ]
@@ -116,8 +116,8 @@ export const ItemsInternalUser = [
         Link: "/organizations",
     },
     {
-        Icon: RemixIcons.RiBuildingLine,
-        Display: "Entreprises",
+        Icon: RemixIcons.RiStoreLine,
+        Display: "Restaurants",
         Link: "/companies",
     },
     {
@@ -153,18 +153,18 @@ export const ItemsExternalSuperAdmin = [
         Link: "/dashboard"
     },
     {
-        Icon: RemixIcons.RiBuildingLine,
-        Display: "Entreprises",
+        Icon: RemixIcons.RiStoreLine,
+        Display: "Restaurants",
         Link: "/companies",
         subNav: [
             {
                 Icon: RemixIcons.RiAddLine,
-                Display: "Nouvelle entreprise",
+                Display: "Nouveau restaurant",
                 Link: "/companies/new",
             },
             {
                 Icon: RemixIcons.RiListRadio,
-                Display: "Liste des entreprises",
+                Display: "Liste des restaurants",
                 Link: "/companies/list",
             }
         ]
@@ -292,8 +292,8 @@ export const ItemsExternalUser = [
         Link: "/dashboard"
     },
     {
-        Icon: RemixIcons.RiBuildingLine,
-        Display: "Entreprises",
+        Icon: RemixIcons.RiStoreLine,
+        Display: "Restaurants",
         Link: "/company",
     },
     {

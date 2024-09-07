@@ -194,10 +194,10 @@ const External = ({ Navigate, access, idStatus, idUser, CustomSelect }) => {
                 {access === 23 && (
                     <div className="col-md-6">
                         <label htmlFor="" className="form-label">
-                            Nom de l'entreprise :
+                            Nom du restaurant :
                             <span className="text-danger taille_etoile">*</span>
                         </label>
-                        <CustomSelect data={company} placeholder="Selectionnez une entreprise" onSelectedValue={handleCompanyValue} />
+                        <CustomSelect data={company} placeholder="Selectionnez un restaurant" onSelectedValue={handleCompanyValue} />
                     </div>
                 )}
                 <div className="col-md-12 d-flex justify-content-between align-items-center">

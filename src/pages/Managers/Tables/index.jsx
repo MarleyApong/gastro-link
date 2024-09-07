@@ -201,7 +201,7 @@ const Tables = () => {
 
    if (access === 13 || access === 23) {
       columns.splice(2, 0, {
-         name: 'Entreprise',
+         name: 'Restaurant',
          selector: row => row.Company ? row.Company.name : '',
          wrap: true,
       })
@@ -292,7 +292,7 @@ const Tables = () => {
                               <h5 className="mb-3 mt-3 p-2 shadow">Affiliation</h5>
                               <div className="ps-4">
                                  <p className="mb-2"><span className="fw-bold">Organisation :</span> {oneData.Company.Organization.name || 'Aucune'}</p>
-                                 <p className="mb-2"><span className="fw-bold">Entreprise :</span> {oneData.Company.name || 'Aucune'}</p>
+                                 <p className="mb-2"><span className="fw-bold">Restaurant :</span> {oneData.Company.name || 'Aucune'}</p>
                               </div>
                            </>
                         </div>

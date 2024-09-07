@@ -2,6 +2,10 @@ import Axios from "./callerService"
 
 const route = 'answers'
 
+const getCount = () => {
+   return Axios.get(`/${route}`)
+}
+
 const getAll = () => {
    return Axios.get(`/${route}`)
 }
@@ -19,6 +23,7 @@ const add = (data) => {
 }
 
 export const Answer = {
+   getCount,
    getAll,
    getOne,
    getAnswersByOrganization,

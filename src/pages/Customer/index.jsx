@@ -159,7 +159,7 @@ const ListCustomer = () => {
 
    if (access === 13 || access === 23) {
       columns.splice(4, 0, {
-         name: 'Entreprise',
+         name: 'Restaurant',
          selector: row => row.id && row.company,
          wrap: true,
       })
@@ -245,7 +245,7 @@ const ListCustomer = () => {
                               <h5 className="mb-3 mt-3 p-2 shadow">Affiliation</h5>
                               <div className="ps-4">
                                  <p className="mb-2"><span className="fw-bold">Organisation :</span> {oneData.organization || 'Aucune'}</p>
-                                 <p className="mb-2"><span className="fw-bold">Entreprise :</span> {oneData.company || 'Aucune'}</p>
+                                 <p className="mb-2"><span className="fw-bold">Restaurant :</span> {oneData.company || 'Aucune'}</p>
                               </div>
                            </>
                         </div>

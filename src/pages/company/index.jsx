@@ -175,8 +175,8 @@ const ListCompany = () => {
    const handleToggle = (idRow) => {
       Company.changeStatus(idRow)
          .then((res) => {
-            if (res.data.message === 'company active') toast.success("Entreprise activée !")
-            else toast.success("Entreprise désactivée !")
+            if (res.data.message === 'company active') toast.success("Restaurant activé !")
+            else toast.success("Restaurant désactivé !")
             setRefresh((current) => current + 1)
          })
          .catch((err) => {
@@ -188,8 +188,8 @@ const ListCompany = () => {
    const detailsStatusChange = (id) => {
       Company.changeStatus(id)
          .then((res) => {
-            if (res.data.message === 'company active') toast.success("Entreprise activée !")
-            else toast.success("Entreprise désactivée !")
+            if (res.data.message === 'company active') toast.success("Restaurant activé !")
+            else toast.success("Restaurant désactivé !")
             setRefresh((current) => current + 1)
          })
          .catch((err) => {
@@ -212,7 +212,7 @@ const ListCompany = () => {
          if (result.isConfirmed) {
             Company.deleted(id)
                .then((res) => {
-                  toast.success("Entreprise supprimée avec succès !")
+                  toast.success("Restaurant supprimé avec succès !")
                   setRefresh((current) => current + 1)
                })
                .catch((err) => {
@@ -386,7 +386,7 @@ const ListCompany = () => {
             className="modal-react-bootstrap">
             <Modal.Header closeButton className="header-react-bootstrap">
                <Modal.Title id="contained-modal-title-vcenter" className="title-react-bootstrap">
-                  Detail de l'entreprise : {oneData.name}
+                  Detail du restaurant : {oneData.name}
                </Modal.Title>
             </Modal.Header>
             <Modal.Body className="body-react-bootstrap">
